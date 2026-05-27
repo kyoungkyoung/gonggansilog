@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Create Share Link" %} - {{ report.get_report_type_display }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'contracts:list' %}">{% trans "Contracts" %}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'contracts:detail' contract.pk %}">{{ contract.get_display_address|truncatechars:20 }}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'reports:history' contract.pk %}">{% trans "Reports" %}</a></li>
+                <li class="breadcrumb-item active">{% trans "Create Share Link" %}</li>
+            </ol>
+        </nav>
+
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-share"></i> {% trans "Create Share Link" %}
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info mb-4">
+                    <strong>{% trans "Report" %}:</strong> {{ report.get_report_type_display }}<br>
+                    <strong>{% trans "Language" %}:</strong> {{ report.get_language_display }}<br>
+                    <strong>{% trans "Created" %}:</strong> {{ report.created_at|date:"Y-m-d H:i" }}
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label">{% trans "Expires After" %}</label>
+                        <select name="expires_days" class="form-select">
+                            <option value="never">{% trans "Never" %}</option>
+                            <option value="1">{% trans "1 day" %}</option>
+                            <option value="7" selected>{% trans "7 days" %}</option>
+                            <option value="30">{% trans "30 days" %}</option>
+                            <option value="90">{% trans "90 days" %}</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">{% trans "Max Downloads" %}</label>
+                        <select name="max_downloads" class="form-select">
+                            <option value="unlimited">{% trans "Unlimited" %}</option>
+                            <option value="1">1</option>
+                            <option value="5">5</option>
+                            <option value="10" selected>10</option>
+                            <option value="50">50</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">{% trans "Note" %} ({% trans "optional" %})</label>
+                        <input type="text" name="note" class="form-control"
+                               placeholder="{% trans 'e.g., For real estate agency' %}" maxlength="200">
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'reports:history' contract.pk %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> {% trans "Cancel" %}
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-link-45deg"></i> {% trans "Create Link" %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

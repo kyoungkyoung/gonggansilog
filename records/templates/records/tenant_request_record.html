@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% if record_type == 'MOVE_IN' %}{% trans "Move In" %}{% else %}{% trans "Move Out" %}{% endif %} {% trans "Record Request" %} - {{ contract.get_display_address }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'contracts:list' %}">{% trans "Contract List" %}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'contracts:detail' contract.pk %}">{{ contract.get_display_address|truncatechars:20 }}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'records:list' contract.pk %}">{% trans "Move-in/Move-out Records" %}</a></li>
+                <li class="breadcrumb-item active">{% trans "Record Request" %}</li>
+            </ol>
+        </nav>
+
+        <div class="card shadow">
+            <div class="card-header bg-info text-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-send"></i>
+                    {% if record_type == 'MOVE_IN' %}{% trans "Move In" %}{% else %}{% trans "Move Out" %}{% endif %} {% trans "Record Registration Request" %}
+                </h4>
+            </div>
+            <div class="card-body p-4">
+                <div class="alert alert-info mb-4">
+                    <i class="bi bi-info-circle"></i>
+                    <strong>{% trans "Tenant Record Request" %}</strong><br>
+                    {% trans "Request the landlord to register a record. Once the landlord approves, you can upload photos." %}
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="id_record_type" class="form-label">{% trans "Record Type" %}</label>
+                        {{ form.record_type }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_notes" class="form-label">{% trans "Request Notes (optional)" %}</label>
+                        {{ form.notes }}
+                        <div class="form-text">{% trans "Please enter the reason for the request or any special notes." %}</div>
+                    </div>
+
+                    <hr>
+
+                    <div class="alert alert-secondary">
+                        <h6><i class="bi bi-arrow-right-circle"></i> {% trans "Process" %}</h6>
+                        <ol class="mb-0">
+                            <li>{% trans "The tenant requests record registration. (Current step)" %}</li>
+                            <li>{% trans "The landlord reviews and approves the request." %}</li>
+                            <li>{% trans "The tenant uploads photos by the deadline." %}</li>
+                            <li>{% trans "The tenant clicks the 'Submit' button to complete." %}</li>
+                            <li>{% trans "The landlord gives final approval." %}</li>
+                        </ol>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-info">
+                            <i class="bi bi-send"></i> {% trans "Submit Request" %}
+                        </button>
+                        <a href="{% url 'records:list' contract.pk %}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> {% trans "Cancel" %}
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

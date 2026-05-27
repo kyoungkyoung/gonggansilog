@@ -1,0 +1,1188 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{{ record.get_record_type_display }} {% trans "Record" %} - {{ contract.get_display_address }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'contracts:list' %}">{% trans "Contract List" %}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'contracts:detail' contract.pk %}">{{ contract.get_display_address|truncatechars:20 }}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'records:list' contract.pk %}">{% trans "Move-in/Move-out Records" %}</a></li>
+                <li class="breadcrumb-item active">{{ record.get_record_type_display }}</li>
+            </ol>
+        </nav>
+
+        <div class="card shadow">
+            <div class="card-header bg-{% if record.record_type == 'MOVE_IN' %}success text-white{% else %}warning{% endif %}">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">
+                        <i class="bi bi-{% if record.record_type == 'MOVE_IN' %}box-arrow-in-right{% else %}box-arrow-right{% endif %}"></i>
+                        {{ record.get_record_type_display }} {% trans "Record" %}
+                    </h4>
+                    <span class="badge bg-{% if record.status == 'APPROVED' %}success{% elif record.status == 'REJECTED' %}danger{% elif record.status == 'SUBMITTED' %}info{% elif record.status == 'REQUESTED' %}secondary{% else %}warning{% endif %}">
+                        {{ record.get_status_display }}
+                    </span>
+                </div>
+            </div>
+            <div class="card-body p-4">
+                <!-- Basic Information -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <p class="mb-1"><strong>{% trans "Contract Address" %}:</strong></p>
+                        <p class="text-muted">{{ contract.get_display_address }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="mb-1"><strong>{% trans "Registration Date" %}:</strong></p>
+                        <p class="text-muted">{{ record.created_at|date:"Y-m-d H:i" }}</p>
+                    </div>
+                </div>
+
+                {% if record.notes %}
+                    <div class="mb-4">
+                        <p class="mb-1"><strong>{% trans "Notes" %}:</strong></p>
+                        <p class="text-muted">{{ record.notes }}</p>
+                    </div>
+                {% endif %}
+
+                <!-- Status Alerts -->
+                {% if record.status == 'REQUESTED' %}
+                    <div class="alert alert-secondary mb-4">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-hourglass-split"></i> {% trans "Waiting for Approval" %}
+                        </h6>
+                        <p class="mb-0">
+                            {% if request.user == contract.landlord %}
+                                {% trans "The tenant has requested record registration. Please approve and set the deadline below." %}
+                            {% else %}
+                                {% trans "Waiting for landlord approval." %}
+                            {% endif %}
+                        </p>
+                    </div>
+                {% elif record.status == 'OPEN' %}
+                    <div class="alert alert-warning mb-4">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-cloud-upload"></i> {% trans "Photo Upload Available" %}
+                        </h6>
+                        {% if record.upload_deadline %}
+                            {% with deadline_status=record.get_deadline_status %}
+                            <p class="mb-1">
+                                <strong>{% trans "Deadline" %}:</strong> {{ record.upload_deadline|date:"Y-m-d H:i" }}
+                                <span class="badge bg-{% if deadline_status.status == 'expired' %}danger{% elif deadline_status.status == 'urgent' %}warning{% else %}info{% endif %}">
+                                    {{ deadline_status.message }}
+                                </span>
+                            </p>
+                            {% if deadline_status.status == 'expired' %}
+                                <p class="mb-0 text-danger small">
+                                    <i class="bi bi-exclamation-circle"></i> {% trans "Deadline has passed. Photo upload/edit/delete is no longer available." %}
+                                </p>
+                            {% endif %}
+                            <p class="mb-0 text-muted small mt-1">
+                                <i class="bi bi-info-circle"></i> {% trans "Please contact admin if you need to change the deadline." %}
+                            </p>
+                            {% endwith %}
+                        {% else %}
+                            <p class="mb-0">{% trans "Deadline has not been set." %}</p>
+                        {% endif %}
+                    </div>
+                {% elif record.status == 'SUBMITTED' %}
+                    <div class="alert alert-info mb-4">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-send-check"></i> {% trans "Submission Complete" %}
+                        </h6>
+                        <p class="mb-1">{% trans "Submission Date" %}: {{ record.submitted_at|date:"Y-m-d H:i" }}</p>
+                        <p class="mb-0">
+                            {% if request.user == contract.landlord %}
+                                {% trans "The tenant has completed photo upload and submitted. Please review and approve/reject." %}
+                            {% else %}
+                                {% trans "Waiting for landlord's final confirmation." %}
+                            {% endif %}
+                        </p>
+                    </div>
+                {% elif record.status == 'APPROVED' %}
+                    <div class="alert alert-success mb-4">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-check-circle"></i> {% trans "Approved" %}
+                        </h6>
+                        <p class="mb-1">{% trans "Processing Date" %}: {{ record.landlord_approved_at|date:"Y-m-d H:i" }}</p>
+                        {% if record.landlord_comment %}
+                            <hr>
+                            <p class="mb-0"><strong>{% trans "Comment" %}:</strong> {{ record.landlord_comment }}</p>
+                        {% endif %}
+                    </div>
+                {% elif record.status == 'REJECTED' %}
+                    <div class="alert alert-danger mb-4">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-x-circle"></i> {% trans "Rejected" %}
+                        </h6>
+                        <p class="mb-1">{% trans "Processing Date" %}: {{ record.landlord_approved_at|date:"Y-m-d H:i" }}</p>
+                        {% if record.landlord_comment %}
+                            <hr>
+                            <p class="mb-0"><strong>{% trans "Rejection Reason" %}:</strong> {{ record.landlord_comment }}</p>
+                        {% endif %}
+                        {% if request.user == contract.tenant %}
+                            <hr>
+                            <p class="mb-0 text-muted">{% trans "Please modify the photos and resubmit." %}</p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                <hr>
+
+                <!-- Inspection Results Summary -->
+                {% if item_responses %}
+                <div class="mb-4">
+                    <h5 class="mb-3">
+                        <i class="bi bi-clipboard-check"></i> {% trans "Inspection Results" %}
+                    </h5>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>{% trans "Item" %}</th>
+                                    <th style="width:120px">{% trans "Condition" %}</th>
+                                    <th>{% trans "Notes" %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item_id, resp in item_responses.items %}
+                                <tr>
+                                    <td>{{ resp.template_item.name_ko }}</td>
+                                    <td>
+                                        {% if resp.condition_status == 'NORMAL' %}
+                                            <span class="badge bg-success">{% trans "Normal" %}</span>
+                                        {% elif resp.condition_status == 'DEFECTIVE' %}
+                                            <span class="badge bg-danger">{% trans "Defective" %}</span>
+                                        {% elif resp.condition_status == 'AGED' %}
+                                            <span class="badge bg-info">{% trans "Aged" %}</span>
+                                        {% elif resp.condition_status == 'NEEDS_REPAIR' %}
+                                            <span class="badge bg-warning text-dark">{% trans "Needs Repair" %}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td><small>{{ resp.notes|default:"-" }}</small></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Photo Gallery -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0">
+                        <i class="bi bi-images"></i> {% trans "Photo Gallery" %}
+                        <span class="badge bg-secondary">{% blocktrans with count=record.photos.count %}{{ count }} photos{% endblocktrans %}</span>
+                    </h5>
+                </div>
+
+                <!-- Category-based Photo Upload Area -->
+                <form id="uploadForm" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% for code, name in photo_categories %}
+                    <div class="card mb-3 category-section" data-category="{{ code }}">
+                        <div class="card-header bg-light d-flex justify-content-between align-items-center py-2">
+                            <h6 class="mb-0">
+                                <i class="bi bi-tag"></i> {{ name }}
+                                <span class="badge bg-secondary photo-count" id="count-{{ code }}">
+                                    {% for cat in sorted_categories %}
+                                        {% if cat.code == code %}{{ cat.photos|length }}{% endif %}
+                                    {% endfor %}
+                                </span>
+                            </h6>
+                            {% if can_upload_photos %}
+                            <div>
+                                <input type="file" id="file-{{ code }}" accept="image/*" multiple class="d-none category-file-input" data-category="{{ code }}">
+                                <button type="button" class="btn btn-sm btn-primary upload-btn" onclick="document.getElementById('file-{{ code }}').click()">
+                                    <i class="bi bi-upload"></i> {% trans "Add Photos" %}
+                                </button>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="card-body p-2">
+                            <div class="row g-2" id="preview-{{ code }}">
+                                <!-- Existing Photos Display -->
+                                {% for cat in sorted_categories %}
+                                    {% if cat.code == code %}
+                                        {% for photo in cat.photos %}
+                                        <div class="col-4 col-md-3 col-lg-2" id="existing-photo-{{ photo.pk }}">
+                                            <div class="card photo-card h-100 photo-item" data-photo-id="{{ photo.pk }}" data-photo-url="{{ photo.image.url }}" data-photo-description="{{ photo.description }}">
+                                                <!-- Photo Approval Status Badge -->
+                                                <div class="position-absolute top-0 start-0 m-1" style="z-index: 1;">
+                                                    <span class="badge bg-{% if photo.approval_status == 'APPROVED' %}success{% elif photo.approval_status == 'REJECTED' %}danger{% else %}warning{% endif %}" id="photo-status-{{ photo.pk }}">
+                                                        {% if photo.approval_status == 'APPROVED' %}✓{% elif photo.approval_status == 'REJECTED' %}✗{% else %}?{% endif %}
+                                                    </span>
+                                                </div>
+                                                <!-- Memo Icon Display -->
+                                                {% if photo.description %}
+                                                <div class="position-absolute top-0 end-0 m-1" style="z-index: 1;">
+                                                    <span class="badge bg-info" title="{{ photo.description }}">
+                                                        <i class="bi bi-chat-text"></i>
+                                                    </span>
+                                                </div>
+                                                {% endif %}
+                                                <a href="{{ photo.image.url }}" target="_blank">
+                                                    <img src="{{ photo.image.url }}" class="card-img-top" alt="{{ photo.get_category_display }}">
+                                                </a>
+                                                <!-- Memo Content Display -->
+                                                {% if photo.description %}
+                                                <div class="card-body p-1">
+                                                    <small class="text-muted photo-description-text" id="photo-desc-{{ photo.pk }}">
+                                                        <i class="bi bi-chat-text"></i> {{ photo.description|truncatechars:30 }}
+                                                    </small>
+                                                </div>
+                                                {% endif %}
+                                                {% if photo.approval_status == 'REJECTED' and photo.rejection_reason %}
+                                                    <div class="card-body p-1 pt-0">
+                                                        <small class="text-danger" id="photo-reason-{{ photo.pk }}">
+                                                            <i class="bi bi-exclamation-circle"></i> {{ photo.rejection_reason }}
+                                                        </small>
+                                                    </div>
+                                                {% endif %}
+                                                <div class="card-footer p-1 bg-transparent border-0">
+                                                    {% if request.user == contract.landlord and photo.approval_status == 'PENDING' %}
+                                                        <div class="d-flex gap-1">
+                                                            <button type="button" class="btn btn-sm btn-success flex-fill approve-photo" data-photo-id="{{ photo.pk }}">
+                                                                <i class="bi bi-check"></i>
+                                                            </button>
+                                                            <button type="button" class="btn btn-sm btn-danger flex-fill reject-photo" data-photo-id="{{ photo.pk }}">
+                                                                <i class="bi bi-x"></i>
+                                                            </button>
+                                                            {% if photo.description %}
+                                                            <button type="button" class="btn btn-sm btn-outline-info view-photo-memo" data-photo-id="{{ photo.pk }}" title="{% trans 'View Memo' %}">
+                                                                <i class="bi bi-chat-text"></i>
+                                                            </button>
+                                                            {% endif %}
+                                                        </div>
+                                                    {% elif request.user == contract.landlord %}
+                                                        {% if photo.description %}
+                                                        <button type="button" class="btn btn-sm btn-outline-info w-100 view-photo-memo" data-photo-id="{{ photo.pk }}">
+                                                            <i class="bi bi-chat-text"></i> {% trans "View Memo" %}
+                                                        </button>
+                                                        {% endif %}
+                                                    {% elif record.status != 'APPROVED' and request.user == contract.tenant %}
+                                                        <div class="d-flex gap-1">
+                                                            {% if can_upload_photos %}
+                                                            <button type="button" class="btn btn-sm btn-outline-info flex-fill edit-photo-memo" data-photo-id="{{ photo.pk }}">
+                                                                <i class="bi bi-pencil"></i>
+                                                            </button>
+                                                            {% endif %}
+                                                            {% if photo.approval_status == 'REJECTED' %}
+                                                                <button type="button" class="btn btn-sm btn-outline-danger flex-fill delete-photo" data-photo-id="{{ photo.pk }}">
+                                                                    <i class="bi bi-trash"></i>
+                                                                </button>
+                                                            {% endif %}
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                {% empty %}
+                                {% endfor %}
+                                <!-- Empty Message (shown only when no photos) -->
+                                {% with has_photos=False %}
+                                    {% for cat in sorted_categories %}
+                                        {% if cat.code == code %}
+                                            {% if cat.photos|length > 0 %}
+                                                {% with has_photos=True %}{% endwith %}
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endwith %}
+                                <div class="col-12 text-center text-muted py-2 empty-message" id="empty-{{ code }}"
+                                    {% for cat in sorted_categories %}{% if cat.code == code %}style="display: none;"{% endif %}{% endfor %}>
+                                    <small>{% trans "No photos uploaded yet" %}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </form>
+
+                <hr>
+
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="{% url 'records:list' contract.pk %}" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> {% trans "Back to List" %}
+                    </a>
+                    {% if compare_record %}
+                        <a href="{% url 'records:compare' contract.pk %}" class="btn btn-info">
+                            <i class="bi bi-arrows-expand"></i> {% trans "Compare View" %}
+                        </a>
+                    {% endif %}
+
+                    <!-- Tenant: Submit Button (only before deadline) -->
+                    {% if request.user == contract.tenant and record.status in 'OPEN,REJECTED' %}
+                        {% if record.photos.count > 0 and not record.is_deadline_passed %}
+                            <form method="post" action="{% url 'records:submit' record.pk %}" class="d-inline" id="submitForm">
+                                {% csrf_token %}
+                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#submitModal">
+                                    <i class="bi bi-send"></i> {% trans "Submit" %}
+                                </button>
+                            </form>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar: Status-based Action Cards -->
+    <div class="col-lg-4 mt-4 mt-lg-0">
+        <!-- REQUESTED Status: Landlord Approval Form -->
+        {% if record.status == 'REQUESTED' and request.user == contract.landlord %}
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-check-circle"></i> {% trans "Request Approval" %}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'records:approve_request' record.pk %}">
+                        {% csrf_token %}
+                        <div class="alert alert-info py-2 mb-3">
+                            <small><i class="bi bi-info-circle"></i> {% trans "Deadline is required." %}</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">{% trans "Days until deadline" %} <span class="text-danger">*</span></label>
+                            <input type="number" name="deadline_days" class="form-control" min="1" max="365" placeholder="{% trans 'e.g.: 7' %}">
+                            <div class="form-text">{% trans "Enter the number of days from today to set as deadline." %}</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">{% trans "Or select date directly" %}</label>
+                            <input type="datetime-local" name="upload_deadline" class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="bi bi-check-lg"></i> {% trans "Approve" %}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+
+
+        <!-- SUBMITTED Status: Final Approval/Rejection (Landlord) -->
+        {% if record.status == 'SUBMITTED' and request.user == contract.landlord %}
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-clipboard-check"></i> {% trans "Final Approval" %}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'records:final_approve' record.pk %}" id="finalApproveForm">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">{% trans "Action" %}</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="action" id="action_approve" value="APPROVED" checked>
+                                <label class="form-check-label" for="action_approve">
+                                    <i class="bi bi-check-circle text-success"></i> {% trans "Approve" %}
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="action" id="action_reject" value="REJECTED">
+                                <label class="form-check-label" for="action_reject">
+                                    <i class="bi bi-x-circle text-danger"></i> {% trans "Reject" %}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">{% trans "Comment (required for rejection)" %}</label>
+                            <textarea name="landlord_comment" class="form-control" rows="3" placeholder="{% trans 'Enter comment or rejection reason' %}"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-send"></i> {% trans "Process" %}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- Photo Approval Status Card (Landlord Only) -->
+        {% if request.user == contract.landlord %}
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-clipboard-check"></i> {% trans "Photo Approval Status" %}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% with approved_count=record.photos.all|length pending_count=0 rejected_count=0 %}
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>{% trans "Approval Progress" %}</span>
+                            <span id="approval-progress-text">{% trans "Checking..." %}</span>
+                        </div>
+                        <div class="progress" style="height: 20px;">
+                            <div class="progress-bar bg-success" id="approved-bar" style="width: 0%"></div>
+                            <div class="progress-bar bg-danger" id="rejected-bar" style="width: 0%"></div>
+                            <div class="progress-bar bg-warning" id="pending-bar" style="width: 100%"></div>
+                        </div>
+                    </div>
+                    {% endwith %}
+                    <div class="d-flex justify-content-between text-center">
+                        <div>
+                            <span class="badge bg-success" id="approved-count">0</span>
+                            <small class="d-block text-muted">{% trans "Approved" %}</small>
+                        </div>
+                        <div>
+                            <span class="badge bg-danger" id="rejected-count">0</span>
+                            <small class="d-block text-muted">{% trans "Rejected" %}</small>
+                        </div>
+                        <div>
+                            <span class="badge bg-warning" id="pending-count">0</span>
+                            <small class="d-block text-muted">{% trans "Pending" %}</small>
+                        </div>
+                    </div>
+                    <hr>
+                    <p class="text-muted small mb-0">
+                        <i class="bi bi-info-circle"></i> {% trans "Click the" %} <span class="badge bg-success"><i class="bi bi-check"></i></span> {% trans "or" %} <span class="badge bg-danger"><i class="bi bi-x"></i></span> {% trans "button on each photo to approve/reject individually." %}
+                    </p>
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- Record Information -->
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-info-circle"></i> {% trans "Record Information" %}
+                </h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <tr>
+                        <th class="text-muted">{% trans "Record Type" %}</th>
+                        <td>{{ record.get_record_type_display }}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-muted">{% trans "Status" %}</th>
+                        <td>
+                            <span class="badge bg-{% if record.status == 'APPROVED' %}success{% elif record.status == 'REJECTED' %}danger{% elif record.status == 'SUBMITTED' %}info{% elif record.status == 'REQUESTED' %}secondary{% else %}warning{% endif %}">
+                                {{ record.get_status_display }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% if record.upload_deadline %}
+                    <tr>
+                        <th class="text-muted">{% trans "Deadline" %}</th>
+                        <td>
+                            {{ record.upload_deadline|date:"Y-m-d H:i" }}
+                            {% with deadline_status=record.get_deadline_status %}
+                            <span class="badge bg-{% if deadline_status.status == 'expired' %}danger{% elif deadline_status.status == 'urgent' %}warning{% else %}info{% endif %}">
+                                {{ deadline_status.message }}
+                            </span>
+                            {% endwith %}
+                            <br><small class="text-muted">{% trans "Change: Contact admin" %}</small>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <th class="text-muted">{% trans "Photo Count" %}</th>
+                        <td><span id="total-photo-count">{{ record.photos.count }}</span> {% trans "photos" %}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-muted">{% trans "Registration Date" %}</th>
+                        <td>{{ record.created_at|date:"Y-m-d H:i" }}</td>
+                    </tr>
+                    {% if record.submitted_at %}
+                        <tr>
+                            <th class="text-muted">{% trans "Submission Date" %}</th>
+                            <td>{{ record.submitted_at|date:"Y-m-d H:i" }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if record.landlord_approved_at %}
+                        <tr>
+                            <th class="text-muted">{% trans "Processing Date" %}</th>
+                            <td>{{ record.landlord_approved_at|date:"Y-m-d H:i" }}</td>
+                        </tr>
+                    {% endif %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Rejection Reason Input Modal -->
+<div class="modal fade" id="rejectModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title"><i class="bi bi-x-circle"></i> {% trans "Reject Photo" %}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted">{% trans "Rejecting this photo. Please enter the rejection reason." %}</p>
+                <input type="hidden" id="rejectPhotoId">
+                <div class="mb-3">
+                    <label for="rejectReason" class="form-label">{% trans "Rejection Reason" %} <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="rejectReason" rows="3" placeholder="{% trans 'e.g.: Photo is blurry. Please retake.' %}"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+                <button type="button" class="btn btn-danger" id="confirmReject">{% trans "Reject" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Submit Confirmation Modal -->
+<div class="modal fade" id="submitModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title"><i class="bi bi-send-check"></i> {% trans "Final Submission" %}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <i class="bi bi-exclamation-triangle text-warning" style="font-size: 3rem;"></i>
+                <h5 class="mt-3">{% trans "Do you want to submit?" %}</h5>
+                <p class="text-muted mb-0">
+                    {% trans "After final submission," %}<br>
+                    <strong class="text-danger">{% trans "adding/editing/deleting photos will not be possible" %}</strong>.
+                </p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x"></i> {% trans "Cancel" %}
+                </button>
+                <button type="button" class="btn btn-success" id="confirmSubmit">
+                    <i class="bi bi-send"></i> {% trans "Submit" %}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Photo Delete Confirmation Modal -->
+<div class="modal fade" id="deletePhotoModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title"><i class="bi bi-trash"></i> {% trans "Delete Photo" %}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <i class="bi bi-image text-danger" style="font-size: 3rem;"></i>
+                <h5 class="mt-3">{% trans "Do you want to delete this photo?" %}</h5>
+                <p class="text-muted mb-0">{% trans "Deleted photos cannot be recovered." %}</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x"></i> {% trans "Cancel" %}
+                </button>
+                <button type="button" class="btn btn-danger" id="confirmDeletePhoto">
+                    <i class="bi bi-trash"></i> {% trans "Delete" %}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Photo Upload Modal (Memo Input) -->
+<div class="modal fade" id="uploadPhotoModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title"><i class="bi bi-cloud-upload"></i> {% trans "Upload Photos" %}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted mb-3">
+                    <i class="bi bi-info-circle"></i> {% trans "You can add a memo to each photo. If there are any issues, please record them in the memo." %}
+                </p>
+                <input type="hidden" id="uploadCategory" value="">
+                <div id="uploadPreviewContainer">
+                    <!-- Selected photo previews will be displayed here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x"></i> {% trans "Cancel" %}
+                </button>
+                <button type="button" class="btn btn-primary" id="confirmUpload">
+                    <i class="bi bi-cloud-upload"></i> {% trans "Upload" %}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Photo Memo Edit Modal -->
+<div class="modal fade" id="photoDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title"><i class="bi bi-pencil-square"></i> {% trans "Photo Memo" %}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editPhotoId" value="">
+                <div class="text-center mb-3">
+                    <img id="editPhotoImage" src="" alt="" class="img-fluid rounded" style="max-height: 200px;">
+                </div>
+                <div class="mb-3">
+                    <label for="editPhotoDescription" class="form-label">{% trans "Memo" %}</label>
+                    <textarea class="form-control" id="editPhotoDescription" rows="3" placeholder="{% trans 'Enter memo for the photo' %}"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+                <button type="button" class="btn btn-primary" id="savePhotoDescription">
+                    <i class="bi bi-check"></i> {% trans "Save" %}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Photo Memo View Only Modal (Landlord) -->
+<div class="modal fade" id="viewMemoModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title"><i class="bi bi-chat-text"></i> {% trans "Photo Memo" %}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-3">
+                    <img id="viewMemoImage" src="" alt="" class="img-fluid rounded" style="max-height: 200px;">
+                </div>
+                <div class="alert alert-light mb-0">
+                    <p class="mb-0" id="viewMemoText"></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Alert Modal (Toast Style) -->
+<div class="modal fade" id="alertModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+            <div class="modal-header py-2" id="alertModalHeader">
+                <h6 class="modal-title" id="alertModalTitle">{% trans "Notice" %}</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center py-3">
+                <p class="mb-0" id="alertModalMessage"></p>
+            </div>
+            <div class="modal-footer py-2 justify-content-center">
+                <button type="button" class="btn btn-primary btn-sm" data-bs-dismiss="modal">{% trans "OK" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<style>
+    .category-section .card-header {
+        border-bottom: 1px solid #dee2e6;
+    }
+    .photo-card {
+        position: relative;
+    }
+    .photo-card .remove-btn {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        padding: 2px 6px;
+        font-size: 12px;
+        z-index: 2;
+    }
+    .photo-card img {
+        height: 100px;
+        object-fit: cover;
+    }
+    .new-photo-card img {
+        height: 100px;
+        object-fit: cover;
+    }
+    .new-photo-card .remove-btn {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        padding: 2px 6px;
+        font-size: 12px;
+        z-index: 2;
+    }
+    .photo-description-text {
+        display: block;
+        font-size: 0.75rem;
+        line-height: 1.2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .upload-preview-item {
+        border: 1px solid #dee2e6;
+    }
+    .upload-preview-item:last-child {
+        margin-bottom: 0 !important;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const rejectModalEl = document.getElementById('rejectModal');
+    const rejectModal = rejectModalEl ? new bootstrap.Modal(rejectModalEl) : null;
+    let currentRejectPhotoId = null;
+
+    // Custom modals
+    const deletePhotoModalEl = document.getElementById('deletePhotoModal');
+    const deletePhotoModal = deletePhotoModalEl ? new bootstrap.Modal(deletePhotoModalEl) : null;
+    let currentDeletePhotoId = null;
+
+    const alertModalEl = document.getElementById('alertModal');
+    const alertModal = alertModalEl ? new bootstrap.Modal(alertModalEl) : null;
+
+    // Photo upload modal
+    const uploadPhotoModalEl = document.getElementById('uploadPhotoModal');
+    const uploadPhotoModal = uploadPhotoModalEl ? new bootstrap.Modal(uploadPhotoModalEl) : null;
+    let pendingUploadFiles = [];
+
+    // Photo memo edit modal
+    const photoDetailModalEl = document.getElementById('photoDetailModal');
+    const photoDetailModal = photoDetailModalEl ? new bootstrap.Modal(photoDetailModalEl) : null;
+
+    // Photo memo view only modal (landlord)
+    const viewMemoModalEl = document.getElementById('viewMemoModal');
+    const viewMemoModal = viewMemoModalEl ? new bootstrap.Modal(viewMemoModalEl) : null;
+
+    // Custom alert function
+    function showAlert(message, type = 'info') {
+        const header = document.getElementById('alertModalHeader');
+        const title = document.getElementById('alertModalTitle');
+        const messageEl = document.getElementById('alertModalMessage');
+
+        // Type-based styling
+        header.className = 'modal-header py-2 ';
+        if (type === 'success') {
+            header.classList.add('bg-success', 'text-white');
+            title.innerHTML = '<i class="bi bi-check-circle"></i> {% trans "Success" %}';
+        } else if (type === 'error') {
+            header.classList.add('bg-danger', 'text-white');
+            title.innerHTML = '<i class="bi bi-x-circle"></i> {% trans "Error" %}';
+        } else if (type === 'warning') {
+            header.classList.add('bg-warning');
+            title.innerHTML = '<i class="bi bi-exclamation-triangle"></i> {% trans "Warning" %}';
+        } else {
+            header.classList.add('bg-info', 'text-white');
+            title.innerHTML = '<i class="bi bi-info-circle"></i> {% trans "Notice" %}';
+        }
+
+        messageEl.textContent = message;
+        alertModal.show();
+    }
+
+    // Submit confirmation button
+    const confirmSubmitBtn = document.getElementById('confirmSubmit');
+    if (confirmSubmitBtn) {
+        confirmSubmitBtn.addEventListener('click', function() {
+            document.getElementById('submitForm').submit();
+        });
+    }
+
+    // Check for unapproved photos when submitting final approval form
+    const finalApproveForm = document.getElementById('finalApproveForm');
+    if (finalApproveForm) {
+        finalApproveForm.addEventListener('submit', function(e) {
+            // Only check when approval is selected
+            const selectedAction = document.querySelector('input[name="action"]:checked');
+            if (selectedAction && selectedAction.value === 'APPROVED') {
+                // Check if there are photos in PENDING status
+                const pendingPhotos = document.querySelectorAll('.photo-item .badge.bg-warning');
+                if (pendingPhotos.length > 0) {
+                    e.preventDefault();
+                    showAlert('{% trans "Please approve all photos before final approval." %}', 'warning');
+                    return false;
+                }
+            }
+        });
+    }
+
+    // Update approval progress (landlord only)
+    function updateApprovalProgress() {
+        const approvedCountEl = document.getElementById('approved-count');
+        if (!approvedCountEl) return;
+
+        const photos = document.querySelectorAll('.photo-item');
+        let approved = 0, rejected = 0, pending = 0;
+
+        photos.forEach(photo => {
+            const statusBadge = photo.querySelector('[id^="photo-status-"]');
+            if (statusBadge) {
+                if (statusBadge.classList.contains('bg-success')) approved++;
+                else if (statusBadge.classList.contains('bg-danger')) rejected++;
+                else pending++;
+            }
+        });
+
+        const total = approved + rejected + pending;
+        if (total > 0) {
+            approvedCountEl.textContent = approved;
+            document.getElementById('rejected-count').textContent = rejected;
+            document.getElementById('pending-count').textContent = pending;
+
+            document.getElementById('approved-bar').style.width = (approved / total * 100) + '%';
+            document.getElementById('rejected-bar').style.width = (rejected / total * 100) + '%';
+            document.getElementById('pending-bar').style.width = (pending / total * 100) + '%';
+
+            document.getElementById('approval-progress-text').textContent = `${approved}/${total} {% trans "approved" %}`;
+        }
+    }
+
+    updateApprovalProgress();
+
+    // Category file upload handling - modal preview and memo input
+    document.querySelectorAll('.category-file-input').forEach(input => {
+        input.addEventListener('change', function(e) {
+            const category = this.dataset.category;
+            const files = Array.from(this.files).filter(f => f.type.startsWith('image/'));
+
+            if (files.length === 0) return;
+
+            // Save category
+            document.getElementById('uploadCategory').value = category;
+            pendingUploadFiles = files;
+
+            // Initialize preview container
+            const previewContainer = document.getElementById('uploadPreviewContainer');
+            previewContainer.innerHTML = '';
+
+            // Create preview and memo input for each file
+            files.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const previewHtml = `
+                        <div class="card mb-3 upload-preview-item" data-index="${index}">
+                            <div class="text-center bg-light p-2">
+                                <img src="${e.target.result}" class="img-fluid rounded" style="max-height: 300px; object-fit: contain;" alt="{% trans 'Preview' %}">
+                            </div>
+                            <div class="card-body py-2">
+                                <p class="card-text mb-2"><small class="text-muted"><i class="bi bi-image"></i> ${file.name}</small></p>
+                                <textarea class="form-control upload-description" data-index="${index}" rows="2" placeholder="{% trans 'Enter memo for the photo (optional)' %}"></textarea>
+                            </div>
+                        </div>
+                    `;
+                    previewContainer.insertAdjacentHTML('beforeend', previewHtml);
+                };
+                reader.readAsDataURL(file);
+            });
+
+            // Open modal
+            uploadPhotoModal.show();
+
+            this.value = '';
+        });
+    });
+
+    // Upload confirmation button
+    const confirmUploadBtn = document.getElementById('confirmUpload');
+    if (confirmUploadBtn) {
+        confirmUploadBtn.addEventListener('click', function() {
+            const category = document.getElementById('uploadCategory').value;
+            const formData = new FormData();
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+            // Add each file and description
+            pendingUploadFiles.forEach((file, index) => {
+                formData.append('images', file);
+                formData.append('categories', category);
+                const descEl = document.querySelector(`.upload-description[data-index="${index}"]`);
+                const description = descEl ? descEl.value : '';
+                formData.append('descriptions', description);
+            });
+
+            // Show uploading indicator
+            confirmUploadBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> {% trans "Uploading..." %}';
+            confirmUploadBtn.disabled = true;
+
+            fetch('{% url "records:add_photos" record.pk %}', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.reload();
+                } else {
+                    return response.text();
+                }
+            })
+            .then(html => {
+                if (html) {
+                    window.location.reload();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                uploadPhotoModal.hide();
+                showAlert('{% trans "Error occurred during upload." %}', 'error');
+                confirmUploadBtn.innerHTML = '<i class="bi bi-cloud-upload"></i> {% trans "Upload" %}';
+                confirmUploadBtn.disabled = false;
+            });
+        });
+    }
+
+    // Photo approval
+    document.querySelectorAll('.approve-photo').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const photoId = this.dataset.photoId;
+            const btnElement = this;
+
+            fetch(`/records/photo/${photoId}/approve/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const statusBadge = document.getElementById(`photo-status-${photoId}`);
+                    statusBadge.className = 'badge bg-success';
+                    statusBadge.textContent = '✓';
+
+                    btnElement.closest('.card-footer').innerHTML = '<small class="text-success"><i class="bi bi-check-circle"></i> {% trans "Approved" %}</small>';
+
+                    updateApprovalProgress();
+                } else {
+                    showAlert(data.error || '{% trans "Error occurred during approval." %}', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showAlert('{% trans "Error occurred during approval." %}', 'error');
+            });
+        });
+    });
+
+    // Photo rejection button click - open modal
+    document.querySelectorAll('.reject-photo').forEach(btn => {
+        btn.addEventListener('click', function() {
+            currentRejectPhotoId = this.dataset.photoId;
+            document.getElementById('rejectReason').value = '';
+            rejectModal.show();
+        });
+    });
+
+    // Rejection confirmation button
+    const confirmRejectBtn = document.getElementById('confirmReject');
+    if (confirmRejectBtn) confirmRejectBtn.addEventListener('click', function() {
+        const reason = document.getElementById('rejectReason').value.trim();
+        if (!reason) {
+            showAlert('{% trans "Please enter the rejection reason." %}', 'warning');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('reason', reason);
+
+        fetch(`/records/photo/${currentRejectPhotoId}/reject/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            rejectModal.hide();
+
+            if (data.success) {
+                const statusBadge = document.getElementById(`photo-status-${currentRejectPhotoId}`);
+                statusBadge.className = 'badge bg-danger';
+                statusBadge.textContent = '✗';
+
+                const cardBody = document.querySelector(`[data-photo-id="${currentRejectPhotoId}"] .card-body`);
+                let reasonEl = document.getElementById(`photo-reason-${currentRejectPhotoId}`);
+                if (!reasonEl) {
+                    reasonEl = document.createElement('small');
+                    reasonEl.id = `photo-reason-${currentRejectPhotoId}`;
+                    reasonEl.className = 'text-danger d-block mt-1';
+                    if (cardBody) cardBody.appendChild(reasonEl);
+                }
+                if (reasonEl) reasonEl.innerHTML = `<i class="bi bi-exclamation-circle"></i> ${data.reason}`;
+
+                const cardFooter = document.querySelector(`[data-photo-id="${currentRejectPhotoId}"] .card-footer`);
+                if (cardFooter) cardFooter.innerHTML = '<small class="text-danger"><i class="bi bi-x-circle"></i> {% trans "Rejected" %}</small>';
+
+                updateApprovalProgress();
+            } else {
+                showAlert(data.error || '{% trans "Error occurred during rejection." %}', 'error');
+            }
+        })
+        .catch(error => {
+            rejectModal.hide();
+            console.error('Error:', error);
+            showAlert('{% trans "Error occurred during rejection." %}', 'error');
+        });
+    });
+
+    // Photo delete button - open modal
+    document.querySelectorAll('.delete-photo').forEach(btn => {
+        btn.addEventListener('click', function() {
+            currentDeletePhotoId = this.dataset.photoId;
+            deletePhotoModal.show();
+        });
+    });
+
+    // Photo delete confirmation button
+    const confirmDeletePhotoBtn = document.getElementById('confirmDeletePhoto');
+    if (confirmDeletePhotoBtn) {
+        confirmDeletePhotoBtn.addEventListener('click', function() {
+            if (!currentDeletePhotoId) return;
+
+            fetch(`/records/photo/${currentDeletePhotoId}/delete/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                deletePhotoModal.hide();
+
+                if (data.success) {
+                    const photoCard = document.getElementById(`existing-photo-${currentDeletePhotoId}`);
+                    if (photoCard) photoCard.remove();
+                    updateApprovalProgress();
+
+                    // Update total photo count
+                    const totalCount = document.getElementById('total-photo-count');
+                    if (totalCount) {
+                        totalCount.textContent = parseInt(totalCount.textContent) - 1;
+                    }
+
+                    showAlert('{% trans "Photo has been deleted." %}', 'success');
+                } else {
+                    showAlert(data.error || '{% trans "Error occurred during deletion." %}', 'error');
+                }
+            })
+            .catch(error => {
+                deletePhotoModal.hide();
+                console.error('Error:', error);
+                showAlert('{% trans "Error occurred during deletion." %}', 'error');
+            });
+        });
+    }
+
+    // Photo memo edit button click (tenant)
+    document.querySelectorAll('.edit-photo-memo').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const photoId = this.dataset.photoId;
+            const photoItem = document.querySelector(`.photo-item[data-photo-id="${photoId}"]`);
+            const photoUrl = photoItem.dataset.photoUrl;
+            const photoDescription = photoItem.dataset.photoDescription || '';
+
+            document.getElementById('editPhotoId').value = photoId;
+            document.getElementById('editPhotoImage').src = photoUrl;
+            document.getElementById('editPhotoDescription').value = photoDescription;
+
+            photoDetailModal.show();
+        });
+    });
+
+    // Photo memo view button click (landlord)
+    document.querySelectorAll('.view-photo-memo').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const photoId = this.dataset.photoId;
+            const photoItem = document.querySelector(`.photo-item[data-photo-id="${photoId}"]`);
+            const photoUrl = photoItem.dataset.photoUrl;
+            const photoDescription = photoItem.dataset.photoDescription || '{% trans "No memo." %}';
+
+            document.getElementById('viewMemoImage').src = photoUrl;
+            document.getElementById('viewMemoText').textContent = photoDescription;
+
+            viewMemoModal.show();
+        });
+    });
+
+    // Photo memo save button
+    const savePhotoDescriptionBtn = document.getElementById('savePhotoDescription');
+    if (savePhotoDescriptionBtn) {
+        savePhotoDescriptionBtn.addEventListener('click', function() {
+            const photoId = document.getElementById('editPhotoId').value;
+            const description = document.getElementById('editPhotoDescription').value;
+
+            const formData = new FormData();
+            formData.append('description', description);
+
+            savePhotoDescriptionBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+            savePhotoDescriptionBtn.disabled = true;
+
+            fetch(`/records/photo/${photoId}/update/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                photoDetailModal.hide();
+                savePhotoDescriptionBtn.innerHTML = '<i class="bi bi-check"></i> {% trans "Save" %}';
+                savePhotoDescriptionBtn.disabled = false;
+
+                if (data.success) {
+                    // UI update
+                    const photoItem = document.querySelector(`.photo-item[data-photo-id="${photoId}"]`);
+                    photoItem.dataset.photoDescription = description;
+
+                    // Update or add memo text
+                    let descText = document.getElementById(`photo-desc-${photoId}`);
+                    if (description) {
+                        if (!descText) {
+                            // Add memo display area
+                            const cardBody = document.createElement('div');
+                            cardBody.className = 'card-body p-1';
+                            cardBody.innerHTML = `<small class="text-muted photo-description-text" id="photo-desc-${photoId}"><i class="bi bi-chat-text"></i> ${description.substring(0, 30)}${description.length > 30 ? '...' : ''}</small>`;
+                            const imgLink = photoItem.querySelector('a');
+                            imgLink.parentNode.insertBefore(cardBody, imgLink.nextSibling);
+
+                            // Add memo icon badge
+                            if (!photoItem.querySelector('.badge.bg-info')) {
+                                const badge = document.createElement('div');
+                                badge.className = 'position-absolute top-0 end-0 m-1';
+                                badge.style.zIndex = '1';
+                                badge.innerHTML = '<span class="badge bg-info" title="' + description + '"><i class="bi bi-chat-text"></i></span>';
+                                photoItem.insertBefore(badge, photoItem.firstChild.nextSibling);
+                            }
+                        } else {
+                            descText.innerHTML = `<i class="bi bi-chat-text"></i> ${description.substring(0, 30)}${description.length > 30 ? '...' : ''}`;
+                        }
+                    } else if (descText) {
+                        // Memo deleted
+                        descText.parentElement.remove();
+                        const badge = photoItem.querySelector('.badge.bg-info');
+                        if (badge) badge.parentElement.remove();
+                    }
+
+                    showAlert('{% trans "Memo has been saved." %}', 'success');
+                } else {
+                    showAlert(data.error || '{% trans "Error occurred during save." %}', 'error');
+                }
+            })
+            .catch(error => {
+                photoDetailModal.hide();
+                savePhotoDescriptionBtn.innerHTML = '<i class="bi bi-check"></i> {% trans "Save" %}';
+                savePhotoDescriptionBtn.disabled = false;
+                console.error('Error:', error);
+                showAlert('{% trans "Error occurred during save." %}', 'error');
+            });
+        });
+    }
+});
+</script>
+{% endblock %}

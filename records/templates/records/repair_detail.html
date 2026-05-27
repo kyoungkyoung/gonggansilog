@@ -1,0 +1,249 @@
+{% extends 'base.html' %}
+{% load i18n humanize %}
+
+{% block title %}{{ repair.title }} - {% trans "Repair Request" %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-9">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'contracts:detail' contract.pk %}">{{ contract.get_display_address|truncatechars:20 }}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'records:repair_list' contract.pk %}">{% trans "Repairs" %}</a></li>
+                <li class="breadcrumb-item active">{{ repair.title|truncatechars:20 }}</li>
+            </ol>
+        </nav>
+
+        <div class="row">
+            <!-- Main content -->
+            <div class="col-lg-8">
+                <div class="card shadow mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center
+                        {% if repair.status == 'COMPLETED' %}bg-success{% elif repair.status == 'IN_PROGRESS' %}bg-warning{% elif repair.status == 'CANCELLED' %}bg-secondary{% else %}bg-primary{% endif %} text-white">
+                        <h5 class="mb-0"><i class="bi bi-tools"></i> {{ repair.title }}</h5>
+                        <span class="badge bg-light text-dark">{{ repair.get_status_display }}</span>
+                    </div>
+                    <div class="card-body">
+                        <!-- Info -->
+                        <div class="row g-2 mb-3">
+                            <div class="col-6"><small class="text-muted">{% trans "Requested By" %}</small><br>{{ repair.requested_by.username }}</div>
+                            <div class="col-6"><small class="text-muted">{% trans "Date" %}</small><br>{{ repair.created_at|date:"Y-m-d H:i" }}</div>
+                            {% if repair.location %}
+                            <div class="col-6"><small class="text-muted">{% trans "Location" %}</small><br><i class="bi bi-geo-alt"></i> {{ repair.location }}</div>
+                            {% endif %}
+                            {% if repair.defect_report %}
+                            <div class="col-6"><small class="text-muted">{% trans "Related Defect" %}</small><br>
+                                <a href="{% url 'records:defect_detail' repair.defect_report.pk %}">{{ repair.defect_report.title|truncatechars:20 }}</a>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="bg-light p-3 rounded mb-3">{{ repair.description|linebreaks }}</div>
+
+                        <!-- Cost info -->
+                        {% if repair.estimated_cost or repair.actual_cost %}
+                        <div class="row g-2 mb-3">
+                            {% if repair.estimated_cost %}
+                            <div class="col-6">
+                                <div class="card border-info">
+                                    <div class="card-body p-2 text-center">
+                                        <small class="text-muted">{% trans "Estimated Cost" %}</small>
+                                        <h5 class="mb-0 text-info">{{ repair.estimated_cost|intcomma }}{% trans "won" %}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% if repair.actual_cost %}
+                            <div class="col-6">
+                                <div class="card border-success">
+                                    <div class="card-body p-2 text-center">
+                                        <small class="text-muted">{% trans "Actual Cost" %}</small>
+                                        <h5 class="mb-0 text-success">{{ repair.actual_cost|intcomma }}{% trans "won" %}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+
+                        <!-- Photos by type -->
+                        {% if issue_photos %}
+                        <h6><i class="bi bi-camera text-danger"></i> {% trans "Problem Photos" %}</h6>
+                        <div class="row g-2 mb-3">
+                            {% for photo in issue_photos %}
+                            <div class="col-4 col-md-3"><a href="{{ photo.image.url }}" target="_blank"><img src="{{ photo.image.url }}" class="img-fluid rounded" style="height:100px;width:100%;object-fit:cover;"></a></div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        {% if progress_photos %}
+                        <h6><i class="bi bi-hammer text-warning"></i> {% trans "In Progress Photos" %}</h6>
+                        <div class="row g-2 mb-3">
+                            {% for photo in progress_photos %}
+                            <div class="col-4 col-md-3"><a href="{{ photo.image.url }}" target="_blank"><img src="{{ photo.image.url }}" class="img-fluid rounded" style="height:100px;width:100%;object-fit:cover;"></a></div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        {% if completed_photos %}
+                        <h6><i class="bi bi-check-circle text-success"></i> {% trans "Completed Photos" %}</h6>
+                        <div class="row g-2 mb-3">
+                            {% for photo in completed_photos %}
+                            <div class="col-4 col-md-3"><a href="{{ photo.image.url }}" target="_blank"><img src="{{ photo.image.url }}" class="img-fluid rounded" style="height:100px;width:100%;object-fit:cover;"></a></div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Comments timeline -->
+                <div class="card shadow mb-4">
+                    <div class="card-header"><h6 class="mb-0"><i class="bi bi-chat-dots"></i> {% trans "Comments" %}</h6></div>
+                    <div class="card-body">
+                        {% if comments %}
+                        {% for comment in comments %}
+                        <div class="d-flex mb-3">
+                            <div class="me-2">
+                                <span class="badge rounded-circle bg-{% if comment.author == contract.landlord %}primary{% else %}success{% endif %} p-2">
+                                    <i class="bi bi-person"></i>
+                                </span>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="bg-light rounded p-2">
+                                    <strong>{{ comment.author.username }}</strong>
+                                    <small class="text-muted ms-2">{{ comment.created_at|date:"Y-m-d H:i" }}</small>
+                                    <p class="mb-0 mt-1">{{ comment.message|linebreaks }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <p class="text-muted text-center mb-0">{% trans "No comments yet." %}</p>
+                        {% endif %}
+
+                        {% if repair.status != 'COMPLETED' and repair.status != 'CANCELLED' %}
+                        <hr>
+                        <form method="post" action="{% url 'records:repair_add_comment' repair.pk %}">
+                            {% csrf_token %}
+                            <div class="input-group">
+                                <input type="text" name="message" class="form-control" placeholder="{% trans 'Add a comment...' %}" required>
+                                <button type="submit" class="btn btn-primary"><i class="bi bi-send"></i></button>
+                            </div>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar: actions -->
+            <div class="col-lg-4">
+                <!-- Status actions -->
+                {% if repair.status != 'COMPLETED' and repair.status != 'CANCELLED' %}
+                <div class="card shadow mb-3">
+                    <div class="card-header bg-primary text-white">
+                        <h6 class="mb-0"><i class="bi bi-gear"></i> {% trans "Actions" %}</h6>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" action="{% url 'records:repair_update_status' repair.pk %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+
+                            {% if repair.status == 'REQUESTED' and request.user == contract.landlord %}
+                            <div class="mb-3">
+                                <label class="form-label small">{% trans "Estimated Cost" %}</label>
+                                <input type="number" name="estimated_cost" class="form-control" placeholder="{% trans 'Amount' %}">
+                            </div>
+                            <button type="submit" name="action" value="provide_quote" class="btn btn-info w-100 mb-2">
+                                <i class="bi bi-calculator"></i> {% trans "Provide Quote" %}
+                            </button>
+                            {% endif %}
+
+                            {% if repair.status == 'QUOTE_PROVIDED' and request.user == contract.tenant %}
+                            <p class="text-center mb-2">
+                                {% trans "Estimated:" %} <strong>{{ repair.estimated_cost|intcomma }}{% trans "won" %}</strong>
+                            </p>
+                            <button type="submit" name="action" value="approve_quote" class="btn btn-success w-100 mb-2">
+                                <i class="bi bi-check"></i> {% trans "Approve Quote" %}
+                            </button>
+                            {% endif %}
+
+                            {% if repair.status == 'APPROVED' and request.user == contract.landlord %}
+                            <div class="mb-2">
+                                <label class="form-label small">{% trans "Progress photos" %}</label>
+                                <input type="file" name="images" class="form-control form-control-sm" accept="image/*" multiple>
+                            </div>
+                            <button type="submit" name="action" value="start_repair" class="btn btn-warning w-100 mb-2">
+                                <i class="bi bi-hammer"></i> {% trans "Start Repair" %}
+                            </button>
+                            {% endif %}
+
+                            {% if repair.status == 'IN_PROGRESS' and request.user == contract.landlord %}
+                            <div class="mb-2">
+                                <label class="form-label small">{% trans "Actual Cost" %}</label>
+                                <input type="number" name="actual_cost" class="form-control" value="{{ repair.estimated_cost|default:'' }}">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label small">{% trans "Completed photos" %}</label>
+                                <input type="file" name="images" class="form-control form-control-sm" accept="image/*" multiple>
+                            </div>
+                            <button type="submit" name="action" value="complete_repair" class="btn btn-success w-100 mb-2">
+                                <i class="bi bi-check-circle"></i> {% trans "Complete Repair" %}
+                            </button>
+                            {% endif %}
+
+                            <button type="submit" name="action" value="cancel" class="btn btn-outline-secondary w-100"
+                                    onclick="return confirm('{% trans "Are you sure?" %}')">
+                                <i class="bi bi-x"></i> {% trans "Cancel Request" %}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Status timeline -->
+                <div class="card shadow">
+                    <div class="card-header"><h6 class="mb-0"><i class="bi bi-clock-history"></i> {% trans "Status Timeline" %}</h6></div>
+                    <div class="card-body p-0">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item {% if repair.status == 'REQUESTED' %}list-group-item-primary{% endif %}">
+                                <i class="bi bi-circle-fill text-primary me-1" style="font-size:8px;"></i>
+                                {% trans "Requested" %} <small class="text-muted float-end">{{ repair.created_at|date:"m/d H:i" }}</small>
+                            </li>
+                            {% if repair.estimated_cost %}
+                            <li class="list-group-item {% if repair.status == 'QUOTE_PROVIDED' %}list-group-item-info{% endif %}">
+                                <i class="bi bi-circle-fill text-info me-1" style="font-size:8px;"></i>
+                                {% trans "Quote Provided" %}
+                            </li>
+                            {% endif %}
+                            {% if repair.approved_at %}
+                            <li class="list-group-item">
+                                <i class="bi bi-circle-fill text-success me-1" style="font-size:8px;"></i>
+                                {% trans "Approved" %} <small class="text-muted float-end">{{ repair.approved_at|date:"m/d H:i" }}</small>
+                            </li>
+                            {% endif %}
+                            {% if repair.started_at %}
+                            <li class="list-group-item {% if repair.status == 'IN_PROGRESS' %}list-group-item-warning{% endif %}">
+                                <i class="bi bi-circle-fill text-warning me-1" style="font-size:8px;"></i>
+                                {% trans "Repair Started" %} <small class="text-muted float-end">{{ repair.started_at|date:"m/d H:i" }}</small>
+                            </li>
+                            {% endif %}
+                            {% if repair.completed_at %}
+                            <li class="list-group-item list-group-item-success">
+                                <i class="bi bi-circle-fill text-success me-1" style="font-size:8px;"></i>
+                                {% trans "Completed" %} <small class="text-muted float-end">{{ repair.completed_at|date:"m/d H:i" }}</small>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a href="{% url 'records:expense_create' contract.pk %}?repair={{ repair.pk }}" class="btn btn-outline-success mt-3 me-2">
+            <i class="bi bi-receipt"></i> {% trans "Add Expense" %}
+        </a>
+        <a href="{% url 'records:repair_list' contract.pk %}" class="btn btn-secondary mt-3">
+            <i class="bi bi-list"></i> {% trans "Back to List" %}
+        </a>
+    </div>
+</div>
+{% endblock %}

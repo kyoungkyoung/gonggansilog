@@ -1,0 +1,352 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{{ recording.get_display_title }} - {% trans "Commercial Property Restoration Management" %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-start mb-4">
+                    <h2 class="card-title mb-0">
+                        <i class="bi bi-mic-fill text-danger"></i> {{ recording.get_display_title }}
+                    </h2>
+                    <form method="post" action="{% url 'recordings:delete' recording.pk %}"
+                          onsubmit="return confirm('{% trans "Are you sure you want to delete?" %}');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-danger btn-sm">
+                            <i class="bi bi-trash"></i> {% trans "Delete" %}
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Recording Information -->
+                <div class="mb-4">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <small class="text-muted d-block">{% trans "Recording Date" %}</small>
+                            <span>{{ recording.recorded_at|date:"Y-m-d H:i" }}</span>
+                        </div>
+                        <div class="col-md-6">
+                            <small class="text-muted d-block">{% trans "Duration" %}</small>
+                            <span>{{ recording.get_duration_display }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Audio Player -->
+                <div class="mb-4">
+                    <label class="form-label"><strong>{% trans "Recording File" %}</strong></label>
+                    <audio controls class="w-100">
+                        <source src="{{ recording.audio_file.url }}" type="audio/webm">
+                        {% trans "Your browser does not support audio playback." %}
+                    </audio>
+                </div>
+
+                <!-- Memo -->
+                {% if recording.description %}
+                    <div class="mb-4">
+                        <label class="form-label"><strong>{% trans "Memo" %}</strong></label>
+                        <div class="bg-light p-3 rounded">
+                            {{ recording.description|linebreaks }}
+                        </div>
+                    </div>
+                {% endif %}
+
+                <!-- Consent Status -->
+                {% if recording.consent_status != 'NOT_REQUIRED' %}
+                <div class="mb-4">
+                    <label class="form-label"><strong><i class="bi bi-shield-check"></i> {% trans "Mutual Consent" %}</strong></label>
+
+                    {% if recording.consent_status == 'APPROVED' %}
+                        <div class="alert alert-success mb-0">
+                            <i class="bi bi-check-circle-fill"></i>
+                            {% trans "Both parties have consented. This recording is officially recognized." %}
+                            <br><small class="text-muted">
+                                {% trans "Consented by" %}: {{ recording.consented_by.username }}
+                                ({{ recording.consented_at|date:"Y-m-d H:i" }})
+                            </small>
+                        </div>
+
+                    {% elif recording.consent_status == 'REJECTED' %}
+                        <div class="alert alert-danger mb-0">
+                            <i class="bi bi-x-circle-fill"></i>
+                            {% trans "Consent was rejected. This recording is not officially recognized." %}
+                            {% if recording.consent_rejected_reason %}
+                                <br><strong>{% trans "Reason" %}:</strong> {{ recording.consent_rejected_reason }}
+                            {% endif %}
+                            <br><small class="text-muted">
+                                {% trans "Rejected by" %}: {{ recording.consented_by.username }}
+                                ({{ recording.consented_at|date:"Y-m-d H:i" }})
+                            </small>
+                        </div>
+
+                    {% elif recording.consent_status == 'PENDING' %}
+                        {% if request.user == recording.user %}
+                            {# 녹음 생성자에게 보이는 화면 #}
+                            <div class="alert alert-warning mb-0">
+                                <i class="bi bi-hourglass-split"></i>
+                                {% trans "Waiting for the other party's consent. This recording will be officially recognized once the other party approves." %}
+                            </div>
+                        {% else %}
+                            {# 상대방에게 보이는 화면 - 승인/거절 버튼 #}
+                            <div class="alert alert-info mb-0">
+                                <i class="bi bi-question-circle-fill"></i>
+                                <strong>{{ recording.user.username }}</strong>{% trans " has registered this recording. Do you consent to recognizing it as an official record?" %}
+
+                                <div class="mt-3 d-flex gap-2">
+                                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#consentApproveModal">
+                                        <i class="bi bi-check-lg"></i> {% trans "Approve" %}
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#consentRejectModal">
+                                        <i class="bi bi-x-lg"></i> {% trans "Reject" %}
+                                    </button>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                <!-- AI Summary -->
+                {% if recording.summary %}
+                    <div class="mb-4">
+                        <label class="form-label">
+                            <strong><i class="bi bi-stars text-primary"></i> {% trans "AI Summary" %}</strong>
+                            <span class="badge bg-success ms-2">{% trans "Completed" %}</span>
+                        </label>
+                        <div class="border border-primary rounded p-3 bg-light">
+                            {{ recording.summary|linebreaks }}
+                        </div>
+                    </div>
+                {% elif recording.processing_status == 'PROCESSING' %}
+                    <div class="mb-4">
+                        <label class="form-label">
+                            <strong><i class="bi bi-stars text-primary"></i> {% trans "AI Summary" %}</strong>
+                            <span class="badge bg-warning ms-2">{% trans "Processing" %}</span>
+                        </label>
+                        <div class="alert alert-info mb-0">
+                            <i class="bi bi-hourglass-split"></i> {% trans "AI is analyzing the recording content. Please check back shortly." %}
+                        </div>
+                    </div>
+                {% elif recording.processing_status == 'FAILED' %}
+                    <div class="mb-4">
+                        <label class="form-label">
+                            <strong><i class="bi bi-stars text-primary"></i> {% trans "AI Summary" %}</strong>
+                            <span class="badge bg-danger ms-2">{% trans "Failed" %}</span>
+                        </label>
+                        <div class="alert alert-warning mb-0">
+                            <i class="bi bi-exclamation-triangle"></i> {% trans "An error occurred during AI processing." %}
+                        </div>
+                    </div>
+                {% elif recording.processing_status == 'PENDING' %}
+                    <div class="mb-4">
+                        <label class="form-label">
+                            <strong><i class="bi bi-stars text-primary"></i> {% trans "AI Summary" %}</strong>
+                            <span class="badge bg-secondary ms-2">{% trans "Pending" %}</span>
+                        </label>
+                        <div class="alert alert-secondary mb-0">
+                            <i class="bi bi-clock"></i> {% trans "AI processing will start soon." %}
+                        </div>
+                    </div>
+                {% endif %}
+
+                <!-- Connected Contract Information -->
+                {% if recording.contract %}
+                    <div class="mb-4">
+                        <label class="form-label"><strong>{% trans "Connected Contract" %}</strong></label>
+                        <div class="alert alert-info mb-0">
+                            <h6 class="alert-heading">
+                                <i class="bi bi-file-text"></i> {% trans "Contract Information" %}
+                            </h6>
+                            <hr>
+                            <p class="mb-1"><strong>{% trans "Address" %}:</strong> {{ recording.contract.get_display_address }}</p>
+                            <p class="mb-1"><strong>{% trans "Contract Date" %}:</strong> {{ recording.contract.contract_date }}</p>
+                            <p class="mb-2">
+                                <a href="{% url 'contracts:detail' recording.contract.pk %}" class="alert-link">
+                                    {% trans "View Contract Details" %} <i class="bi bi-arrow-right"></i>
+                                </a>
+                            </p>
+                            <small class="text-muted">
+                                <i class="bi bi-lock-fill"></i> {% trans "For security, contract connection cannot be changed." %}
+                            </small>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="mb-4">
+                        <label class="form-label"><strong>{% trans "Connected Contract" %}</strong></label>
+                        <div class="alert alert-secondary mb-0">
+                            <i class="bi bi-x-circle"></i> {% trans "This recording is not connected to any contract." %}
+                        </div>
+                    </div>
+                {% endif %}
+
+                <hr>
+
+                <div class="d-flex gap-2">
+                    <a href="{% url 'recordings:list' %}" class="btn btn-secondary">
+                        <i class="bi bi-list"></i> {% trans "Back to List" %}
+                    </a>
+                    <button type="button" class="btn btn-outline-primary" id="downloadMp3Btn">
+                        <i class="bi bi-download"></i> {% trans "Download as MP3" %}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Consent Approval Modal -->
+{% if recording.consent_status == 'PENDING' and request.user != recording.user %}
+<div class="modal fade" id="consentApproveModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-shield-check text-success"></i> {% trans "Approve Recording Consent" %}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>{% trans "Are you sure you want to approve this recording? Once approved, it will be officially recognized as a mutual record." %}</p>
+                <div class="alert alert-light mb-0">
+                    <small>
+                        <strong>{% trans "Recording" %}:</strong> {{ recording.get_display_title }}<br>
+                        <strong>{% trans "Registered by" %}:</strong> {{ recording.user.username }}<br>
+                        <strong>{% trans "Recording Date" %}:</strong> {{ recording.recorded_at|date:"Y-m-d H:i" }}
+                    </small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+                <form method="post" action="{% url 'recordings:consent' recording.pk %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="approve">
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-check-lg"></i> {% trans "Approve" %}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Consent Rejection Modal -->
+{% if recording.consent_status == 'PENDING' and request.user != recording.user %}
+<div class="modal fade" id="consentRejectModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-x-circle text-danger"></i> {% trans "Reject Recording Consent" %}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" action="{% url 'recordings:consent' recording.pk %}">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="reject">
+                <div class="modal-body">
+                    <p>{% trans "Please enter the reason for rejecting this recording." %}</p>
+                    <textarea name="reason" class="form-control" rows="3" required
+                              placeholder="{% trans 'e.g., Recording was made without my knowledge.' %}"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-x-lg"></i> {% trans "Reject" %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- MP3 Conversion Loading Modal -->
+<div class="modal fade" id="conversionModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center p-5">
+                <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
+                    <span class="visually-hidden">{% trans "Converting..." %}</span>
+                </div>
+                <h5>{% trans "Converting to MP3..." %}</h5>
+                <p class="text-muted mb-3">{% trans "Please wait a moment" %}</p>
+                <div class="progress" style="height: 25px;">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated"
+                         role="progressbar"
+                         id="conversionProgress"
+                         style="width: 0%"
+                         aria-valuenow="0"
+                         aria-valuemin="0"
+                         aria-valuemax="100">
+                        <span id="progressText">0%</span>
+                    </div>
+                </div>
+                <small class="text-muted mt-2 d-block" id="estimatedTime">{% trans "Estimated time: Calculating..." %}</small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('downloadMp3Btn').addEventListener('click', function() {
+    const modal = new bootstrap.Modal(document.getElementById('conversionModal'));
+    const progressBar = document.getElementById('conversionProgress');
+    const progressText = document.getElementById('progressText');
+    const estimatedTime = document.getElementById('estimatedTime');
+
+    // Calculate estimated conversion time based on recording duration (approximately 0.3 seconds per second)
+    const recordingDuration = {{ recording.duration }};
+    const estimatedSeconds = Math.max(3, Math.ceil(recordingDuration * 0.3));
+
+    modal.show();
+
+    // Progress animation
+    let progress = 0;
+    const interval = 100; // Update every 100ms
+    const increment = 100 / (estimatedSeconds * 1000 / interval);
+    let remainingTime = estimatedSeconds;
+
+    const progressInterval = setInterval(() => {
+        progress += increment;
+        if (progress > 95) progress = 95; // Wait at 95%
+
+        progressBar.style.width = progress + '%';
+        progressBar.setAttribute('aria-valuenow', progress);
+        progressText.textContent = Math.round(progress) + '%';
+
+        remainingTime = Math.max(0, estimatedSeconds - (progress / 100 * estimatedSeconds));
+        if (remainingTime > 0) {
+            estimatedTime.textContent = `{% trans "Estimated remaining time" %}: ${Math.ceil(remainingTime)}{% trans "seconds" %}`;
+        } else {
+            estimatedTime.textContent = '{% trans "Almost done..." %}';
+        }
+    }, interval);
+
+    // Start actual download
+    const downloadUrl = '{% url "recordings:download_mp3" recording.pk %}';
+
+    // Close modal after estimated time and start download
+    setTimeout(() => {
+        clearInterval(progressInterval);
+        progressBar.style.width = '100%';
+        progressBar.setAttribute('aria-valuenow', 100);
+        progressText.textContent = '100%';
+        estimatedTime.textContent = '{% trans "Complete!" %}';
+
+        // Execute download (create temporary link)
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = '{{ recording.get_display_title }}.mp3';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        setTimeout(() => {
+            modal.hide();
+        }, 500);
+    }, estimatedSeconds * 1000);
+});
+</script>
+{% endblock %}

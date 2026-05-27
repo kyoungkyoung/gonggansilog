@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% if record_type == 'MOVE_IN' %}{% trans "Move In" %}{% else %}{% trans "Move Out" %}{% endif %} {% trans "Create Record" %} - {{ contract.get_display_address }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'contracts:list' %}">{% trans "Contract List" %}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'contracts:detail' contract.pk %}">{{ contract.get_display_address|truncatechars:20 }}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'records:list' contract.pk %}">{% trans "Move-in/Move-out Records" %}</a></li>
+                <li class="breadcrumb-item active">{% trans "Create Record" %}</li>
+            </ol>
+        </nav>
+
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-plus-circle"></i>
+                    {% if record_type == 'MOVE_IN' %}{% trans "Move In" %}{% else %}{% trans "Move Out" %}{% endif %} {% trans "Create Record" %}
+                </h4>
+            </div>
+            <div class="card-body p-4">
+                <div class="alert alert-info mb-4">
+                    <i class="bi bi-info-circle"></i>
+                    <strong>{% trans "Landlord Record Creation" %}</strong><br>
+                    {% trans "Once the record is created, the tenant can upload photos. You can set a deadline for uploads." %}
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="id_record_type" class="form-label">{% trans "Record Type" %}</label>
+                        {{ form.record_type }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_notes" class="form-label">{% trans "Notes (optional)" %}</label>
+                        {{ form.notes }}
+                    </div>
+
+                    <hr>
+                    <h5 class="mb-3"><i class="bi bi-calendar-event"></i> {% trans "Upload Deadline Setting" %}</h5>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="id_deadline_days" class="form-label">{% trans "Days until deadline" %}</label>
+                            {{ form.deadline_days }}
+                            <div class="form-text">{{ form.deadline_days.help_text }}</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="id_upload_deadline" class="form-label">{% trans "Or select a date directly" %}</label>
+                            {{ form.upload_deadline }}
+                            <div class="form-text">{{ form.upload_deadline.help_text }}</div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i>
+                        <strong>{% trans "Deadline is required." %}</strong> {% trans "Please enter either days or a date." %}
+                    </div>
+
+                    <hr>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-lg"></i> {% trans "Create Record" %}
+                        </button>
+                        <a href="{% url 'records:list' contract.pk %}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> {% trans "Cancel" %}
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

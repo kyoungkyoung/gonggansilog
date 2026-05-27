@@ -1,0 +1,683 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{{ title }} - {% trans "Property Management" %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-body p-4">
+                <h2 class="card-title mb-4">{{ title }}</h2>
+
+                <form method="post" id="contractForm" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <!-- Hidden field for processed file path -->
+                    <input type="hidden" id="processedFilePath" name="processed_file_path" value="">
+
+                    <!-- 국가 및 템플릿 선택 -->
+                    <div class="card bg-light mb-4">
+                        <div class="card-header">
+                            <h6 class="mb-0"><i class="bi bi-globe"></i> {% trans "Country & Template" %}</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label for="{{ form.country.id_for_label }}" class="form-label">
+                                        <strong>{% trans "Country" %} *</strong>
+                                    </label>
+                                    {{ form.country }}
+                                    {% if form.country.help_text %}
+                                        <div class="form-text">{{ form.country.help_text }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="{{ form.property_type.id_for_label }}" class="form-label">
+                                        <strong>{% trans "Property Type" %} *</strong>
+                                    </label>
+                                    {{ form.property_type }}
+                                    {% if form.property_type.help_text %}
+                                        <div class="form-text">{{ form.property_type.help_text }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="{{ form.template.id_for_label }}" class="form-label">
+                                        <strong>{% trans "Inspection Template" %}</strong>
+                                    </label>
+                                    {{ form.template }}
+                                    <div class="form-text" id="templateHelpText">{% trans "Select country and property type first" %}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- Property Address -->
+                    <div class="mb-3">
+                        <label for="{{ form.address.id_for_label }}" class="form-label">
+                            <strong>{% trans "Property Address" %} *</strong>
+                        </label>
+                        {{ form.address }}
+                        {% if form.address.help_text %}
+                            <div class="form-text">{{ form.address.help_text }}</div>
+                        {% endif %}
+                        {% if form.address.errors %}
+                            <div class="text-danger">{{ form.address.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Contract Date -->
+                    <div class="mb-3">
+                        <label for="{{ form.contract_date.id_for_label }}" class="form-label">
+                            <strong>{% trans "Contract Date" %} *</strong>
+                        </label>
+                        {{ form.contract_date }}
+                        {% if form.contract_date.errors %}
+                            <div class="text-danger">{{ form.contract_date.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Move In Date -->
+                    <div class="mb-3">
+                        <label for="{{ form.move_in_date.id_for_label }}" class="form-label">
+                            <strong>{% trans "Move In Date" %} *</strong>
+                        </label>
+                        {{ form.move_in_date }}
+                        {% if form.move_in_date.errors %}
+                            <div class="text-danger">{{ form.move_in_date.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Move Out Date -->
+                    <div class="mb-3">
+                        <label for="{{ form.move_out_date.id_for_label }}" class="form-label">
+                            <strong>{% trans "Move Out Date" %}</strong>
+                        </label>
+                        {{ form.move_out_date }}
+                        {% if form.move_out_date.help_text %}
+                            <div class="form-text">{{ form.move_out_date.help_text }}</div>
+                        {% endif %}
+                        {% if form.move_out_date.errors %}
+                            <div class="text-danger">{{ form.move_out_date.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- Landlord Selection (Tenant view) -->
+                    {% if form.landlord %}
+                    <div class="mb-3">
+                        <label for="{{ form.landlord.id_for_label }}" class="form-label">
+                            <strong>{% trans "Landlord" %}</strong>
+                        </label>
+                        {{ form.landlord }}
+                        {% if form.landlord.help_text %}
+                            <div class="form-text">{{ form.landlord.help_text }}</div>
+                        {% endif %}
+                        {% if form.landlord.errors %}
+                            <div class="text-danger">{{ form.landlord.errors }}</div>
+                        {% endif %}
+                    </div>
+                    {% if form.landlord_name %}
+                    <div id="landlord-manual-fields" class="ms-3 ps-3 border-start">
+                        <small class="text-muted d-block mb-2">{% trans "Or enter landlord details manually:" %}</small>
+                        <div class="mb-3">
+                            <label for="{{ form.landlord_name.id_for_label }}" class="form-label">{% trans "Landlord Name" %}</label>
+                            {{ form.landlord_name }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.landlord_phone.id_for_label }}" class="form-label">{% trans "Landlord Contact" %}</label>
+                            {{ form.landlord_phone }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endif %}
+
+                    <!-- Tenant Selection (Landlord view) -->
+                    {% if form.tenant %}
+                    <div class="mb-3">
+                        <label for="{{ form.tenant.id_for_label }}" class="form-label">
+                            <strong>{% trans "Tenant" %}</strong>
+                        </label>
+                        {{ form.tenant }}
+                        {% if form.tenant.help_text %}
+                            <div class="form-text">{{ form.tenant.help_text }}</div>
+                        {% endif %}
+                        {% if form.tenant.errors %}
+                            <div class="text-danger">{{ form.tenant.errors }}</div>
+                        {% endif %}
+                    </div>
+                    {% if form.tenant_name %}
+                    <div id="tenant-manual-fields" class="ms-3 ps-3 border-start">
+                        <small class="text-muted d-block mb-2">{% trans "Or enter tenant details manually:" %}</small>
+                        <div class="mb-3">
+                            <label for="{{ form.tenant_name.id_for_label }}" class="form-label">{% trans "Tenant Name" %}</label>
+                            {{ form.tenant_name }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.tenant_phone.id_for_label }}" class="form-label">{% trans "Tenant Contact" %}</label>
+                            {{ form.tenant_phone }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endif %}
+
+                    <hr class="my-4">
+
+                    <!-- Contract File (Custom UI) -->
+                    <div class="mb-4">
+                        <label class="form-label">
+                            <strong>{% trans "Contract File" %}</strong>
+                        </label>
+
+                        <!-- Actual file input (hidden) -->
+                        <input type="file" id="contractFileInput" accept=".pdf,.jpg,.jpeg,.png,.gif" style="display: none;">
+
+                        <!-- Custom file select button -->
+                        <div class="d-flex align-items-center gap-2">
+                            <button type="button" class="btn btn-outline-primary" id="selectFileBtn">
+                                <i class="bi bi-file-earmark-arrow-up"></i> {% trans "Select File" %}
+                            </button>
+                            <span id="fileName" class="text-muted">{% trans "No file selected" %}</span>
+                        </div>
+                        <div class="form-text">{% trans "PDF or image file (max 10MB)" %}</div>
+
+                        <!-- 파일 상태 -->
+                        <div id="fileStatus" class="mt-2"></div>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary" id="submitBtn">
+                            {% if contract %}{% trans "Edit" %}{% else %}{% trans "Register" %}{% endif %}
+                        </button>
+                        <a href="{% url 'contracts:list' %}" class="btn btn-secondary">{% trans "Cancel" %}</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- File Masking Modal -->
+<div class="modal fade" id="fileMaskingModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{% trans "Contract Privacy Masking" %}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info">
+                    <strong>{% trans "How to use" %}:</strong> {% trans "Drag with mouse to select areas (personal info) to mask" %}.
+                    {% trans "Selected areas will be displayed in black." %}
+                </div>
+
+                <!-- Toolbar -->
+                <div class="mb-3 d-flex gap-2">
+                    <button type="button" class="btn btn-sm btn-danger" id="clearMasksBtn">
+                        <i class="bi bi-eraser"></i> {% trans "Clear All" %}
+                    </button>
+                    <button type="button" class="btn btn-sm btn-secondary" id="undoBtn">
+                        <i class="bi bi-arrow-counterclockwise"></i> {% trans "Undo" %}
+                    </button>
+                </div>
+
+                <!-- Canvas 영역 -->
+                <div id="canvasContainer" style="max-height: 600px; overflow-y: auto; border: 1px solid #dee2e6; background: #f8f9fa; text-align: center;">
+                    <canvas id="maskingCanvas" style="cursor: crosshair; display: block; margin: 0 auto;"></canvas>
+                </div>
+
+                <!-- Masking area count display -->
+                <div class="mt-2 text-muted">
+                    <small>{% trans "Masking Areas" %}: <span id="maskCount">0</span></small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+                <button type="button" class="btn btn-primary" id="saveMaskedFileBtn">
+                    <i class="bi bi-check-lg"></i> {% trans "Save and Continue" %}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Loading Overlay (not a Bootstrap modal) -->
+<div id="loadingOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center;">
+    <div style="background:white; border-radius:12px; padding:2rem 3rem; text-align:center;">
+        <div class="spinner-border text-primary" role="status" style="width:2.5rem; height:2.5rem;">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-3 mb-0">{% trans "Processing file" %}...</p>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Landlord/Tenant selection toggle
+function setupPartyToggle(selectId, manualFieldsId) {
+    const select = document.getElementById(selectId);
+    const manual = document.getElementById(manualFieldsId);
+    if (!select || !manual) return;
+
+    function toggle() {
+        if (select.value) {
+            manual.style.display = 'none';
+        } else {
+            manual.style.display = '';
+        }
+    }
+    select.addEventListener('change', toggle);
+    toggle(); // initial state
+}
+setupPartyToggle('id_landlord', 'landlord-manual-fields');
+setupPartyToggle('id_tenant', 'tenant-manual-fields');
+
+// Translation strings for JavaScript
+const TRANSLATIONS = {
+    fileSizeError: '{% trans "File size must be under 10MB" %}',
+    fileUploadFailed: '{% trans "File upload failed" %}',
+    error: '{% trans "Error" %}',
+    clearAllConfirm: '{% trans "Clear all masking areas?" %}',
+    fileProcessed: '{% trans "File has been processed" %}',
+    maskingAreas: '{% trans "Masking Areas" %}',
+    fileProcessingFailed: '{% trans "File processing failed" %}',
+    selectCountryFirst: '{% trans "Select country and property type first" %}',
+    selectTemplate: '{% trans "Select a template" %}',
+    defaultLabel: '{% trans "Default" %}',
+    templatesAvailable: '{% trans "templates available" %}',
+    noTemplatesAvailable: '{% trans "No templates available" %}',
+    noTemplatesForCombination: '{% trans "No templates available for this combination" %}',
+    errorLoadingTemplates: '{% trans "Error loading templates" %}'
+};
+
+// Global variables
+let maskingCanvas;
+let ctx;
+let isDrawing = false;
+let startX, startY;
+let maskAreas = [];
+let tempFilePath = '';
+let originalFileName = '';
+let previewImageData = null;
+let originalImageWidth = 0;
+let originalImageHeight = 0;
+let displayScale = 1; // Display scale (relative to original)
+let cachedImage = null; // Cached image object
+
+// Get CSRF token
+function getCSRFToken() {
+    return document.querySelector('[name=csrfmiddlewaretoken]').value;
+}
+
+// File select button click
+document.getElementById('selectFileBtn').addEventListener('click', function() {
+    document.getElementById('contractFileInput').click();
+});
+
+// On file selection
+document.getElementById('contractFileInput').addEventListener('change', async function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // File size check (10MB)
+    if (file.size > 10 * 1024 * 1024) {
+        alert(TRANSLATIONS.fileSizeError);
+        return;
+    }
+
+    // Display filename
+    document.getElementById('fileName').textContent = file.name;
+    originalFileName = file.name;
+
+    // Show loading overlay
+    const overlay = document.getElementById('loadingOverlay');
+    overlay.style.display = 'flex';
+
+    try {
+        // Temporary upload
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const response = await fetch('{% url "contracts:upload_temp_file" %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCSRFToken()
+            },
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || TRANSLATIONS.fileUploadFailed);
+        }
+
+        // Save temporary file path
+        tempFilePath = data.temp_path;
+        previewImageData = data.preview;
+
+        // Hide loading overlay and open masking modal
+        overlay.style.display = 'none';
+        openMaskingModal();
+
+    } catch (error) {
+        overlay.style.display = 'none';
+        alert(TRANSLATIONS.error + ': ' + error.message);
+    }
+});
+
+// Open masking modal
+function openMaskingModal() {
+    const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('fileMaskingModal'));
+    modal.show();
+
+    // Initialize canvas
+    setTimeout(() => {
+        initializeCanvas();
+    }, 300);
+}
+
+// Initialize canvas
+function initializeCanvas() {
+    maskingCanvas = document.getElementById('maskingCanvas');
+    ctx = maskingCanvas.getContext('2d');
+
+    // Load image data (first page only)
+    const imgData = 'data:image/png;base64,' + previewImageData.pages[0];
+    const img = new Image();
+
+    img.onload = function() {
+        // Save image to cache
+        cachedImage = img;
+
+        // Save original image size
+        originalImageWidth = img.width;
+        originalImageHeight = img.height;
+
+        // Fit width to modal width (maintain aspect ratio)
+        const maxWidth = 950; // Modal max width (with padding)
+
+        let displayWidth = img.width;
+        let displayHeight = img.height;
+
+        // Resize only if width is larger
+        if (displayWidth > maxWidth) {
+            displayScale = maxWidth / displayWidth;
+            displayWidth = maxWidth;
+            displayHeight = img.height * displayScale;
+        }
+
+        // Set canvas size
+        maskingCanvas.width = displayWidth;
+        maskingCanvas.height = displayHeight;
+
+        // Draw image (resized)
+        ctx.drawImage(img, 0, 0, displayWidth, displayHeight);
+
+        // Initialize masking areas
+        maskAreas = [];
+        updateMaskCount();
+    };
+
+    img.src = imgData;
+
+    // Register event listeners
+    maskingCanvas.addEventListener('mousedown', startDrawing);
+    maskingCanvas.addEventListener('mousemove', draw);
+    maskingCanvas.addEventListener('mouseup', stopDrawing);
+    maskingCanvas.addEventListener('mouseleave', stopDrawing);
+}
+
+// Start drawing
+function startDrawing(e) {
+    isDrawing = true;
+    const rect = maskingCanvas.getBoundingClientRect();
+    startX = e.clientX - rect.left;
+    startY = e.clientY - rect.top;
+}
+
+// Drawing in progress
+function draw(e) {
+    if (!isDrawing) return;
+
+    const rect = maskingCanvas.getBoundingClientRect();
+    const currentX = e.clientX - rect.left;
+    const currentY = e.clientY - rect.top;
+
+    // Redraw canvas
+    redrawCanvas();
+
+    // Show current dragging area (semi-transparent)
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+    ctx.fillRect(startX, startY, currentX - startX, currentY - startY);
+}
+
+// Stop drawing
+function stopDrawing(e) {
+    if (!isDrawing) return;
+    isDrawing = false;
+
+    const rect = maskingCanvas.getBoundingClientRect();
+    const endX = e.clientX - rect.left;
+    const endY = e.clientY - rect.top;
+
+    const width = endX - startX;
+    const height = endY - startY;
+
+    // Minimum size check (5px)
+    if (Math.abs(width) > 5 && Math.abs(height) > 5) {
+        // Add masking area
+        maskAreas.push({
+            x: Math.min(startX, endX),
+            y: Math.min(startY, endY),
+            width: Math.abs(width),
+            height: Math.abs(height)
+        });
+
+        redrawCanvas();
+        updateMaskCount();
+    }
+}
+
+// Redraw canvas
+function redrawCanvas() {
+    if (!cachedImage) return;
+
+    // Clear canvas
+    ctx.clearRect(0, 0, maskingCanvas.width, maskingCanvas.height);
+
+    // Draw cached image (synchronously)
+    ctx.drawImage(cachedImage, 0, 0, maskingCanvas.width, maskingCanvas.height);
+
+    // Draw all masking areas
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+    maskAreas.forEach(area => {
+        ctx.fillRect(area.x, area.y, area.width, area.height);
+    });
+}
+
+// Update mask count
+function updateMaskCount() {
+    document.getElementById('maskCount').textContent = maskAreas.length;
+}
+
+// Clear all
+document.getElementById('clearMasksBtn').addEventListener('click', function() {
+    if (confirm(TRANSLATIONS.clearAllConfirm)) {
+        maskAreas = [];
+        redrawCanvas();
+        updateMaskCount();
+    }
+});
+
+// Undo
+document.getElementById('undoBtn').addEventListener('click', function() {
+    if (maskAreas.length > 0) {
+        maskAreas.pop();
+        redrawCanvas();
+        updateMaskCount();
+    }
+});
+
+// Masking complete and save
+document.getElementById('saveMaskedFileBtn').addEventListener('click', async function() {
+    // Close masking modal, show loading overlay
+    const maskingModalElement = document.getElementById('fileMaskingModal');
+    const maskingModal = bootstrap.Modal.getInstance(maskingModalElement);
+    if (maskingModal) {
+        maskingModal.hide();
+    }
+
+    const overlay = document.getElementById('loadingOverlay');
+    overlay.style.display = 'flex';
+
+    try {
+        // Convert masking areas to original size basis
+        const originalMaskAreas = maskAreas.map(area => ({
+            x: Math.round(area.x / displayScale),
+            y: Math.round(area.y / displayScale),
+            width: Math.round(area.width / displayScale),
+            height: Math.round(area.height / displayScale)
+        }));
+
+        // Send masking info to server
+        const response = await fetch('{% url "contracts:process_masking" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken()
+            },
+            body: JSON.stringify({
+                temp_path: tempFilePath,
+                mask_areas: originalMaskAreas,
+                file_name: originalFileName
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || TRANSLATIONS.fileProcessingFailed);
+        }
+
+        // Save processed file path
+        document.getElementById('processedFilePath').value = data.file_path;
+
+        // Display status
+        document.getElementById('fileStatus').innerHTML =
+            '<div class="alert alert-success"><i class="bi bi-check-circle"></i> ' + TRANSLATIONS.fileProcessed + ': ' +
+            originalFileName + ' (' + TRANSLATIONS.maskingAreas + ': ' + maskAreas.length + ')</div>';
+
+        overlay.style.display = 'none';
+
+    } catch (error) {
+        overlay.style.display = 'none';
+        alert(TRANSLATIONS.error + ': ' + error.message);
+
+        // Reopen masking modal
+        if (maskingModal) {
+            maskingModal.show();
+        }
+    }
+});
+
+// Form submission file field handling
+document.getElementById('contractForm').addEventListener('submit', function(e) {
+    // Disable file input field to prevent regular file from being sent
+    document.getElementById('contractFileInput').disabled = true;
+});
+
+// ==========================================
+// Dynamic template loading functionality
+// ==========================================
+
+const countrySelect = document.getElementById('id_country');
+const propertyTypeSelect = document.getElementById('id_property_type');
+const templateSelect = document.getElementById('id_template');
+const templateHelpText = document.getElementById('templateHelpText');
+
+// Function to dynamically load template list
+async function loadTemplates() {
+    const country = countrySelect ? countrySelect.value : '';
+    const propertyType = propertyTypeSelect ? propertyTypeSelect.value : '';
+
+    if (!country || !propertyType) {
+        // If country or property type is not selected
+        if (templateSelect) {
+            templateSelect.innerHTML = '<option value="">' + TRANSLATIONS.selectCountryFirst + '</option>';
+            templateSelect.disabled = true;
+        }
+        if (templateHelpText) {
+            templateHelpText.textContent = TRANSLATIONS.selectCountryFirst;
+        }
+        return;
+    }
+
+    try {
+        const response = await fetch(`{% url 'contracts:get_templates' %}?country=${country}&property_type=${propertyType}`, {
+            headers: {
+                'X-CSRFToken': getCSRFToken()
+            }
+        });
+
+        const data = await response.json();
+
+        if (templateSelect) {
+            templateSelect.innerHTML = '<option value="">' + TRANSLATIONS.selectTemplate + '</option>';
+
+            if (data.templates && data.templates.length > 0) {
+                data.templates.forEach(template => {
+                    const option = document.createElement('option');
+                    option.value = template.id;
+                    option.textContent = template.name + (template.is_default ? ' (' + TRANSLATIONS.defaultLabel + ')' : '') + ' v' + template.version;
+                    if (template.is_default) {
+                        option.selected = true;
+                    }
+                    templateSelect.appendChild(option);
+                });
+                templateSelect.disabled = false;
+                if (templateHelpText) {
+                    templateHelpText.textContent = data.templates.length + ' ' + TRANSLATIONS.templatesAvailable;
+                }
+            } else {
+                templateSelect.innerHTML = '<option value="">' + TRANSLATIONS.noTemplatesAvailable + '</option>';
+                templateSelect.disabled = true;
+                if (templateHelpText) {
+                    templateHelpText.textContent = TRANSLATIONS.noTemplatesForCombination;
+                }
+            }
+        }
+    } catch (error) {
+        console.error('Error loading templates:', error);
+        if (templateSelect) {
+            templateSelect.innerHTML = '<option value="">' + TRANSLATIONS.errorLoadingTemplates + '</option>';
+            templateSelect.disabled = true;
+        }
+    }
+}
+
+// On country selection change
+if (countrySelect) {
+    countrySelect.addEventListener('change', loadTemplates);
+}
+
+// On property type selection change
+if (propertyTypeSelect) {
+    propertyTypeSelect.addEventListener('change', loadTemplates);
+}
+
+// Initial template load on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Load templates if existing values are present
+    if (countrySelect && countrySelect.value && propertyTypeSelect && propertyTypeSelect.value) {
+        loadTemplates();
+    }
+});
+</script>
+{% endblock %}

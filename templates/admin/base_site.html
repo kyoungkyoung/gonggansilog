@@ -1,0 +1,754 @@
+{% extends "admin/base.html" %}
+{% load i18n static %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block extrahead %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+:root {
+    --sidebar-bg: #1a1d29;
+    --sidebar-text: #a0a3b1;
+    --sidebar-active-bg: #3b82f6;
+    --sidebar-active-text: #ffffff;
+    --sidebar-hover-bg: #2a2d3a;
+    --sidebar-width: 240px;
+    --content-bg: #f8f9fc;
+    --card-bg: #ffffff;
+    --text-primary: #1f2937;
+    --text-secondary: #6b7280;
+    --border-color: #e5e7eb;
+    --primary-color: #3b82f6;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --danger-color: #ef4444;
+}
+
+* {
+    font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+/* 전체 레이아웃 리셋 */
+html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: var(--content-bg) !important;
+}
+
+body:not(.popup) #container {
+    display: flex;
+    min-height: 100vh;
+    background: var(--content-bg);
+}
+
+/* 기본 헤더 숨기기 */
+body:not(.popup) #header {
+    display: none !important;
+}
+
+/* 기본 브레드크럼 숨기기 */
+body:not(.popup) nav[aria-label="Breadcrumbs"] {
+    display: none !important;
+}
+
+/* 기본 nav-sidebar 숨기기 */
+body:not(.popup) #nav-sidebar {
+    display: none !important;
+}
+
+/* ========== 커스텀 사이드바 ========== */
+.custom-sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: var(--sidebar-width);
+    height: 100vh;
+    background: var(--sidebar-bg);
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.sidebar-header {
+    padding: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 700;
+    text-decoration: none;
+    margin-bottom: 5px;
+}
+
+.sidebar-logo-icon {
+    width: 32px;
+    height: 32px;
+    background: var(--primary-color);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.sidebar-subtitle {
+    font-size: 11px;
+    color: var(--sidebar-text);
+    margin-top: 2px;
+}
+
+.sidebar-user {
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.sidebar-user-label {
+    font-size: 11px;
+    color: var(--sidebar-text);
+    margin-bottom: 5px;
+}
+
+.sidebar-user-email {
+    font-size: 13px;
+    color: #fff;
+    font-weight: 500;
+}
+
+.sidebar-user-role {
+    font-size: 11px;
+    color: var(--primary-color);
+    margin-top: 3px;
+}
+
+/* 사이드바 메뉴 */
+.sidebar-menu {
+    flex: 1;
+    padding: 15px 10px;
+}
+
+.sidebar-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 15px;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    border-radius: 8px;
+    margin-bottom: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.sidebar-menu-item:hover {
+    background: var(--sidebar-hover-bg);
+    color: #fff;
+}
+
+.sidebar-menu-item.active {
+    background: var(--sidebar-active-bg);
+    color: var(--sidebar-active-text);
+}
+
+.sidebar-menu-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.sidebar-section-title {
+    font-size: 11px;
+    color: var(--sidebar-text);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 15px 15px 8px;
+    font-weight: 600;
+}
+
+/* 사이드바 푸터 */
+.sidebar-footer {
+    padding: 15px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.sidebar-logout {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 14px;
+    background: none;
+    border: none;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.sidebar-logout:hover {
+    background: var(--sidebar-hover-bg);
+    color: #fff;
+}
+
+/* ========== 메인 컨텐츠 영역 ========== */
+body:not(.popup) .main#main {
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+    min-height: 100vh;
+    display: block;
+}
+
+body:not(.popup) .content {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.content-header {
+    background: var(--card-bg);
+    padding: 20px 30px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.content-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.content-subtitle {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 5px;
+}
+
+body:not(.popup) #content {
+    padding: 25px 30px;
+    background: var(--content-bg);
+    min-height: calc(100vh - 80px);
+}
+
+body:not(.popup) #content > h1 {
+    display: none;
+}
+
+/* ========== 카드 스타일 ========== */
+.module {
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.module caption {
+    background: var(--card-bg);
+    padding: 15px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.module table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.module td {
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.module td a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.module td a:hover {
+    color: var(--primary-color);
+}
+
+/* ========== 상세/수정 폼 스타일 ========== */
+fieldset.module {
+    border: none;
+    margin-bottom: 20px;
+}
+
+fieldset.module h2 {
+    background: var(--content-bg);
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.form-row {
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.form-row > div {
+    width: 100%;
+    flex: 1;
+}
+
+.form-row > label {
+    min-width: 150px;
+    font-weight: 600;
+    color: var(--text-primary);
+    padding-top: 8px;
+}
+
+.form-row .flex-container {
+    flex: 1;
+}
+
+.form-row .readonly {
+    padding: 8px 0;
+    color: var(--text-secondary);
+}
+
+.form-row .help {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 5px;
+    display: block;
+}
+
+/* 인라인 관련 아이템 */
+.inline-related {
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.inline-related h3 {
+    background: var(--content-bg);
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* 저장 버튼 영역 */
+.submit-row {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.submit-row input[type="submit"] {
+    margin: 0;
+}
+
+.submit-row .deletelink-box {
+    margin-left: auto;
+}
+
+/* object-tools (히스토리, 사이트에서 보기 버튼) */
+.object-tools {
+    padding: 0;
+    margin: 0 0 20px;
+    list-style: none;
+    display: flex;
+    gap: 10px;
+}
+
+.object-tools li {
+    margin: 0;
+}
+
+.object-tools a {
+    display: inline-block;
+    padding: 8px 16px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.object-tools a:hover {
+    background: var(--content-bg);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* ========== 테이블 스타일 ========== */
+#changelist {
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+#changelist-filter {
+    background: var(--card-bg);
+    border-left: 1px solid var(--border-color);
+    padding: 20px;
+}
+
+#changelist-filter h2 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 15px;
+}
+
+#changelist table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#changelist table thead th {
+    background: var(--content-bg);
+    padding: 12px 15px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+}
+
+#changelist table tbody td {
+    padding: 15px;
+    font-size: 14px;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+#changelist table tbody tr:hover {
+    background: var(--content-bg);
+}
+
+/* ========== 폼 스타일 ========== */
+.form-row {
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.form-row label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="url"],
+textarea {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 14px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+select {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 14px;
+    min-width: 150px;
+    max-width: 100%;
+    height: 100%;
+    margin: 0;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+    background: #fff;
+    cursor: pointer;
+}
+
+select option {
+    height: 100%;
+    padding: 8px 12px;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* 필터 영역 select */
+#changelist-filter select {
+    width: 100%;
+    margin-top: 5px;
+}
+
+/* related widget (돋보기, +버튼 있는 select) */
+.related-widget-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.related-widget-wrapper select {
+    flex: 1;
+}
+
+/* ========== 버튼 스타일 ========== */
+.submit-row input[type="submit"],
+input[type="submit"],
+.button,
+a.button {
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.submit-row input[type="submit"]:hover,
+input[type="submit"]:hover,
+.button:hover {
+    background: #2563eb;
+}
+
+.deletelink {
+    color: var(--danger-color) !important;
+}
+
+/* ========== 검색 폼 ========== */
+#changelist-search {
+    background: var(--card-bg);
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 10px;
+}
+
+#changelist-search label {
+    display: none !important;
+}
+
+#changelist-search #searchbar {
+    flex: 1 !important;
+    max-width: none !important;
+    margin: 0 !important;
+    width: auto !important;
+    height: 40px !important;
+    padding: 0 14px !important;
+}
+
+#changelist-search input[type="submit"] {
+    margin: 0 !important;
+    white-space: nowrap;
+    flex-shrink: 0;
+    height: 40px !important;
+    padding: 0 20px !important;
+}
+
+/* ========== 페이지네이션 ========== */
+.paginator {
+    padding: 15px 20px;
+    background: var(--card-bg);
+    border-top: 1px solid var(--border-color);
+    font-size: 14px;
+}
+
+/* ========== 알림 메시지 ========== */
+.messagelist {
+    padding: 0;
+    margin: 0 0 20px;
+    list-style: none;
+}
+
+.messagelist li {
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.messagelist li.success {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.messagelist li.error {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.messagelist li.warning {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+/* ========== 푸터 ========== */
+#footer {
+    display: none;
+}
+
+/* ========== 반응형 ========== */
+@media (max-width: 1024px) {
+    :root {
+        --sidebar-width: 220px;
+    }
+}
+
+@media (max-width: 768px) {
+    .custom-sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+
+    .custom-sidebar.show {
+        transform: translateX(0);
+    }
+
+    body:not(.popup) .main#main {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    body:not(.popup) #content {
+        padding: 15px;
+    }
+}
+
+/* skip link 숨기기 */
+.skip-to-content-link {
+    display: none;
+}
+</style>
+{% endblock %}
+
+{% block header %}
+<!-- 커스텀 사이드바 -->
+<aside class="custom-sidebar">
+    <div class="sidebar-header">
+        <a href="{% url 'admin:index' %}" class="sidebar-logo">
+            <span class="sidebar-logo-icon">G</span>
+            <span>공간실록</span>
+        </a>
+        <div class="sidebar-subtitle">관리자 시스템</div>
+    </div>
+
+    <div class="sidebar-user">
+        <div class="sidebar-user-label">로그인 계정</div>
+        <div class="sidebar-user-email">{% firstof user.email user.username %}</div>
+        <div class="sidebar-user-role">최고 관리자</div>
+    </div>
+
+    <nav class="sidebar-menu">
+        <a href="{% url 'admin:index' %}" class="sidebar-menu-item {% if request.path == '/admin/' %}active{% endif %}">
+            <span class="sidebar-menu-icon">📊</span>
+            <span>대시보드</span>
+        </a>
+
+        <div class="sidebar-section-title">사용자</div>
+        <a href="{% url 'admin:accounts_user_changelist' %}" class="sidebar-menu-item {% if 'accounts/user' in request.path %}active{% endif %}">
+            <span class="sidebar-menu-icon">👤</span>
+            <span>사용자 관리</span>
+        </a>
+
+        <div class="sidebar-section-title">계약</div>
+        <a href="{% url 'admin:contracts_contract_changelist' %}" class="sidebar-menu-item {% if 'contracts/contract/' in request.path and 'history' not in request.path and 'changerequest' not in request.path and 'invitation' not in request.path %}active{% endif %}">
+            <span class="sidebar-menu-icon">📄</span>
+            <span>계약 관리</span>
+        </a>
+        <a href="{% url 'admin:contracts_contractinvitation_changelist' %}" class="sidebar-menu-item {% if 'contractinvitation' in request.path %}active{% endif %}">
+            <span class="sidebar-menu-icon">✉️</span>
+            <span>계약 초대</span>
+        </a>
+        <a href="{% url 'admin:contracts_contracthistory_changelist' %}" class="sidebar-menu-item {% if 'contracthistory' in request.path %}active{% endif %}">
+            <span class="sidebar-menu-icon">📜</span>
+            <span>계약 이력</span>
+        </a>
+        <a href="{% url 'admin:contracts_contractchangerequest_changelist' %}" class="sidebar-menu-item {% if 'contractchangerequest' in request.path %}active{% endif %}">
+            <span class="sidebar-menu-icon">🔄</span>
+            <span>변경 요청</span>
+        </a>
+
+        <div class="sidebar-section-title">기록</div>
+        <a href="{% url 'admin:records_record_changelist' %}" class="sidebar-menu-item {% if 'records/record/' in request.path and 'photo' not in request.path %}active{% endif %}">
+            <span class="sidebar-menu-icon">📸</span>
+            <span>입실/퇴실 기록</span>
+        </a>
+        <a href="{% url 'admin:records_photo_changelist' %}" class="sidebar-menu-item {% if 'records/photo' in request.path %}active{% endif %}">
+            <span class="sidebar-menu-icon">🖼️</span>
+            <span>사진 관리</span>
+        </a>
+        <a href="{% url 'admin:recordings_recording_changelist' %}" class="sidebar-menu-item {% if 'recordings/recording' in request.path %}active{% endif %}">
+            <span class="sidebar-menu-icon">🎙️</span>
+            <span>녹음 관리</span>
+        </a>
+    </nav>
+
+    <div class="sidebar-footer">
+        <form id="logout-form" method="post" action="{% url 'admin:logout' %}" style="margin: 0;">
+            {% csrf_token %}
+            <button type="submit" class="sidebar-logout">
+                <span class="sidebar-menu-icon">🚪</span>
+                <span>로그아웃</span>
+            </button>
+        </form>
+    </div>
+</aside>
+{% endblock %}
+
+{% block nav-breadcrumbs %}
+<!-- 컨텐츠 헤더 -->
+<div class="content-header">
+    <h1 class="content-title">{{ title|default:"대시보드" }}</h1>
+</div>
+{% endblock %}
+
+{% block branding %}{% endblock %}

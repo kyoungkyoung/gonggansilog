@@ -1,0 +1,315 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Record" %} - {% trans "Commercial Property Restoration Management" %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-body p-4">
+                <h2 class="card-title mb-4">
+                    <i class="bi bi-mic-fill text-danger"></i> {% trans "Record" %}
+                </h2>
+
+                <!-- Recording Controls -->
+                <div class="mb-4">
+                    <div class="text-center p-4 bg-light rounded">
+                        <div class="mb-3">
+                            <h3 class="text-muted" id="recordingTime">00:00</h3>
+                            <small class="text-muted" id="recordingStatus">{% trans "Ready to record" %}</small>
+                        </div>
+
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-danger btn-lg" id="startRecordBtn">
+                                <i class="bi bi-record-circle"></i> {% trans "Start Recording" %}
+                            </button>
+                            <button type="button" class="btn btn-secondary btn-lg" id="stopRecordBtn" disabled>
+                                <i class="bi bi-stop-circle"></i> {% trans "Stop Recording" %}
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-lg" id="resetRecordBtn" disabled>
+                                <i class="bi bi-arrow-counterclockwise"></i> {% trans "Record Again" %}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recording Preview -->
+                <div class="mb-4" id="audioPreviewContainer" style="display: none;">
+                    <label class="form-label"><strong>{% trans "Recording Preview" %}</strong></label>
+                    <audio controls class="w-100" id="audioPreview"></audio>
+                </div>
+
+                <!-- Save Form -->
+                <form id="saveRecordingForm" style="display: none;">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="title" class="form-label"><strong>{% trans "Title" %} *</strong></label>
+                        <input type="text" class="form-control" id="title" name="title" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label"><strong>{% trans "Memo" %}</strong></label>
+                        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="contract_id" class="form-label"><strong>{% trans "Select Contract" %} *</strong></label>
+                        <select class="form-select" id="contract_id" name="contract_id" required>
+                            <option value="">{% trans "Please select" %}</option>
+                            {% for contract in contracts %}
+                                <option value="{{ contract.id }}">{{ contract.get_display_address }} ({{ contract.contract_date }})</option>
+                            {% endfor %}
+                        </select>
+                        <div class="form-text text-danger">
+                            <i class="bi bi-exclamation-triangle"></i> {% trans "Once connected, the contract cannot be changed." %}
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> {% trans "Save" %}
+                        </button>
+                        <a href="{% url 'recordings:list' %}" class="btn btn-secondary">{% trans "Cancel" %}</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- AI Processing Progress Modal -->
+<div class="modal fade" id="aiProcessingModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center p-5">
+                <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
+                    <span class="visually-hidden">{% trans "Processing..." %}</span>
+                </div>
+                <h5 id="processingTitle">{% trans "Saving recording file..." %}</h5>
+                <p class="text-muted mb-3" id="processingMessage">{% trans "Please wait a moment" %}</p>
+
+                <!-- Progress Steps Display -->
+                <div class="list-group text-start mb-3">
+                    <div class="list-group-item" id="step1">
+                        <i class="bi bi-hourglass-split text-secondary"></i>
+                        <span id="step1-text">{% trans "Saving recording file..." %}</span>
+                    </div>
+                    <div class="list-group-item" id="step2">
+                        <i class="bi bi-hourglass-split text-secondary"></i>
+                        <span id="step2-text">{% trans "Converting speech to text..." %}</span>
+                    </div>
+                    <div class="list-group-item" id="step3">
+                        <i class="bi bi-hourglass-split text-secondary"></i>
+                        <span id="step3-text">{% trans "AI is summarizing the content..." %}</span>
+                    </div>
+                </div>
+
+                <small class="text-muted d-block">{% trans "Estimated time: 10-30 seconds" %}</small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let mediaRecorder;
+let audioChunks = [];
+let recordingStartTime;
+let timerInterval;
+let recordedBlob;
+
+const startBtn = document.getElementById('startRecordBtn');
+const stopBtn = document.getElementById('stopRecordBtn');
+const resetBtn = document.getElementById('resetRecordBtn');
+const timeDisplay = document.getElementById('recordingTime');
+const statusDisplay = document.getElementById('recordingStatus');
+const previewContainer = document.getElementById('audioPreviewContainer');
+const audioPreview = document.getElementById('audioPreview');
+const saveForm = document.getElementById('saveRecordingForm');
+
+// Start recording
+startBtn.addEventListener('click', async function() {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+        mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
+
+        mediaRecorder.ondataavailable = (event) => {
+            audioChunks.push(event.data);
+        };
+
+        mediaRecorder.onstop = () => {
+            recordedBlob = new Blob(audioChunks, { type: 'audio/webm' });
+            const audioUrl = URL.createObjectURL(recordedBlob);
+            audioPreview.src = audioUrl;
+            previewContainer.style.display = 'block';
+            saveForm.style.display = 'block';
+
+            // Stop stream
+            stream.getTracks().forEach(track => track.stop());
+        };
+
+        mediaRecorder.start();
+        recordingStartTime = Date.now();
+
+        // UI update
+        startBtn.disabled = true;
+        stopBtn.disabled = false;
+        statusDisplay.textContent = '{% trans "Recording..." %}';
+        statusDisplay.classList.add('text-danger');
+
+        // Start timer
+        timerInterval = setInterval(updateTimer, 1000);
+
+    } catch (error) {
+        alert('{% trans "Microphone access permission is required" %}: ' + error.message);
+    }
+});
+
+// Stop recording
+stopBtn.addEventListener('click', function() {
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.stop();
+        clearInterval(timerInterval);
+
+        // UI update
+        startBtn.disabled = true;
+        stopBtn.disabled = true;
+        resetBtn.disabled = false;
+        statusDisplay.textContent = '{% trans "Recording completed" %}';
+        statusDisplay.classList.remove('text-danger');
+        statusDisplay.classList.add('text-success');
+    }
+});
+
+// Record again
+resetBtn.addEventListener('click', function() {
+    audioChunks = [];
+    recordedBlob = null;
+    timeDisplay.textContent = '00:00';
+    statusDisplay.textContent = '{% trans "Ready to record" %}';
+    statusDisplay.classList.remove('text-success');
+    previewContainer.style.display = 'none';
+    saveForm.style.display = 'none';
+
+    startBtn.disabled = false;
+    stopBtn.disabled = true;
+    resetBtn.disabled = true;
+});
+
+// Timer update
+function updateTimer() {
+    const elapsed = Math.floor((Date.now() - recordingStartTime) / 1000);
+    const minutes = Math.floor(elapsed / 60);
+    const seconds = elapsed % 60;
+    timeDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
+
+// Save
+saveForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    if (!recordedBlob) {
+        alert('{% trans "No recorded file found." %}');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('title', document.getElementById('title').value);
+    formData.append('description', document.getElementById('description').value);
+    formData.append('contract_id', document.getElementById('contract_id').value);
+
+    // Calculate recording duration
+    const duration = Math.floor((Date.now() - recordingStartTime) / 1000);
+    formData.append('duration', duration);
+
+    // Convert Blob to Base64
+    const reader = new FileReader();
+    reader.onloadend = async function() {
+        formData.append('audio_data', reader.result);
+
+        try {
+            // Show AI processing modal
+            const modal = new bootstrap.Modal(document.getElementById('aiProcessingModal'));
+            modal.show();
+
+            // Disable save button
+            const saveBtn = document.querySelector('button[type="submit"]');
+            saveBtn.disabled = true;
+
+            // Step update function
+            function updateStep(stepNum, status) {
+                const step = document.getElementById(`step${stepNum}`);
+                const icon = step.querySelector('i');
+                if (status === 'processing') {
+                    icon.className = 'bi bi-hourglass-split text-primary';
+                } else if (status === 'completed') {
+                    icon.className = 'bi bi-check-circle-fill text-success';
+                }
+            }
+
+            // Step 1: Start file save
+            updateStep(1, 'processing');
+
+            const response = await fetch('{% url "recordings:save" %}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                credentials: 'same-origin',  // Include session cookie
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                // Step 1 complete
+                updateStep(1, 'completed');
+
+                // Step 2: Speech conversion (auto progress)
+                updateStep(2, 'processing');
+                document.getElementById('processingTitle').textContent = '{% trans "Converting speech to text..." %}';
+
+                // Show Step 2 complete after short delay
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                updateStep(2, 'completed');
+
+                // Step 3: AI summary
+                updateStep(3, 'processing');
+                document.getElementById('processingTitle').textContent = '{% trans "AI is summarizing the content..." %}';
+
+                // Show Step 3 complete after short delay
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                updateStep(3, 'completed');
+
+                // Completion message
+                document.getElementById('processingTitle').textContent = '{% trans "Complete!" %}';
+                document.getElementById('processingMessage').textContent = '{% trans "Recording saved and AI processing completed." %}';
+
+                // Navigate to list page after brief delay
+                setTimeout(() => {
+                    modal.hide();
+                    window.location.href = '{% url "recordings:list" %}';
+                }, 1500);
+            } else {
+                modal.hide();
+                saveBtn.disabled = false;
+                alert('{% trans "Save failed" %}: ' + (data.error || '{% trans "Unknown error" %}'));
+            }
+        } catch (error) {
+            const modal = bootstrap.Modal.getInstance(document.getElementById('aiProcessingModal'));
+            if (modal) modal.hide();
+            const saveBtn = document.querySelector('button[type="submit"]');
+            saveBtn.disabled = false;
+            alert('{% trans "An error occurred while saving" %}: ' + error.message);
+        }
+    };
+
+    reader.readAsDataURL(recordedBlob);
+});
+</script>
+{% endblock %}

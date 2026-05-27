@@ -1,0 +1,176 @@
+[
+  {
+    "model": "accounts.user",
+    "pk": 100,
+    "fields": {
+      "username": "demo_landlord_jp",
+      "email": "landlord@demo.jp",
+      "first_name": "Taro",
+      "last_name": "Tanaka",
+      "role": "LANDLORD",
+      "preferred_language": "ja",
+      "is_active": true,
+      "password": "pbkdf2_sha256$720000$demo$demopasswordhash",
+      "date_joined": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 101,
+    "fields": {
+      "username": "demo_tenant_jp",
+      "email": "tenant@demo.jp",
+      "first_name": "Hanako",
+      "last_name": "Suzuki",
+      "role": "TENANT",
+      "preferred_language": "ja",
+      "is_active": true,
+      "password": "pbkdf2_sha256$720000$demo$demopasswordhash",
+      "date_joined": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 102,
+    "fields": {
+      "username": "demo_landlord_commercial",
+      "email": "owner@demo.jp",
+      "first_name": "Ichiro",
+      "last_name": "Yamamoto",
+      "role": "LANDLORD",
+      "preferred_language": "ja",
+      "is_active": true,
+      "password": "pbkdf2_sha256$720000$demo$demopasswordhash",
+      "date_joined": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 103,
+    "fields": {
+      "username": "demo_tenant_commercial",
+      "email": "shop@demo.jp",
+      "first_name": "Yuki",
+      "last_name": "Sato",
+      "role": "TENANT",
+      "preferred_language": "ja",
+      "is_active": true,
+      "password": "pbkdf2_sha256$720000$demo$demopasswordhash",
+      "date_joined": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "contracts.contract",
+    "pk": 100,
+    "fields": {
+      "landlord": 100,
+      "tenant": 101,
+      "landlord_name": "田中太郎",
+      "landlord_phone": "03-1234-5678",
+      "tenant_name": "鈴木花子",
+      "tenant_phone": "090-1234-5678",
+      "address": "東京都渋谷区恵比寿1-2-3 恵比寿マンション 505号室",
+      "country": "JP",
+      "contract_date": "2024-03-15",
+      "move_in_date": "2024-04-01",
+      "move_out_date": null,
+      "status": "ACTIVE",
+      "template": 3,
+      "created_at": "2024-03-15T10:00:00Z",
+      "updated_at": "2024-03-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "contracts.contract",
+    "pk": 101,
+    "fields": {
+      "landlord": 102,
+      "tenant": 103,
+      "landlord_name": "山本一郎",
+      "landlord_phone": "03-9876-5432",
+      "tenant_name": "佐藤ゆき",
+      "tenant_phone": "080-9876-5432",
+      "address": "東京都港区六本木3-4-5 六本木ビル 1F",
+      "country": "JP",
+      "contract_date": "2023-12-01",
+      "move_in_date": "2024-01-05",
+      "move_out_date": null,
+      "status": "ACTIVE",
+      "template": 4,
+      "created_at": "2023-12-01T10:00:00Z",
+      "updated_at": "2023-12-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "countries_jp.contractjapanextension",
+    "pk": 100,
+    "fields": {
+      "contract": 100,
+      "contract_type": "ORDINARY",
+      "renewal_type": "AUTO",
+      "renewal_fee": 150000,
+      "key_money": 300000,
+      "deposit": 300000,
+      "guarantee_fee": 75000,
+      "management_fee": 10000,
+      "has_special_restoration_clause": false,
+      "restoration_clause": "",
+      "agency_name": "ABC不動産株式会社",
+      "agency_license": "東京都知事 (3) 第12345号",
+      "created_at": "2024-03-15T10:00:00Z",
+      "updated_at": "2024-03-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "countries_jp.contractjapanextension",
+    "pk": 101,
+    "fields": {
+      "contract": 101,
+      "contract_type": "FIXED_TERM",
+      "renewal_type": "NONE",
+      "renewal_fee": null,
+      "key_money": 1000000,
+      "deposit": 1500000,
+      "guarantee_fee": 250000,
+      "management_fee": 30000,
+      "has_special_restoration_clause": true,
+      "restoration_clause": "退去時、テナントは全ての内装・設備を撤去し、スケルトン状態で返還すること。",
+      "agency_name": "六本木商業不動産",
+      "agency_license": "東京都知事 (5) 第98765号",
+      "created_at": "2023-12-01T10:00:00Z",
+      "updated_at": "2023-12-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "records.record",
+    "pk": 100,
+    "fields": {
+      "contract": 100,
+      "record_type": "MOVE_IN",
+      "status": "APPROVED",
+      "created_by": 101,
+      "submitted_at": "2024-04-01T11:00:00Z",
+      "landlord_approved_at": "2024-04-01T12:00:00Z",
+      "notes": "入居時の状態確認。全体的に良好な状態。玄関ドアに小さな傷あり（既存）。",
+      "template": 3,
+      "created_at": "2024-04-01T10:30:00Z",
+      "updated_at": "2024-04-01T12:00:00Z"
+    }
+  },
+  {
+    "model": "records.record",
+    "pk": 101,
+    "fields": {
+      "contract": 101,
+      "record_type": "MOVE_IN",
+      "status": "APPROVED",
+      "created_by": 103,
+      "submitted_at": "2024-01-05T15:00:00Z",
+      "landlord_approved_at": "2024-01-05T16:00:00Z",
+      "notes": "店舗入居時の状態確認。スケルトン状態での引渡し。床コンクリート、天井配管露出。",
+      "template": 4,
+      "created_at": "2024-01-05T14:30:00Z",
+      "updated_at": "2024-01-05T16:00:00Z"
+    }
+  }
+]

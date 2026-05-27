@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Verification" %} - {{ contract.get_display_address }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header {% if result.is_valid %}bg-success{% else %}bg-danger{% endif %} text-white">
+                <h4 class="mb-0">
+                    {% if result.is_valid %}
+                        <i class="bi bi-shield-check"></i> {% trans "Verification Successful" %}
+                    {% else %}
+                        <i class="bi bi-shield-x"></i> {% trans "Verification Failed" %}
+                    {% endif %}
+                </h4>
+            </div>
+            <div class="card-body">
+                <!-- 검증 결과 요약 -->
+                <div class="text-center mb-4">
+                    {% if result.is_valid %}
+                        <div class="display-1 text-success mb-3">
+                            <i class="bi bi-check-circle-fill"></i>
+                        </div>
+                        <h3 class="text-success">{% trans "File Integrity Verified" %}</h3>
+                        <p class="text-muted">
+                            {% trans "The files are identical to those at the time of contract finalization." %}<br>
+                            {% trans "It has been confirmed that the files have not been tampered with." %}
+                        </p>
+                    {% else %}
+                        <div class="display-1 text-danger mb-3">
+                            <i class="bi bi-x-circle-fill"></i>
+                        </div>
+                        <h3 class="text-danger">{% trans "File Mismatch Detected" %}</h3>
+                        <p class="text-muted">
+                            {% trans "The current files differ from those at the time of contract finalization." %}<br>
+                            {% trans "The files may have been modified or corrupted." %}
+                        </p>
+                    {% endif %}
+                </div>
+
+                <hr>
+
+                <!-- 계약 정보 -->
+                <div class="mb-4">
+                    <h5 class="text-muted mb-3">
+                        <i class="bi bi-file-earmark-text"></i> {% trans "Contract Information" %}
+                    </h5>
+                    <table class="table table-sm">
+                        <tr>
+                            <th width="35%">{% trans "Property Address" %}</th>
+                            <td>{{ contract.get_display_address }}</td>
+                        </tr>
+                        <tr>
+                            <th>{% trans "Contract Finalization Time" %}</th>
+                            <td>{{ contract.finalized_at|date:"Y-m-d H:i:s" }}</td>
+                        </tr>
+                        <tr>
+                            <th>{% trans "Blockchain Registration Time" %}</th>
+                            <td>{{ contract.blockchain_anchored_at|date:"Y-m-d H:i:s" }}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <hr>
+
+                <!-- 해시 정보 -->
+                <div class="mb-4">
+                    <h5 class="text-muted mb-3">
+                        <i class="bi bi-fingerprint"></i> {% trans "Hash Comparison" %}
+                    </h5>
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <tr>
+                                <th width="35%">{% trans "Stored Hash (At Finalization)" %}</th>
+                                <td>
+                                    <code class="text-break small">{{ result.stored_hash }}</code>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>{% trans "Current File Hash" %}</th>
+                                <td>
+                                    {% if result.current_hash %}
+                                        <code class="text-break small {% if result.is_valid %}text-success{% else %}text-danger{% endif %}">
+                                            {{ result.current_hash }}
+                                        </code>
+                                    {% else %}
+                                        <span class="text-danger">{% trans "Hash Calculation Failed" %}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                {% if result.mismatched_files %}
+                <hr>
+                <!-- 불일치 파일 목록 -->
+                <div class="mb-4">
+                    <h5 class="text-danger mb-3">
+                        <i class="bi bi-exclamation-triangle"></i> {% trans "Mismatched Items" %}
+                    </h5>
+                    <ul class="list-group">
+                        {% for file in result.mismatched_files %}
+                            <li class="list-group-item list-group-item-danger">
+                                <i class="bi bi-x-circle"></i> {{ file }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                <hr>
+
+                <!-- 블록체인 정보 -->
+                <div class="mb-4">
+                    <h5 class="text-muted mb-3">
+                        <i class="bi bi-box"></i> {% trans "Blockchain Transaction" %}
+                    </h5>
+                    <table class="table table-sm">
+                        <tr>
+                            <th width="35%">{% trans "Transaction Hash" %}</th>
+                            <td>
+                                <code class="text-break small">{{ contract.blockchain_tx_hash }}</code>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Klaytn Scope</th>
+                            <td>
+                                {% if scope_url %}
+                                    <a href="{{ scope_url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-box-arrow-up-right"></i> {% trans "View on Blockchain" %}
+                                    </a>
+                                {% else %}
+                                    <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- 설명 -->
+                <div class="alert alert-secondary">
+                    <h6 class="alert-heading">
+                        <i class="bi bi-info-circle"></i> {% trans "Verification Result Explanation" %}
+                    </h6>
+                    <ul class="mb-0 small">
+                        {% if result.is_valid %}
+                            <li><strong>{% trans "Verification Successful" %}</strong>: {% trans "The hash of the current files matches the hash recorded on the blockchain." %}</li>
+                            <li>{% trans "This means the files have not been changed since the contract was finalized." %}</li>
+                            <li>{% trans "Third parties can independently verify this fact through the blockchain transaction." %}</li>
+                        {% else %}
+                            <li><strong>{% trans "Verification Failed" %}</strong>: {% trans "The hash of the current files differs from the hash recorded on the blockchain." %}</li>
+                            <li>{% trans "This means the files may have been changed or corrupted since the contract was finalized." %}</li>
+                            <li>{% trans "Recovery of the original files may be necessary." %}</li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+                <!-- 버튼 -->
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{% url 'contracts:detail' contract.pk %}" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> {% trans "Back to Contract Details" %}
+                    </a>
+
+                    {% if scope_url %}
+                        <a href="{{ scope_url }}" target="_blank" class="btn btn-primary">
+                            <i class="bi bi-box-arrow-up-right"></i> {% trans "View on Klaytn Scope" %}
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

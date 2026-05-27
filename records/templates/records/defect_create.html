@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Report Defect" %} - {{ contract.get_display_address|truncatechars:30 }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'contracts:list' %}">{% trans "Contracts" %}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'contracts:detail' contract.pk %}">{{ contract.get_display_address|truncatechars:20 }}</a></li>
+                <li class="breadcrumb-item active">{% trans "Report Defect" %}</li>
+            </ol>
+        </nav>
+
+        <div class="card shadow">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-exclamation-triangle"></i> {% trans "Report Defect" %}
+                </h4>
+            </div>
+            <div class="card-body p-4">
+                <div class="alert alert-info mb-4">
+                    <i class="bi bi-info-circle"></i>
+                    {% trans "Report any defects or damage found in the property. Photos will serve as evidence." %}
+                </div>
+
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label"><strong>{% trans "Title" %} *</strong></label>
+                        <input type="text" name="title" class="form-control" required
+                               placeholder="{% trans 'e.g., Water leak in bathroom ceiling' %}">
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label"><strong>{% trans "Location" %}</strong></label>
+                            <input type="text" name="location" class="form-control"
+                                   placeholder="{% trans 'e.g., Bathroom, Kitchen' %}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label"><strong>{% trans "Severity" %} *</strong></label>
+                            <select name="severity" class="form-select">
+                                <option value="MINOR">{% trans "Minor" %} - {% trans "Small cosmetic issue" %}</option>
+                                <option value="MAJOR">{% trans "Major" %} - {% trans "Functional problem" %}</option>
+                                <option value="CRITICAL">{% trans "Critical" %} - {% trans "Urgent safety concern" %}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label"><strong>{% trans "Description" %} *</strong></label>
+                        <textarea name="description" class="form-control" rows="4" required
+                                  placeholder="{% trans 'Describe the defect in detail. When did you first notice it? How does it affect daily use?' %}"></textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label"><strong>{% trans "Photos" %}</strong></label>
+                        <input type="file" name="images" class="form-control" accept="image/*" multiple>
+                        <div class="form-text">{% trans "Attach photos of the defect. Multiple photos recommended." %}</div>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'contracts:detail' contract.pk %}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> {% trans "Cancel" %}
+                        </a>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-exclamation-triangle"></i> {% trans "Submit Report" %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,250 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% if record_type == 'MOVE_IN' %}{% trans "Move-in" %}{% else %}{% trans "Move-out" %}{% endif %} {% trans "Record Registration" %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'contracts:list' %}">{% trans "Contract List" %}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'contracts:detail' contract.pk %}">{{ contract.get_display_address|truncatechars:20 }}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'records:list' contract.pk %}">{% trans "Move-in/Move-out Records" %}</a></li>
+                <li class="breadcrumb-item active">{% if record_type == 'MOVE_IN' %}{% trans "Move-in" %}{% else %}{% trans "Move-out" %}{% endif %} {% trans "Record Registration" %}</li>
+            </ol>
+        </nav>
+
+        <div class="card shadow">
+            <div class="card-header bg-{% if record_type == 'MOVE_IN' %}success{% else %}warning{% endif %} {% if record_type == 'MOVE_IN' %}text-white{% endif %}">
+                <h4 class="mb-0">
+                    <i class="bi bi-{% if record_type == 'MOVE_IN' %}box-arrow-in-right{% else %}box-arrow-right{% endif %}"></i>
+                    {% if record_type == 'MOVE_IN' %}{% trans "Move-in" %}{% else %}{% trans "Move-out" %}{% endif %} {% trans "Record Registration" %}
+                </h4>
+            </div>
+            <div class="card-body p-4">
+                <form method="post" enctype="multipart/form-data" id="recordForm">
+                    {% csrf_token %}
+
+                    <!-- Record Type (hidden) -->
+                    <input type="hidden" name="record_type" value="{{ record_type }}">
+
+                    <!-- Contract Information -->
+                    <div class="alert alert-info mb-4">
+                        <h6 class="mb-2"><i class="bi bi-building"></i> {% trans "Contract Information" %}</h6>
+                        <p class="mb-1"><strong>{% trans "Address" %}:</strong> {{ contract.get_display_address }}</p>
+                        <p class="mb-0"><strong>{% trans "Contract Date" %}:</strong> {{ contract.contract_date }}</p>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="mb-4">
+                        <label for="id_notes" class="form-label">{% trans "Notes" %}</label>
+                        {{ form.notes }}
+                        <div class="form-text">{% trans "Enter any special notes or memos (optional)" %}</div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- Photo Upload Section -->
+                    <h5 class="mb-3">
+                        <i class="bi bi-camera-fill"></i> {% trans "Upload Photos" %}
+                    </h5>
+
+                    <div class="alert alert-warning mb-4">
+                        <i class="bi bi-info-circle"></i>
+                        {% trans "Click the upload button for each category to add photos." %}
+                    </div>
+
+                    <!-- Category-based Upload Area -->
+                    <div id="categoryUploadArea" class="mb-4">
+                        {% for code, name in photo_categories %}
+                        <div class="card mb-3 category-section" data-category="{{ code }}">
+                            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0">
+                                    <i class="bi bi-tag"></i> {{ name }}
+                                    <span class="badge bg-secondary photo-count" id="count-{{ code }}">0</span>
+                                </h6>
+                                <div>
+                                    <input type="file" id="file-{{ code }}" accept="image/*" multiple class="d-none" data-category="{{ code }}">
+                                    <button type="button" class="btn btn-sm btn-primary upload-btn" onclick="document.getElementById('file-{{ code }}').click()">
+                                        <i class="bi bi-upload"></i> {% trans "Add Photos" %}
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body p-2">
+                                <div class="row g-2 photo-preview" id="preview-{{ code }}">
+                                    <div class="col-12 text-center text-muted py-3 empty-message" id="empty-{{ code }}">
+                                        <small>{% trans "No photos uploaded yet" %}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'records:list' contract.pk %}" class="btn btn-secondary">
+                            <i class="bi bi-x"></i> {% trans "Cancel" %}
+                        </a>
+                        <button type="submit" class="btn btn-{% if record_type == 'MOVE_IN' %}success{% else %}warning{% endif %}">
+                            <i class="bi bi-check-circle"></i> {% trans "Register" %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<style>
+    .category-section .card-header {
+        border-bottom: 1px solid #dee2e6;
+    }
+    .photo-card {
+        position: relative;
+    }
+    .photo-card .remove-btn {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        padding: 2px 6px;
+        font-size: 12px;
+    }
+    .photo-card img {
+        height: 100px;
+        object-fit: cover;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const recordForm = document.getElementById('recordForm');
+
+    // Store uploaded files by category
+    let uploadedFiles = {};
+
+    // Add event listeners to each category file input
+    document.querySelectorAll('input[type="file"][data-category]').forEach(input => {
+        input.addEventListener('change', function(e) {
+            const category = this.dataset.category;
+            handleCategoryFiles(category, this.files);
+            this.value = ''; // Allow re-selecting same file
+        });
+    });
+
+    function handleCategoryFiles(category, files) {
+        if (!uploadedFiles[category]) {
+            uploadedFiles[category] = [];
+        }
+
+        Array.from(files).forEach(file => {
+            if (file.type.startsWith('image/')) {
+                const index = uploadedFiles[category].length;
+                uploadedFiles[category].push({
+                    file: file,
+                    description: ''
+                });
+                addPhotoCard(category, file, index);
+            }
+        });
+
+        updateCategoryCount(category);
+    }
+
+    function addPhotoCard(category, file, index) {
+        const previewArea = document.getElementById(`preview-${category}`);
+        const emptyMessage = document.getElementById(`empty-${category}`);
+
+        // Hide empty message
+        if (emptyMessage) {
+            emptyMessage.style.display = 'none';
+        }
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const col = document.createElement('div');
+            col.className = 'col-4 col-md-3 col-lg-2';
+            col.id = `photo-${category}-${index}`;
+
+            col.innerHTML = `
+                <div class="card photo-card h-100">
+                    <img src="${e.target.result}" class="card-img-top">
+                    <button type="button" class="btn btn-danger btn-sm remove-btn" onclick="removePhoto('${category}', ${index})">
+                        <i class="bi bi-x"></i>
+                    </button>
+                </div>
+            `;
+            previewArea.appendChild(col);
+        };
+        reader.readAsDataURL(file);
+    }
+
+    window.removePhoto = function(category, index) {
+        if (uploadedFiles[category]) {
+            uploadedFiles[category][index] = null;
+        }
+
+        const photoCard = document.getElementById(`photo-${category}-${index}`);
+        if (photoCard) photoCard.remove();
+
+        updateCategoryCount(category);
+
+        // Show empty message if all photos deleted
+        const hasPhotos = uploadedFiles[category] && uploadedFiles[category].some(f => f !== null);
+        const emptyMessage = document.getElementById(`empty-${category}`);
+        if (emptyMessage && !hasPhotos) {
+            emptyMessage.style.display = 'block';
+        }
+    };
+
+    function updateCategoryCount(category) {
+        const countBadge = document.getElementById(`count-${category}`);
+        if (countBadge && uploadedFiles[category]) {
+            const count = uploadedFiles[category].filter(f => f !== null).length;
+            countBadge.textContent = count;
+        }
+    }
+
+    // Form submission
+    recordForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(recordForm);
+
+        // Add all uploaded photos from all categories
+        Object.keys(uploadedFiles).forEach(category => {
+            uploadedFiles[category].forEach((item) => {
+                if (item) {
+                    formData.append('images', item.file);
+                    formData.append('categories', category);
+                    formData.append('descriptions', item.description);
+                }
+            });
+        });
+
+        fetch(recordForm.action || window.location.href, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (response.redirected) {
+                window.location.href = response.url;
+            } else {
+                return response.text();
+            }
+        })
+        .then(html => {
+            if (html) {
+                document.body.innerHTML = html;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('{% trans "Error occurred during upload." %}');
+        });
+    });
+});
+</script>
+{% endblock %}

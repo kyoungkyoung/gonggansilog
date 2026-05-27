@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load i18n humanize %}
+
+{% block title %}{{ expense.title }} - {% trans "Expense" %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'contracts:detail' contract.pk %}">{{ contract.get_display_address|truncatechars:20 }}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'records:expense_list' contract.pk %}">{% trans "Expenses" %}</a></li>
+                <li class="breadcrumb-item active">{{ expense.title|truncatechars:20 }}</li>
+            </ol>
+        </nav>
+
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="bi bi-receipt"></i> {{ expense.title }}</h4>
+            </div>
+            <div class="card-body p-4">
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <small class="text-muted d-block">{% trans "Amount" %}</small>
+                        <h4 class="{% if expense.paid_by == 'TENANT' %}text-warning{% else %}text-success{% endif %}">{{ expense.amount|intcomma }}{% trans "won" %}</h4>
+                    </div>
+                    <div class="col-md-4">
+                        <small class="text-muted d-block">{% trans "Category" %}</small>
+                        <span class="badge bg-secondary">{{ expense.get_category_display }}</span>
+                    </div>
+                    <div class="col-md-4">
+                        <small class="text-muted d-block">{% trans "Paid By" %}</small>
+                        <span>{{ expense.get_paid_by_display }}</span>
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <small class="text-muted d-block">{% trans "Expense Date" %}</small>
+                        <span>{{ expense.expense_date|date:"Y-m-d" }}</span>
+                    </div>
+                    <div class="col-md-4">
+                        <small class="text-muted d-block">{% trans "Registered By" %}</small>
+                        <span>{{ expense.created_by.username }}</span>
+                    </div>
+                    {% if expense.repair_request %}
+                    <div class="col-md-4">
+                        <small class="text-muted d-block">{% trans "Related Repair" %}</small>
+                        <a href="{% url 'records:repair_detail' expense.repair_request.pk %}">{{ expense.repair_request.title|truncatechars:20 }}</a>
+                    </div>
+                    {% endif %}
+                </div>
+
+                {% if expense.description %}
+                <div class="mb-4">
+                    <small class="text-muted d-block mb-1">{% trans "Description" %}</small>
+                    <div class="bg-light p-3 rounded">{{ expense.description|linebreaks }}</div>
+                </div>
+                {% endif %}
+
+                {% if expense.receipt_image %}
+                <div class="mb-4">
+                    <h6><i class="bi bi-paperclip"></i> {% trans "Receipt" %}</h6>
+                    <a href="{{ expense.receipt_image.url }}" target="_blank">
+                        <img src="{{ expense.receipt_image.url }}" class="img-fluid rounded shadow-sm" style="max-height: 400px;">
+                    </a>
+                </div>
+                {% endif %}
+
+                <div class="mt-4">
+                    <a href="{% url 'records:expense_list' contract.pk %}" class="btn btn-secondary">
+                        <i class="bi bi-list"></i> {% trans "Back to List" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

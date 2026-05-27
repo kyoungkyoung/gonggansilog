@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load i18n humanize %}
+
+{% block title %}{% trans "Expenses" %} - {{ contract.get_display_address|truncatechars:30 }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'contracts:detail' contract.pk %}">{{ contract.get_display_address|truncatechars:20 }}</a></li>
+                <li class="breadcrumb-item active">{% trans "Expenses" %}</li>
+            </ol>
+        </nav>
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="bi bi-receipt"></i> {% trans "Expenses" %}</h2>
+            <a href="{% url 'records:expense_create' contract.pk %}" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> {% trans "Add Expense" %}
+            </a>
+        </div>
+
+        <!-- Summary cards -->
+        <div class="row g-3 mb-4">
+            <div class="col-4">
+                <div class="card text-center border-primary">
+                    <div class="card-body py-2">
+                        <small class="text-muted">{% trans "Total" %}</small>
+                        <h5 class="mb-0 text-primary">{{ total|intcomma }}{% trans "won" %}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card text-center border-success">
+                    <div class="card-body py-2">
+                        <small class="text-muted">{% trans "Landlord Paid" %}</small>
+                        <h5 class="mb-0 text-success">{{ landlord_total|intcomma }}{% trans "won" %}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card text-center border-warning">
+                    <div class="card-body py-2">
+                        <small class="text-muted">{% trans "Tenant Paid" %}</small>
+                        <h5 class="mb-0 text-warning">{{ tenant_total|intcomma }}{% trans "won" %}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if expenses %}
+        <div class="list-group">
+            {% for expense in expenses %}
+            <a href="{% url 'records:expense_detail' expense.pk %}" class="list-group-item list-group-item-action">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="mb-1">
+                            <span class="badge bg-secondary me-1">{{ expense.get_category_display }}</span>
+                            {{ expense.title }}
+                        </h6>
+                        <small class="text-muted">
+                            {{ expense.expense_date|date:"Y-m-d" }}
+                            · {% trans "Paid by" %}: {{ expense.get_paid_by_display }}
+                            {% if expense.receipt_image %} · <i class="bi bi-paperclip"></i> {% trans "Receipt" %}{% endif %}
+                        </small>
+                    </div>
+                    <h5 class="mb-0 {% if expense.paid_by == 'TENANT' %}text-warning{% else %}text-success{% endif %}">
+                        {{ expense.amount|intcomma }}{% trans "won" %}
+                    </h5>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert alert-secondary text-center">
+            <i class="bi bi-receipt"></i> {% trans "No expenses recorded yet." %}
+        </div>
+        {% endif %}
+
+        <div class="mt-4">
+            <a href="{% url 'contracts:detail' contract.pk %}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> {% trans "Back to Contract" %}
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

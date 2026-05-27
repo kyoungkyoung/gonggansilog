@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Export Data" %} - {{ contract.get_display_address|truncatechars:30 }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'contracts:list' %}">{% trans "Contracts" %}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'contracts:detail' contract.pk %}">{{ contract.get_display_address|truncatechars:20 }}</a></li>
+                <li class="breadcrumb-item active">{% trans "Export" %}</li>
+            </ol>
+        </nav>
+
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-download"></i> {% trans "Export Contract Data" %}
+                </h4>
+            </div>
+            <div class="card-body">
+                <!-- 데이터 요약 -->
+                <div class="alert alert-info mb-4">
+                    <h6 class="alert-heading"><i class="bi bi-info-circle"></i> {% trans "Data Summary" %}</h6>
+                    <div class="row">
+                        <div class="col-6 col-md-3">
+                            <strong>{% trans "Records" %}</strong><br>
+                            <span class="fs-4">{{ records_count }}</span>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <strong>{% trans "Photos" %}</strong><br>
+                            <span class="fs-4">{{ photos_count }}</span>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <strong>{% trans "Recordings" %}</strong><br>
+                            <span class="fs-4">{{ recordings_count }}</span>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <strong>{% trans "Reports" %}</strong><br>
+                            <span class="fs-4">{{ reports_count }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Export 옵션들 -->
+                <div class="row g-4">
+                    <!-- JSON Export -->
+                    <div class="col-md-6">
+                        <div class="card h-100 border-primary">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <i class="bi bi-filetype-json text-primary"></i>
+                                    {% trans "JSON Export" %}
+                                </h5>
+                                <p class="card-text text-muted">
+                                    {% trans "Export all contract data as JSON format. Includes metadata, file hashes, and all records." %}
+                                </p>
+                                <ul class="list-unstyled small text-muted">
+                                    <li><i class="bi bi-check text-success"></i> {% trans "Contract information" %}</li>
+                                    <li><i class="bi bi-check text-success"></i> {% trans "Records & photos metadata" %}</li>
+                                    <li><i class="bi bi-check text-success"></i> {% trans "SHA-256 file hashes" %}</li>
+                                    <li><i class="bi bi-check text-success"></i> {% trans "Blockchain anchoring info" %}</li>
+                                </ul>
+                            </div>
+                            <div class="card-footer bg-transparent">
+                                <div class="d-flex gap-2">
+                                    <a href="{% url 'exports:json' contract.pk %}" class="btn btn-primary">
+                                        <i class="bi bi-download"></i> {% trans "Download" %}
+                                    </a>
+                                    <a href="{% url 'exports:json_preview' contract.pk %}" target="_blank" class="btn btn-outline-secondary">
+                                        <i class="bi bi-eye"></i> {% trans "Preview" %}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Images ZIP Export -->
+                    <div class="col-md-6">
+                        <div class="card h-100 border-success">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <i class="bi bi-file-earmark-zip text-success"></i>
+                                    {% trans "Images ZIP" %}
+                                </h5>
+                                <p class="card-text text-muted">
+                                    {% trans "Download all photos and files as a ZIP archive. Organized by record type and category." %}
+                                </p>
+                                <ul class="list-unstyled small text-muted">
+                                    <li><i class="bi bi-check text-success"></i> {% trans "Contract documents" %}</li>
+                                    <li><i class="bi bi-check text-success"></i> {% trans "Move-in/out photos" %}</li>
+                                    <li><i class="bi bi-check text-success"></i> {% trans "Recording files" %}</li>
+                                    <li><i class="bi bi-check text-success"></i> {% trans "Includes metadata.json" %}</li>
+                                </ul>
+                            </div>
+                            <div class="card-footer bg-transparent">
+                                <a href="{% url 'exports:images_zip' contract.pk %}" class="btn btn-success">
+                                    <i class="bi bi-download"></i> {% trans "Download ZIP" %}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Full Package Export -->
+                    <div class="col-12">
+                        <div class="card border-warning">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-md-8">
+                                        <h5 class="card-title">
+                                            <i class="bi bi-box-seam text-warning"></i>
+                                            {% trans "Full Package" %}
+                                            <span class="badge bg-warning text-dark">{% trans "Recommended" %}</span>
+                                        </h5>
+                                        <p class="card-text text-muted mb-0">
+                                            {% trans "Complete export package including JSON data, all images, recordings, and PDF reports. Best for archiving or sharing with partners." %}
+                                        </p>
+                                    </div>
+                                    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                                        <div class="btn-group-vertical w-100">
+                                            <a href="{% url 'exports:full_package' contract.pk %}?include_pdf=true" class="btn btn-warning">
+                                                <i class="bi bi-download"></i> {% trans "Download Full Package" %}
+                                            </a>
+                                            <a href="{% url 'exports:full_package' contract.pk %}?include_pdf=false" class="btn btn-outline-warning">
+                                                <i class="bi bi-download"></i> {% trans "Without PDF Reports" %}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 블록체인 정보 -->
+                {% if contract.is_finalized %}
+                <div class="alert alert-success mt-4">
+                    <i class="bi bi-shield-check"></i>
+                    <strong>{% trans "Blockchain Verified" %}</strong><br>
+                    <small>
+                        {% trans "This contract has been anchored to the blockchain." %}
+                        {% if contract.blockchain_tx_hash %}
+                        <br>TX: <code>{{ contract.blockchain_tx_hash|truncatechars:20 }}</code>
+                        {% endif %}
+                    </small>
+                </div>
+                {% endif %}
+
+                <!-- 일본 계약인 경우 -->
+                {% if contract.country == 'JP' and contract.japan_extension %}
+                <div class="alert alert-secondary mt-4">
+                    <i class="bi bi-flag"></i>
+                    <strong>{% trans "Japan Contract" %}</strong><br>
+                    <small>
+                        {% trans "This export includes Japan-specific restoration guidelines and contract extension data." %}
+                    </small>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="mt-3">
+            <a href="{% url 'contracts:detail' contract.pk %}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> {% trans "Back to Contract" %}
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

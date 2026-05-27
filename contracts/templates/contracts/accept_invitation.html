@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Accept Contract Invitation" %} - {% trans "Space Chronicle" %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <i class="bi bi-envelope-check" style="font-size: 4rem; color: #0d6efd;"></i>
+                    <h2 class="mt-3">{% trans "Contract Invitation" %}</h2>
+                </div>
+
+                <div class="alert alert-info">
+                    <h5 class="alert-heading">
+                        <i class="bi bi-info-circle"></i> {% trans "Invitation Information" %}
+                    </h5>
+                    <hr>
+                    <p class="mb-1"><strong>{% trans "Contract Address" %}:</strong> {{ invitation.contract.get_display_address }}</p>
+                    <p class="mb-1"><strong>{% trans "Contract Date" %}:</strong> {{ invitation.contract.contract_date }}</p>
+                    <p class="mb-1"><strong>{% trans "Move In Date" %}:</strong> {{ invitation.contract.move_in_date }}</p>
+                    <p class="mb-1"><strong>{% trans "Invited By" %}:</strong> {{ invitation.invited_by.username }}</p>
+                    <p class="mb-1"><strong>{% trans "Role" %}:</strong> {{ invitation.get_invited_user_type_display }}</p>
+                    <p class="mb-0"><strong>{% trans "Expires At" %}:</strong> {{ invitation.expires_at|date:"Y-m-d H:i" }}</p>
+                </div>
+
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    <strong>{% trans "Note" %}:</strong> {% blocktrans with role=invitation.get_invited_user_type_display %}By accepting this invitation, you will be registered as the {{ role }} for this contract.{% endblocktrans %}
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-check-circle"></i> {% trans "Accept Invitation" %}
+                        </button>
+                        <a href="{% url 'accounts:dashboard' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle"></i> {% trans "Decline" %}
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

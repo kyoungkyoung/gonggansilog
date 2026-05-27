@@ -1,0 +1,979 @@
+[
+  {
+    "model": "templates_engine.inspectiontemplate",
+    "pk": 3,
+    "fields": {
+      "name": "日本住居用基本テンプレート",
+      "name_en": "Japan Residential Standard Template",
+      "name_ja": "日本住居用基本テンプレート",
+      "country": "JP",
+      "property_type": "RESIDENTIAL",
+      "description": "国土交通省「原状回復をめぐるトラブルとガイドライン」に基づく住居用物件の点検テンプレートです。マンション、アパート、一戸建てに適用できます。",
+      "version": "1.0",
+      "is_active": true,
+      "is_default": true,
+      "created_at": "2025-03-30T00:00:00Z",
+      "updated_at": "2025-03-30T00:00:00Z"
+    }
+  },
+  {
+    "model": "templates_engine.templatesection",
+    "pk": 201,
+    "fields": {
+      "template": 3,
+      "code": "GENKAN",
+      "name_ko": "현관",
+      "name_en": "Entrance",
+      "name_ja": "玄関",
+      "description": "玄関と廊下の状態を点検します。",
+      "order": 1,
+      "is_required": true
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 201,
+    "fields": {
+      "section": 201,
+      "code": "JP_ENTRANCE_DOOR",
+      "name_ko": "현관문",
+      "name_en": "Entrance Door",
+      "name_ja": "玄関ドア",
+      "description_ko": "현관문 상태를 촬영해주세요.",
+      "description_en": "Please photograph the entrance door condition.",
+      "description_ja": "玄関ドアの状態を撮影してください。鍵の紛失・破損は借主負担です。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 2,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 1
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 202,
+    "fields": {
+      "section": 201,
+      "code": "JP_DOOR_LOCK",
+      "name_ko": "도어락/열쇠",
+      "name_en": "Door Lock/Key",
+      "name_ja": "錠前/鍵",
+      "description_ko": "도어락 및 열쇠 상태를 확인해주세요. 분실/파손은 임차인 책임입니다.",
+      "description_en": "Please check the door lock and key condition. Loss/damage is tenant's responsibility.",
+      "description_ja": "錠前と鍵の状態を確認してください。紛失・破損は借主負担です。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 2,
+      "responsibility_hint": "TENANT",
+      "order": 2
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 203,
+    "fields": {
+      "section": 201,
+      "code": "JP_GETABAKO",
+      "name_ko": "신발장",
+      "name_en": "Shoe Cabinet",
+      "name_ja": "下駄箱",
+      "description_ko": "신발장 상태를 촬영해주세요.",
+      "description_en": "Please photograph the shoe cabinet condition.",
+      "description_ja": "下駄箱の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 2,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 3
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 204,
+    "fields": {
+      "section": 201,
+      "code": "JP_GENKAN_FLOOR",
+      "name_ko": "현관 바닥",
+      "name_en": "Entrance Floor",
+      "name_ja": "玄関土間/床",
+      "description_ko": "현관 바닥 타일 상태를 촬영해주세요.",
+      "description_en": "Please photograph the entrance floor/tile condition.",
+      "description_ja": "玄関土間・床の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 2,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 4
+    }
+  },
+  {
+    "model": "templates_engine.templatesection",
+    "pk": 202,
+    "fields": {
+      "template": 3,
+      "code": "LIVING_DINING",
+      "name_ko": "거실/식당",
+      "name_en": "Living/Dining",
+      "name_ja": "リビング/ダイニング",
+      "description": "リビングとダイニングの状態を点検します。",
+      "order": 2,
+      "is_required": true
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 205,
+    "fields": {
+      "section": 202,
+      "code": "JP_LD_FLOOR",
+      "name_ko": "바닥 (플로링)",
+      "name_en": "Floor (Flooring)",
+      "name_ja": "床（フローリング）",
+      "description_ko": "바닥 상태를 촬영해주세요. 가구 설치 자국은 통상손모입니다.",
+      "description_en": "Please photograph the floor condition. Furniture marks are normal wear.",
+      "description_ja": "床の状態を撮影してください。家具の設置跡は通常損耗です。引越作業のキズは借主負担。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 4,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 1
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 206,
+    "fields": {
+      "section": 202,
+      "code": "JP_LD_WALL",
+      "name_ko": "벽 (클로스)",
+      "name_en": "Wall (Wallpaper)",
+      "name_ja": "壁（クロス）",
+      "description_ko": "벽지 상태를 촬영해주세요. 일조에 의한 변색은 통상손모입니다.",
+      "description_en": "Please photograph the wallpaper condition. Sun discoloration is normal wear.",
+      "description_ja": "壁（クロス）の状態を撮影してください。日照による変色は通常損耗。タバコのヤニは借主負担。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 2,
+      "max_photos": 6,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 2
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 207,
+    "fields": {
+      "section": 202,
+      "code": "JP_LD_CEILING",
+      "name_ko": "천장",
+      "name_en": "Ceiling",
+      "name_ja": "天井",
+      "description_ko": "천장 상태를 촬영해주세요.",
+      "description_en": "Please photograph the ceiling condition.",
+      "description_ja": "天井の状態を撮影してください。照明器具の跡は設置方法により判断します。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 2,
+      "responsibility_hint": "LANDLORD",
+      "order": 3
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 208,
+    "fields": {
+      "section": 202,
+      "code": "JP_LD_WINDOW",
+      "name_ko": "창문/샤시",
+      "name_en": "Window/Sash",
+      "name_ja": "窓/サッシ",
+      "description_ko": "창문 및 샤시 상태를 촬영해주세요.",
+      "description_en": "Please photograph the window and sash condition.",
+      "description_ja": "窓とサッシの状態を撮影してください。網入りガラスの自然亀裂は貸主負担。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 3,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 4
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 209,
+    "fields": {
+      "section": 202,
+      "code": "JP_LD_TV_WALL",
+      "name_ko": "TV 뒷면 벽",
+      "name_en": "Wall Behind TV",
+      "name_ja": "テレビ裏の壁",
+      "description_ko": "TV 뒷면 벽의 전기 자국을 확인해주세요. 통상손모입니다.",
+      "description_en": "Please check the wall behind TV for electrical marks. This is normal wear.",
+      "description_ja": "テレビ裏の壁の状態を撮影してください。電気ヤケは通常損耗（貸主負担）。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 2,
+      "responsibility_hint": "LANDLORD",
+      "order": 5
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 210,
+    "fields": {
+      "section": 202,
+      "code": "JP_LD_AC",
+      "name_ko": "에어컨",
+      "name_en": "Air Conditioner",
+      "name_ja": "エアコン",
+      "description_ko": "에어컨 상태를 촬영해주세요. 흡연 냄새가 있으면 임차인 책임입니다.",
+      "description_en": "Please photograph the AC condition. Smoking odor is tenant's responsibility.",
+      "description_ja": "エアコンの状態を撮影してください。喫煙等の臭いは借主負担で内部洗浄必要。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 2,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 6
+    }
+  },
+  {
+    "model": "templates_engine.templatesection",
+    "pk": 203,
+    "fields": {
+      "template": 3,
+      "code": "BEDROOM",
+      "name_ko": "침실/방",
+      "name_en": "Bedroom",
+      "name_ja": "寝室/居室",
+      "description": "各居室の状態を点検します。複数の部屋がある場合は各部屋ごとに撮影してください。",
+      "order": 3,
+      "is_required": true
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 211,
+    "fields": {
+      "section": 203,
+      "code": "JP_BR_FLOOR",
+      "name_ko": "바닥",
+      "name_en": "Floor",
+      "name_ja": "床",
+      "description_ko": "침실 바닥 상태를 촬영해주세요.",
+      "description_en": "Please photograph the bedroom floor condition.",
+      "description_ja": "居室の床の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 4,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 1
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 212,
+    "fields": {
+      "section": 203,
+      "code": "JP_BR_WALL",
+      "name_ko": "벽면",
+      "name_en": "Wall",
+      "name_ja": "壁面",
+      "description_ko": "침실 벽면 상태를 촬영해주세요. 압정/핀 구멍은 통상손모입니다.",
+      "description_en": "Please photograph the bedroom wall condition. Pushpin holes are normal wear.",
+      "description_ja": "居室の壁面を撮影してください。画鋲・ピンの穴は通常損耗（貸主負担）。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 2,
+      "max_photos": 6,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 2
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 213,
+    "fields": {
+      "section": 203,
+      "code": "JP_BR_CLOSET",
+      "name_ko": "수납/클로젯",
+      "name_en": "Closet/Storage",
+      "name_ja": "収納/クローゼット",
+      "description_ko": "수납공간 및 클로젯 상태를 촬영해주세요.",
+      "description_en": "Please photograph the closet and storage condition.",
+      "description_ja": "収納・クローゼットの状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 3,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 3
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 214,
+    "fields": {
+      "section": 203,
+      "code": "JP_BR_WINDOW",
+      "name_ko": "창문",
+      "name_en": "Window",
+      "name_ja": "窓",
+      "description_ko": "침실 창문 상태를 촬영해주세요.",
+      "description_en": "Please photograph the bedroom window condition.",
+      "description_ja": "居室の窓の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 2,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 4
+    }
+  },
+  {
+    "model": "templates_engine.templatesection",
+    "pk": 204,
+    "fields": {
+      "template": 3,
+      "code": "WASHITSU",
+      "name_ko": "화실 (다다미방)",
+      "name_en": "Japanese Room",
+      "name_ja": "和室",
+      "description": "和室がある場合、畳・襖・障子の状態を点検します。",
+      "order": 4,
+      "is_required": false
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 215,
+    "fields": {
+      "section": 204,
+      "code": "JP_TATAMI",
+      "name_ko": "다다미",
+      "name_en": "Tatami Mat",
+      "name_ja": "畳",
+      "description_ko": "다다미 상태를 촬영해주세요. 통상적 사용에 의한 변색은 임대인 책임입니다.",
+      "description_en": "Please photograph the tatami condition. Normal discoloration is landlord's responsibility.",
+      "description_ja": "畳の状態を撮影してください。裏返し・表替えは次の入居者確保のためなら貸主負担。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 4,
+      "responsibility_hint": "LANDLORD",
+      "order": 1
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 216,
+    "fields": {
+      "section": 204,
+      "code": "JP_FUSUMA",
+      "name_ko": "후스마 (미닫이문)",
+      "name_en": "Fusuma (Sliding Door)",
+      "name_ja": "襖",
+      "description_ko": "후스마 상태를 촬영해주세요.",
+      "description_en": "Please photograph the fusuma condition.",
+      "description_ja": "襖の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 3,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 2
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 217,
+    "fields": {
+      "section": 204,
+      "code": "JP_SHOJI",
+      "name_ko": "장지문",
+      "name_en": "Shoji (Paper Screen)",
+      "name_ja": "障子",
+      "description_ko": "장지문 상태를 촬영해주세요.",
+      "description_en": "Please photograph the shoji screen condition.",
+      "description_ja": "障子の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 2,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 3
+    }
+  },
+  {
+    "model": "templates_engine.templatesection",
+    "pk": 205,
+    "fields": {
+      "template": 3,
+      "code": "KITCHEN",
+      "name_ko": "주방",
+      "name_en": "Kitchen",
+      "name_ja": "キッチン",
+      "description": "キッチンの状態を点検します。油汚れは使用状況により判断します。",
+      "order": 5,
+      "is_required": true
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 218,
+    "fields": {
+      "section": 205,
+      "code": "JP_KIT_SINK",
+      "name_ko": "싱크대",
+      "name_en": "Kitchen Sink",
+      "name_ja": "シンク",
+      "description_ko": "싱크대 상태를 촬영해주세요.",
+      "description_en": "Please photograph the sink condition.",
+      "description_ja": "シンクの状態を撮影してください。水垢等は清掃状況により判断。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 2,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 1
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 219,
+    "fields": {
+      "section": 205,
+      "code": "JP_KIT_STOVE",
+      "name_ko": "가스레인지/IH",
+      "name_en": "Gas Stove/IH",
+      "name_ja": "ガスコンロ/IH",
+      "description_ko": "가스레인지 또는 IH 상태를 촬영해주세요. 청소 태만으로 인한 오염은 임차인 책임입니다.",
+      "description_en": "Please photograph the stove condition. Stains from cleaning neglect is tenant's responsibility.",
+      "description_ja": "ガスコンロ/IHの状態を撮影してください。清掃を怠った油汚れは借主負担。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 2,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 2
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 220,
+    "fields": {
+      "section": 205,
+      "code": "JP_KIT_HOOD",
+      "name_ko": "레인지 후드",
+      "name_en": "Range Hood",
+      "name_ja": "レンジフード/換気扇",
+      "description_ko": "레인지 후드 및 환기팬 상태를 촬영해주세요.",
+      "description_en": "Please photograph the range hood and ventilation fan condition.",
+      "description_ja": "レンジフード・換気扇の状態を撮影してください。油汚れの清掃状況を確認。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 2,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 3
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 221,
+    "fields": {
+      "section": 205,
+      "code": "JP_KIT_CABINET",
+      "name_ko": "수납장",
+      "name_en": "Cabinet",
+      "name_ja": "収納棚/吊戸棚",
+      "description_ko": "주방 수납장 상태를 촬영해주세요.",
+      "description_en": "Please photograph the kitchen cabinet condition.",
+      "description_ja": "キッチン収納棚の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 2,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 4
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 222,
+    "fields": {
+      "section": 205,
+      "code": "JP_KIT_FLOOR",
+      "name_ko": "주방 바닥",
+      "name_en": "Kitchen Floor",
+      "name_ja": "キッチン床",
+      "description_ko": "주방 바닥 상태를 촬영해주세요.",
+      "description_en": "Please photograph the kitchen floor condition.",
+      "description_ja": "キッチンの床の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 2,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 5
+    }
+  },
+  {
+    "model": "templates_engine.templatesection",
+    "pk": 206,
+    "fields": {
+      "template": 3,
+      "code": "BATHROOM",
+      "name_ko": "욕실",
+      "name_en": "Bathroom",
+      "name_ja": "浴室",
+      "description": "浴室の状態を点検します。カビ・水垢は清掃状況により判断します。",
+      "order": 6,
+      "is_required": true
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 223,
+    "fields": {
+      "section": 206,
+      "code": "JP_BATH_TUB",
+      "name_ko": "욕조",
+      "name_en": "Bathtub",
+      "name_ja": "浴槽",
+      "description_ko": "욕조 상태를 촬영해주세요. 교체가 필요하지 않으면 임대인 책임입니다.",
+      "description_en": "Please photograph the bathtub condition. Replacement for next tenant is landlord's responsibility.",
+      "description_ja": "浴槽の状態を撮影してください。次の入居者確保のための取替えは貸主負担。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 3,
+      "responsibility_hint": "LANDLORD",
+      "order": 1
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 224,
+    "fields": {
+      "section": 206,
+      "code": "JP_BATH_WALL",
+      "name_ko": "욕실 벽/타일",
+      "name_en": "Bathroom Wall/Tile",
+      "name_ja": "浴室壁/タイル",
+      "description_ko": "욕실 벽면 및 타일 상태를 촬영해주세요.",
+      "description_en": "Please photograph the bathroom wall and tile condition.",
+      "description_ja": "浴室の壁・タイルの状態を撮影してください。カビ・水垢は清掃状況により判断。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 4,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 2
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 225,
+    "fields": {
+      "section": 206,
+      "code": "JP_BATH_FLOOR",
+      "name_ko": "욕실 바닥",
+      "name_en": "Bathroom Floor",
+      "name_ja": "浴室床",
+      "description_ko": "욕실 바닥 상태를 촬영해주세요.",
+      "description_en": "Please photograph the bathroom floor condition.",
+      "description_ja": "浴室の床の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 2,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 3
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 226,
+    "fields": {
+      "section": 206,
+      "code": "JP_BATH_DOOR",
+      "name_ko": "욕실문",
+      "name_en": "Bathroom Door",
+      "name_ja": "浴室ドア",
+      "description_ko": "욕실문 상태를 촬영해주세요.",
+      "description_en": "Please photograph the bathroom door condition.",
+      "description_ja": "浴室ドアの状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 1,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 4
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 227,
+    "fields": {
+      "section": 206,
+      "code": "JP_BATH_MIRROR",
+      "name_ko": "거울/수납",
+      "name_en": "Mirror/Storage",
+      "name_ja": "鏡/収納",
+      "description_ko": "거울 및 수납 상태를 촬영해주세요.",
+      "description_en": "Please photograph the mirror and storage condition.",
+      "description_ja": "鏡と収納の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 2,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 5
+    }
+  },
+  {
+    "model": "templates_engine.templatesection",
+    "pk": 207,
+    "fields": {
+      "template": 3,
+      "code": "TOILET",
+      "name_ko": "화장실",
+      "name_en": "Toilet",
+      "name_ja": "トイレ",
+      "description": "トイレの状態を点検します。",
+      "order": 7,
+      "is_required": true
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 228,
+    "fields": {
+      "section": 207,
+      "code": "JP_TOILET_BOWL",
+      "name_ko": "변기",
+      "name_en": "Toilet Bowl",
+      "name_ja": "便器",
+      "description_ko": "변기 상태를 촬영해주세요.",
+      "description_en": "Please photograph the toilet bowl condition.",
+      "description_ja": "便器の状態を撮影してください。通常使用による変色は貸主負担。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 2,
+      "responsibility_hint": "LANDLORD",
+      "order": 1
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 229,
+    "fields": {
+      "section": 207,
+      "code": "JP_TOILET_TANK",
+      "name_ko": "물탱크/변기 커버",
+      "name_en": "Tank/Toilet Seat",
+      "name_ja": "タンク/便座",
+      "description_ko": "물탱크 및 변기 커버 상태를 촬영해주세요.",
+      "description_en": "Please photograph the tank and toilet seat condition.",
+      "description_ja": "タンクと便座の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 2,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 2
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 230,
+    "fields": {
+      "section": 207,
+      "code": "JP_TOILET_FLOOR",
+      "name_ko": "화장실 바닥",
+      "name_en": "Toilet Floor",
+      "name_ja": "トイレ床",
+      "description_ko": "화장실 바닥 상태를 촬영해주세요.",
+      "description_en": "Please photograph the toilet floor condition.",
+      "description_ja": "トイレの床の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 2,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 3
+    }
+  },
+  {
+    "model": "templates_engine.templatesection",
+    "pk": 208,
+    "fields": {
+      "template": 3,
+      "code": "WASHROOM",
+      "name_ko": "세면실",
+      "name_en": "Washroom",
+      "name_ja": "洗面所",
+      "description": "洗面所の状態を点検します。",
+      "order": 8,
+      "is_required": true
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 231,
+    "fields": {
+      "section": 208,
+      "code": "JP_WASH_SINK",
+      "name_ko": "세면대",
+      "name_en": "Washbasin",
+      "name_ja": "洗面台",
+      "description_ko": "세면대 상태를 촬영해주세요.",
+      "description_en": "Please photograph the washbasin condition.",
+      "description_ja": "洗面台の状態を撮影してください。水垢・カビは清掃状況により判断。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 2,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 1
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 232,
+    "fields": {
+      "section": 208,
+      "code": "JP_WASH_MIRROR",
+      "name_ko": "거울",
+      "name_en": "Mirror",
+      "name_ja": "鏡",
+      "description_ko": "세면실 거울 상태를 촬영해주세요.",
+      "description_en": "Please photograph the mirror condition.",
+      "description_ja": "洗面所の鏡の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 1,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 2
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 233,
+    "fields": {
+      "section": 208,
+      "code": "JP_WASH_MACHINE",
+      "name_ko": "세탁기 설치 공간",
+      "name_en": "Washing Machine Area",
+      "name_ja": "洗濯機置き場",
+      "description_ko": "세탁기 설치 공간 상태를 촬영해주세요.",
+      "description_en": "Please photograph the washing machine area condition.",
+      "description_ja": "洗濯機置き場の状態を撮影してください。防水パン等含む。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 2,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 3
+    }
+  },
+  {
+    "model": "templates_engine.templatesection",
+    "pk": 209,
+    "fields": {
+      "template": 3,
+      "code": "BALCONY",
+      "name_ko": "베란다/발코니",
+      "name_en": "Balcony",
+      "name_ja": "ベランダ/バルコニー",
+      "description": "ベランダ・バルコニーの状態を点検します。",
+      "order": 9,
+      "is_required": false
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 234,
+    "fields": {
+      "section": 209,
+      "code": "JP_BALCONY_FLOOR",
+      "name_ko": "바닥",
+      "name_en": "Floor",
+      "name_ja": "床",
+      "description_ko": "베란다 바닥 상태를 촬영해주세요.",
+      "description_en": "Please photograph the balcony floor condition.",
+      "description_ja": "ベランダ・バルコニーの床の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 2,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 1
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 235,
+    "fields": {
+      "section": 209,
+      "code": "JP_BALCONY_RAIL",
+      "name_ko": "난간/손스리",
+      "name_en": "Railing",
+      "name_ja": "手すり/柵",
+      "description_ko": "난간 및 손스리 상태를 촬영해주세요.",
+      "description_en": "Please photograph the railing condition.",
+      "description_ja": "手すり・柵の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 2,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 2
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 236,
+    "fields": {
+      "section": 209,
+      "code": "JP_BALCONY_DRAIN",
+      "name_ko": "배수구",
+      "name_en": "Drain",
+      "name_ja": "排水口",
+      "description_ko": "배수구 상태를 촬영해주세요.",
+      "description_en": "Please photograph the drain condition.",
+      "description_ja": "排水口の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 1,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 3
+    }
+  },
+  {
+    "model": "templates_engine.templatesection",
+    "pk": 210,
+    "fields": {
+      "template": 3,
+      "code": "EQUIPMENT",
+      "name_ko": "설비/기타",
+      "name_en": "Equipment/Others",
+      "name_ja": "設備/その他",
+      "description": "給湯器、インターホン、分電盤等の設備を点検します。",
+      "order": 10,
+      "is_required": true
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 237,
+    "fields": {
+      "section": 210,
+      "code": "JP_EQUIP_WATER_HEATER",
+      "name_ko": "급탕기",
+      "name_en": "Water Heater",
+      "name_ja": "給湯器",
+      "description_ko": "급탕기 상태를 촬영해주세요. 수명에 의한 고장은 임대인 책임입니다.",
+      "description_en": "Please photograph the water heater condition. End of life failure is landlord's responsibility.",
+      "description_ja": "給湯器の状態を撮影してください。機器の寿命による故障は貸主負担。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 2,
+      "responsibility_hint": "LANDLORD",
+      "order": 1
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 238,
+    "fields": {
+      "section": 210,
+      "code": "JP_EQUIP_INTERCOM",
+      "name_ko": "인터폰",
+      "name_en": "Intercom",
+      "name_ja": "インターホン",
+      "description_ko": "인터폰 상태를 촬영해주세요.",
+      "description_en": "Please photograph the intercom condition.",
+      "description_ja": "インターホンの状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 1,
+      "responsibility_hint": "LANDLORD",
+      "order": 2
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 239,
+    "fields": {
+      "section": 210,
+      "code": "JP_EQUIP_BREAKER",
+      "name_ko": "분전반",
+      "name_en": "Breaker Panel",
+      "name_ja": "分電盤",
+      "description_ko": "분전반 상태를 촬영해주세요.",
+      "description_en": "Please photograph the breaker panel condition.",
+      "description_ja": "分電盤の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 1,
+      "responsibility_hint": "LANDLORD",
+      "order": 3
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 240,
+    "fields": {
+      "section": 210,
+      "code": "JP_EQUIP_LIGHTING",
+      "name_ko": "조명기구",
+      "name_en": "Lighting Fixtures",
+      "name_ja": "照明器具",
+      "description_ko": "조명기구 상태를 촬영해주세요. 전구/형광등 교체는 소모품입니다.",
+      "description_en": "Please photograph the lighting fixtures. Bulb replacement is consumable.",
+      "description_ja": "照明器具の状態を撮影してください。電球・蛍光灯の交換は消耗品（貸主負担）。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 3,
+      "responsibility_hint": "LANDLORD",
+      "order": 4
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 241,
+    "fields": {
+      "section": 210,
+      "code": "JP_EQUIP_SCREEN",
+      "name_ko": "방충망",
+      "name_en": "Screen Door",
+      "name_ja": "網戸",
+      "description_ko": "방충망 상태를 촬영해주세요. 교체가 필요하지 않으면 임대인 책임입니다.",
+      "description_en": "Please photograph the screen door condition. Replacement for next tenant is landlord's responsibility.",
+      "description_ja": "網戸の状態を撮影してください。次の入居者確保のための張替えは貸主負担。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 2,
+      "responsibility_hint": "LANDLORD",
+      "order": 5
+    }
+  }
+]

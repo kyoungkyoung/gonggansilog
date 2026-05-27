@@ -1,0 +1,643 @@
+[
+  {
+    "model": "templates_engine.inspectiontemplate",
+    "pk": 1,
+    "fields": {
+      "name": "한국 상가용 기본 템플릿",
+      "name_en": "Korea Commercial Standard Template",
+      "name_ja": "韓国商業用基本テンプレート",
+      "country": "KR",
+      "property_type": "COMMERCIAL",
+      "description": "상가건물임대차보호법 기반 상가용 원상복구 점검 템플릿입니다. 간판, 인테리어, 설비 등 상가 특화 항목을 포함합니다.",
+      "version": "1.0",
+      "is_active": true,
+      "is_default": true,
+      "created_at": "2025-03-30T00:00:00Z",
+      "updated_at": "2025-03-30T00:00:00Z"
+    }
+  },
+  {
+    "model": "templates_engine.templatesection",
+    "pk": 1,
+    "fields": {
+      "template": 1,
+      "code": "EXTERIOR",
+      "name_ko": "외부/간판",
+      "name_en": "Exterior/Signage",
+      "name_ja": "外部/看板",
+      "description": "상가 외부 및 간판 설치 상태를 점검합니다.",
+      "order": 1,
+      "is_required": true
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 1,
+    "fields": {
+      "section": 1,
+      "code": "SIGNBOARD",
+      "name_ko": "간판 설치 위치",
+      "name_en": "Signboard Installation Location",
+      "name_ja": "看板設置位置",
+      "description_ko": "간판의 설치 위치와 상태를 촬영해주세요. 퇴실 시 원상복구 대상입니다.",
+      "description_en": "Please photograph the signboard installation location and condition. Subject to restoration upon move-out.",
+      "description_ja": "看板の設置位置と状態を撮影してください。退去時の原状回復対象です。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 5,
+      "responsibility_hint": "TENANT",
+      "order": 1
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 2,
+    "fields": {
+      "section": 1,
+      "code": "ENTRANCE_DOOR",
+      "name_ko": "외부 출입문",
+      "name_en": "Entrance Door",
+      "name_ja": "外部出入口",
+      "description_ko": "상가 외부 출입문의 상태를 촬영해주세요.",
+      "description_en": "Please photograph the condition of the exterior entrance door.",
+      "description_ja": "店舗外部の出入口の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 3,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 2
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 3,
+    "fields": {
+      "section": 1,
+      "code": "EXTERIOR_WALL",
+      "name_ko": "외부 벽면",
+      "name_en": "Exterior Wall",
+      "name_ja": "外壁",
+      "description_ko": "상가 외부 벽면 상태를 촬영해주세요.",
+      "description_en": "Please photograph the exterior wall condition.",
+      "description_ja": "店舗外壁の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 3,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 3
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 4,
+    "fields": {
+      "section": 1,
+      "code": "SHOW_WINDOW",
+      "name_ko": "창문/쇼윈도우",
+      "name_en": "Window/Show Window",
+      "name_ja": "窓/ショーウィンドウ",
+      "description_ko": "창문이나 쇼윈도우 상태를 촬영해주세요.",
+      "description_en": "Please photograph the window or show window condition.",
+      "description_ja": "窓やショーウィンドウの状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 4,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 4
+    }
+  },
+  {
+    "model": "templates_engine.templatesection",
+    "pk": 2,
+    "fields": {
+      "template": 1,
+      "code": "INTERIOR",
+      "name_ko": "내부 (영업공간)",
+      "name_en": "Interior (Business Space)",
+      "name_ja": "内部（営業スペース）",
+      "description": "상가 내부 영업공간의 전체적인 상태를 점검합니다.",
+      "order": 2,
+      "is_required": true
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 5,
+    "fields": {
+      "section": 2,
+      "code": "FLOOR",
+      "name_ko": "바닥",
+      "name_en": "Floor",
+      "name_ja": "床",
+      "description_ko": "영업공간 바닥 상태를 촬영해주세요.",
+      "description_en": "Please photograph the floor condition of the business space.",
+      "description_ja": "営業スペースの床の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 4,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 1
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 6,
+    "fields": {
+      "section": 2,
+      "code": "WALL_EAST",
+      "name_ko": "벽면 (동쪽)",
+      "name_en": "Wall (East)",
+      "name_ja": "壁面（東側）",
+      "description_ko": "동쪽 벽면 상태를 촬영해주세요.",
+      "description_en": "Please photograph the east wall condition.",
+      "description_ja": "東側の壁面の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 3,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 2
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 7,
+    "fields": {
+      "section": 2,
+      "code": "WALL_WEST",
+      "name_ko": "벽면 (서쪽)",
+      "name_en": "Wall (West)",
+      "name_ja": "壁面（西側）",
+      "description_ko": "서쪽 벽면 상태를 촬영해주세요.",
+      "description_en": "Please photograph the west wall condition.",
+      "description_ja": "西側の壁面の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 3,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 3
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 8,
+    "fields": {
+      "section": 2,
+      "code": "WALL_SOUTH",
+      "name_ko": "벽면 (남쪽)",
+      "name_en": "Wall (South)",
+      "name_ja": "壁面（南側）",
+      "description_ko": "남쪽 벽면 상태를 촬영해주세요.",
+      "description_en": "Please photograph the south wall condition.",
+      "description_ja": "南側の壁面の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 3,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 4
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 9,
+    "fields": {
+      "section": 2,
+      "code": "WALL_NORTH",
+      "name_ko": "벽면 (북쪽)",
+      "name_en": "Wall (North)",
+      "name_ja": "壁面（北側）",
+      "description_ko": "북쪽 벽면 상태를 촬영해주세요.",
+      "description_en": "Please photograph the north wall condition.",
+      "description_ja": "北側の壁面の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 3,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 5
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 10,
+    "fields": {
+      "section": 2,
+      "code": "CEILING",
+      "name_ko": "천장",
+      "name_en": "Ceiling",
+      "name_ja": "天井",
+      "description_ko": "천장 상태를 촬영해주세요.",
+      "description_en": "Please photograph the ceiling condition.",
+      "description_ja": "天井の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 3,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 6
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 11,
+    "fields": {
+      "section": 2,
+      "code": "LIGHTING",
+      "name_ko": "조명기구",
+      "name_en": "Lighting Fixtures",
+      "name_ja": "照明器具",
+      "description_ko": "조명기구 상태를 촬영해주세요.",
+      "description_en": "Please photograph the lighting fixtures condition.",
+      "description_ja": "照明器具の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 3,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 7
+    }
+  },
+  {
+    "model": "templates_engine.templatesection",
+    "pk": 3,
+    "fields": {
+      "template": 1,
+      "code": "KITCHEN",
+      "name_ko": "주방/조리시설",
+      "name_en": "Kitchen/Cooking Facilities",
+      "name_ja": "厨房/調理施設",
+      "description": "음식점의 경우 주방 및 조리시설 상태를 점검합니다.",
+      "order": 3,
+      "is_required": false
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 12,
+    "fields": {
+      "section": 3,
+      "code": "SINK_COUNTER",
+      "name_ko": "싱크대/작업대",
+      "name_en": "Sink/Work Counter",
+      "name_ja": "シンク/作業台",
+      "description_ko": "싱크대 및 작업대 상태를 촬영해주세요. 임차인 설치물인 경우 원상복구 대상입니다.",
+      "description_en": "Please photograph the sink and work counter condition. Subject to restoration if installed by tenant.",
+      "description_ja": "シンクと作業台の状態を撮影してください。入居者設置の場合は原状回復対象です。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 4,
+      "responsibility_hint": "TENANT",
+      "order": 1
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 13,
+    "fields": {
+      "section": 3,
+      "code": "STOVE",
+      "name_ko": "가스레인지/화구",
+      "name_en": "Gas Range/Burner",
+      "name_ja": "ガスレンジ/コンロ",
+      "description_ko": "가스레인지 및 화구 상태를 촬영해주세요.",
+      "description_en": "Please photograph the gas range and burner condition.",
+      "description_ja": "ガスレンジとコンロの状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 3,
+      "responsibility_hint": "TENANT",
+      "order": 2
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 14,
+    "fields": {
+      "section": 3,
+      "code": "VENTILATION_DUCT",
+      "name_ko": "환기/덕트",
+      "name_en": "Ventilation/Duct",
+      "name_ja": "換気/ダクト",
+      "description_ko": "환기시설 및 덕트 상태를 촬영해주세요.",
+      "description_en": "Please photograph the ventilation and duct condition.",
+      "description_ja": "換気設備とダクトの状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 3,
+      "responsibility_hint": "TENANT",
+      "order": 3
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 15,
+    "fields": {
+      "section": 3,
+      "code": "REFRIGERATION",
+      "name_ko": "냉장/냉동시설",
+      "name_en": "Refrigeration/Freezer",
+      "name_ja": "冷蔵/冷凍設備",
+      "description_ko": "냉장 및 냉동시설 상태를 촬영해주세요.",
+      "description_en": "Please photograph the refrigeration and freezer equipment condition.",
+      "description_ja": "冷蔵・冷凍設備の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 3,
+      "responsibility_hint": "TENANT",
+      "order": 4
+    }
+  },
+  {
+    "model": "templates_engine.templatesection",
+    "pk": 4,
+    "fields": {
+      "template": 1,
+      "code": "BATHROOM",
+      "name_ko": "화장실",
+      "name_en": "Bathroom",
+      "name_ja": "トイレ",
+      "description": "화장실 시설 상태를 점검합니다.",
+      "order": 4,
+      "is_required": true
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 16,
+    "fields": {
+      "section": 4,
+      "code": "TOILET",
+      "name_ko": "변기",
+      "name_en": "Toilet",
+      "name_ja": "便器",
+      "description_ko": "변기 상태를 촬영해주세요.",
+      "description_en": "Please photograph the toilet condition.",
+      "description_ja": "便器の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 2,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 1
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 17,
+    "fields": {
+      "section": 4,
+      "code": "WASHBASIN",
+      "name_ko": "세면대",
+      "name_en": "Washbasin",
+      "name_ja": "洗面台",
+      "description_ko": "세면대 상태를 촬영해주세요.",
+      "description_en": "Please photograph the washbasin condition.",
+      "description_ja": "洗面台の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 2,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 2
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 18,
+    "fields": {
+      "section": 4,
+      "code": "BATHROOM_TILE",
+      "name_ko": "타일/벽면",
+      "name_en": "Tile/Wall",
+      "name_ja": "タイル/壁面",
+      "description_ko": "화장실 타일 및 벽면 상태를 촬영해주세요.",
+      "description_en": "Please photograph the bathroom tile and wall condition.",
+      "description_ja": "トイレのタイルと壁面の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 3,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 3
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 19,
+    "fields": {
+      "section": 4,
+      "code": "BATHROOM_VENTILATION",
+      "name_ko": "환풍기",
+      "name_en": "Ventilation Fan",
+      "name_ja": "換気扇",
+      "description_ko": "환풍기 상태를 촬영해주세요.",
+      "description_en": "Please photograph the ventilation fan condition.",
+      "description_ja": "換気扇の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 2,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 4
+    }
+  },
+  {
+    "model": "templates_engine.templatesection",
+    "pk": 5,
+    "fields": {
+      "template": 1,
+      "code": "ELECTRICAL",
+      "name_ko": "전기/설비",
+      "name_en": "Electrical/Facilities",
+      "name_ja": "電気/設備",
+      "description": "전기 및 기타 설비 상태를 점검합니다.",
+      "order": 5,
+      "is_required": true
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 20,
+    "fields": {
+      "section": 5,
+      "code": "DISTRIBUTION_BOARD",
+      "name_ko": "분전반",
+      "name_en": "Distribution Board",
+      "name_ja": "分電盤",
+      "description_ko": "분전반 상태를 촬영해주세요. 기본 설비는 임대인 책임, 증설분은 임차인 책임입니다.",
+      "description_en": "Please photograph the distribution board condition. Basic equipment is landlord's responsibility, additions are tenant's.",
+      "description_ja": "分電盤の状態を撮影してください。基本設備は貸主責任、増設分は借主責任です。",
+      "item_type": "PHOTO",
+      "is_required": true,
+      "min_photos": 1,
+      "max_photos": 2,
+      "responsibility_hint": "LANDLORD",
+      "order": 1
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 21,
+    "fields": {
+      "section": 5,
+      "code": "AC_OUTDOOR",
+      "name_ko": "에어컨 실외기 위치",
+      "name_en": "AC Outdoor Unit Location",
+      "name_ja": "エアコン室外機位置",
+      "description_ko": "에어컨 실외기 설치 위치를 촬영해주세요.",
+      "description_en": "Please photograph the AC outdoor unit installation location.",
+      "description_ja": "エアコン室外機の設置位置を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 2,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 2
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 22,
+    "fields": {
+      "section": 5,
+      "code": "GAS_PIPE",
+      "name_ko": "가스 배관",
+      "name_en": "Gas Pipe",
+      "name_ja": "ガス配管",
+      "description_ko": "가스 배관 상태를 촬영해주세요.",
+      "description_en": "Please photograph the gas pipe condition.",
+      "description_ja": "ガス配管の状態を撮影してください。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 2,
+      "responsibility_hint": "NEGOTIABLE",
+      "order": 3
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 23,
+    "fields": {
+      "section": 5,
+      "code": "FIRE_SAFETY",
+      "name_ko": "소방시설",
+      "name_en": "Fire Safety Equipment",
+      "name_ja": "消防設備",
+      "description_ko": "소방시설 상태를 촬영해주세요. 소방시설은 임대인 책임입니다.",
+      "description_en": "Please photograph the fire safety equipment condition. Fire safety is landlord's responsibility.",
+      "description_ja": "消防設備の状態を撮影してください。消防設備は貸主責任です。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 3,
+      "responsibility_hint": "LANDLORD",
+      "order": 4
+    }
+  },
+  {
+    "model": "templates_engine.templatesection",
+    "pk": 6,
+    "fields": {
+      "template": 1,
+      "code": "INTERIOR_FIXTURES",
+      "name_ko": "인테리어/시설물",
+      "name_en": "Interior/Fixtures",
+      "name_ja": "インテリア/設備",
+      "description": "임차인이 설치한 인테리어 및 시설물 상태를 점검합니다. 퇴실 시 원상복구 대상입니다.",
+      "order": 6,
+      "is_required": false
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 24,
+    "fields": {
+      "section": 6,
+      "code": "PARTITION",
+      "name_ko": "칸막이/파티션",
+      "name_en": "Partition",
+      "name_ja": "間仕切り/パーティション",
+      "description_ko": "칸막이 및 파티션 상태를 촬영해주세요. 원상복구 대상입니다.",
+      "description_en": "Please photograph the partition condition. Subject to restoration.",
+      "description_ja": "間仕切りとパーティションの状態を撮影してください。原状回復対象です。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 4,
+      "responsibility_hint": "TENANT",
+      "order": 1
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 25,
+    "fields": {
+      "section": 6,
+      "code": "DISPLAY_SHELF",
+      "name_ko": "진열장/선반",
+      "name_en": "Display/Shelf",
+      "name_ja": "陳列棚/棚",
+      "description_ko": "진열장 및 선반 상태를 촬영해주세요. 원상복구 대상입니다.",
+      "description_en": "Please photograph the display and shelf condition. Subject to restoration.",
+      "description_ja": "陳列棚と棚の状態を撮影してください。原状回復対象です。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 4,
+      "responsibility_hint": "TENANT",
+      "order": 2
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 26,
+    "fields": {
+      "section": 6,
+      "code": "COUNTER",
+      "name_ko": "카운터/계산대",
+      "name_en": "Counter/Checkout",
+      "name_ja": "カウンター/レジ台",
+      "description_ko": "카운터 및 계산대 상태를 촬영해주세요. 원상복구 대상입니다.",
+      "description_en": "Please photograph the counter and checkout area condition. Subject to restoration.",
+      "description_ja": "カウンターとレジ台の状態を撮影してください。原状回復対象です。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 3,
+      "responsibility_hint": "TENANT",
+      "order": 3
+    }
+  },
+  {
+    "model": "templates_engine.templateitem",
+    "pk": 27,
+    "fields": {
+      "section": 6,
+      "code": "OTHER_FIXTURES",
+      "name_ko": "기타 설치물",
+      "name_en": "Other Fixtures",
+      "name_ja": "その他設備",
+      "description_ko": "기타 설치물 상태를 촬영해주세요. 원상복구 대상입니다.",
+      "description_en": "Please photograph other fixtures condition. Subject to restoration.",
+      "description_ja": "その他設備の状態を撮影してください。原状回復対象です。",
+      "item_type": "PHOTO",
+      "is_required": false,
+      "min_photos": 1,
+      "max_photos": 5,
+      "responsibility_hint": "TENANT",
+      "order": 4
+    }
+  }
+]

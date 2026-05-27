@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Select User Type" %} - {% trans "Space Chronicle" %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-body p-5">
+                <h2 class="card-title text-center mb-4">{% trans "Additional Information" %}</h2>
+                <p class="text-center text-muted mb-4">
+                    {% trans "Please enter the following information to use the service." %}
+                </p>
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-4">
+                        <label class="form-label"><strong>{% trans "User Type" %}</strong></label>
+                        <div class="form-check p-3 mb-3 border rounded">
+                            <input class="form-check-input" type="radio" name="user_type" id="tenant" value="TENANT" required>
+                            <label class="form-check-label w-100" for="tenant">
+                                <strong>{% trans "Tenant (Small Business Owner)" %}</strong>
+                                <p class="text-muted mb-0 small">{% trans "Person who rents commercial space for business" %}</p>
+                            </label>
+                        </div>
+
+                        <div class="form-check p-3 border rounded">
+                            <input class="form-check-input" type="radio" name="user_type" id="landlord" value="LANDLORD" required>
+                            <label class="form-check-label w-100" for="landlord">
+                                <strong>{% trans "Landlord (Property Owner)" %}</strong>
+                                <p class="text-muted mb-0 small">{% trans "Person who owns and rents out commercial property" %}</p>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="phone_number" class="form-label"><strong>{% trans "Phone" %}</strong></label>
+                        <input type="tel" class="form-control" id="phone_number" name="phone_number"
+                               value="{{ user.phone_number }}"
+                               placeholder="010-1234-5678"
+                               required>
+                        <div class="form-text">{% trans "Required for contract-related communication." %}</div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">{% trans "Get Started" %}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

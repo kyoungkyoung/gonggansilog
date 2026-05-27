@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Restoration Guide" %} - {{ contract.get_display_address|truncatechars:30 }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'contracts:list' %}">{% trans "Contracts" %}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'contracts:detail' contract.pk %}">{{ contract.get_display_address|truncatechars:20 }}</a></li>
+                <li class="breadcrumb-item active">{% trans "Restoration Guide" %}</li>
+            </ol>
+        </nav>
+
+        <div class="card shadow mb-4">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-book"></i> {% trans "Original Condition Restoration Guide" %}
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <h5><i class="bi bi-info-circle"></i> {% trans "About This Guide" %}</h5>
+                    <p class="mb-0">
+                        {% trans "This guide is based on the Ministry of Land, Infrastructure, Transport and Tourism's 'Guidelines on Troubles Related to Original Condition Restoration'." %}
+                        <br>
+                        <small class="text-muted">国土交通省「原状回復をめぐるトラブルとガイドライン」に基づく</small>
+                    </p>
+                </div>
+
+                <!-- Legend -->
+                <div class="mb-4">
+                    <h5>{% trans "Legend" %}</h5>
+                    <div class="d-flex flex-wrap gap-2">
+                        <span class="badge bg-success">{% trans "Landlord Responsibility" %} (貸主負担)</span>
+                        <span class="badge bg-warning text-dark">{% trans "Tenant Responsibility" %} (借主負担)</span>
+                        <span class="badge bg-secondary">{% trans "Negotiable" %} (協議)</span>
+                        <span class="badge bg-info text-dark">{% trans "Normal Wear" %} (通常損耗)</span>
+                    </div>
+                </div>
+
+                <!-- Categories -->
+                {% for cat_code, cat_data in items_by_category.items %}
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            {% if cat_code == 'FLOOR' %}
+                            <i class="bi bi-grid-3x3"></i>
+                            {% elif cat_code == 'WALL_CEILING' %}
+                            <i class="bi bi-square"></i>
+                            {% elif cat_code == 'DOOR_WINDOW' %}
+                            <i class="bi bi-door-open"></i>
+                            {% elif cat_code == 'EQUIPMENT' %}
+                            <i class="bi bi-gear"></i>
+                            {% elif cat_code == 'KITCHEN' %}
+                            <i class="bi bi-cup-hot"></i>
+                            {% elif cat_code == 'BATHROOM' %}
+                            <i class="bi bi-droplet"></i>
+                            {% elif cat_code == 'TOILET' %}
+                            <i class="bi bi-toilet"></i>
+                            {% else %}
+                            <i class="bi bi-three-dots"></i>
+                            {% endif %}
+                            {{ cat_data.name }}
+                        </h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th style="width: 50%;">{% trans "Item" %}</th>
+                                        <th style="width: 20%;">{% trans "Responsibility" %}</th>
+                                        <th style="width: 15%;">{% trans "Type" %}</th>
+                                        <th style="width: 15%;">{% trans "Depreciation" %}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in cat_data.items %}
+                                    <tr>
+                                        <td>
+                                            <strong>{{ item.description_ja }}</strong>
+                                            {% if item.description_en %}
+                                            <br><small class="text-muted">{{ item.description_en }}</small>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if item.responsibility == 'LANDLORD' %}
+                                            <span class="badge bg-success">{% trans "Landlord" %}</span>
+                                            {% elif item.responsibility == 'TENANT' %}
+                                            <span class="badge bg-warning text-dark">{% trans "Tenant" %}</span>
+                                            {% else %}
+                                            <span class="badge bg-secondary">{% trans "Negotiable" %}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if item.is_normal_wear %}
+                                            <span class="badge bg-info text-dark">{% trans "Normal Wear" %}</span>
+                                            {% else %}
+                                            <span class="badge bg-light text-dark">{% trans "Damage" %}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if item.depreciation_years %}
+                                            {{ item.depreciation_years }}{% trans " years" %}
+                                            {% else %}
+                                            -
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="alert alert-warning">
+                    {% trans "No restoration items found for this property type." %}
+                </div>
+                {% endfor %}
+
+                <!-- Key Principles -->
+                <div class="card mt-4">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0"><i class="bi bi-lightbulb"></i> {% trans "Key Principles" %}</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-success">{% trans "Landlord Responsibility" %} (貸主負担)</h6>
+                                <ul>
+                                    <li>{% trans "Normal wear and tear from daily use" %}</li>
+                                    <li>{% trans "Sun discoloration of wallpaper/floors" %}</li>
+                                    <li>{% trans "Furniture indentation marks" %}</li>
+                                    <li>{% trans "Electrical marks behind appliances" %}</li>
+                                    <li>{% trans "Equipment reaching end of life" %}</li>
+                                    <li>{% trans "Pushpin/pin holes (small)" %}</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-warning">{% trans "Tenant Responsibility" %} (借主負担)</h6>
+                                <ul>
+                                    <li>{% trans "Intentional or negligent damage" %}</li>
+                                    <li>{% trans "Cigarette tar stains and odor" %}</li>
+                                    <li>{% trans "Pet damage (scratches, odor)" %}</li>
+                                    <li>{% trans "Mold from neglected condensation" %}</li>
+                                    <li>{% trans "Oil stains from cleaning neglect" %}</li>
+                                    <li>{% trans "Key loss or damage" %}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="mt-4 d-flex justify-content-between">
+                    <a href="{% url 'contracts:detail' contract.pk %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> {% trans "Back to Contract" %}
+                    </a>
+                    <a href="{% url 'japan:edit_extension' contract.pk %}" class="btn btn-danger">
+                        <i class="bi bi-pencil"></i> {% trans "Edit Contract Info" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} - 상가 원상복구 관리{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-body p-4">
+                <h2 class="card-title mb-4">{{ title }}</h2>
+
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <!-- 상가 주소 -->
+                    <div class="mb-3">
+                        <label for="{{ form.address.id_for_label }}" class="form-label">
+                            <strong>상가 주소 *</strong>
+                        </label>
+                        {{ form.address }}
+                        {% if form.address.help_text %}
+                            <div class="form-text">{{ form.address.help_text }}</div>
+                        {% endif %}
+                        {% if form.address.errors %}
+                            <div class="text-danger">{{ form.address.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- 계약일 -->
+                    <div class="mb-3">
+                        <label for="{{ form.contract_date.id_for_label }}" class="form-label">
+                            <strong>계약일 *</strong>
+                        </label>
+                        {{ form.contract_date }}
+                        {% if form.contract_date.errors %}
+                            <div class="text-danger">{{ form.contract_date.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- 입실일 -->
+                    <div class="mb-3">
+                        <label for="{{ form.move_in_date.id_for_label }}" class="form-label">
+                            <strong>입실일 *</strong>
+                        </label>
+                        {{ form.move_in_date }}
+                        {% if form.move_in_date.errors %}
+                            <div class="text-danger">{{ form.move_in_date.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- 퇴실 예정일 -->
+                    <div class="mb-3">
+                        <label for="{{ form.move_out_date.id_for_label }}" class="form-label">
+                            <strong>퇴실 예정일</strong>
+                        </label>
+                        {{ form.move_out_date }}
+                        {% if form.move_out_date.help_text %}
+                            <div class="form-text">{{ form.move_out_date.help_text }}</div>
+                        {% endif %}
+                        {% if form.move_out_date.errors %}
+                            <div class="text-danger">{{ form.move_out_date.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- 임대인 이름 -->
+                    <div class="mb-3">
+                        <label for="{{ form.landlord_name.id_for_label }}" class="form-label">
+                            <strong>임대인 이름 *</strong>
+                        </label>
+                        {{ form.landlord_name }}
+                        {% if form.landlord_name.errors %}
+                            <div class="text-danger">{{ form.landlord_name.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- 임대인 연락처 -->
+                    <div class="mb-3">
+                        <label for="{{ form.landlord_phone.id_for_label }}" class="form-label">
+                            <strong>임대인 연락처 *</strong>
+                        </label>
+                        {{ form.landlord_phone }}
+                        {% if form.landlord_phone.errors %}
+                            <div class="text-danger">{{ form.landlord_phone.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- 계약서 파일 -->
+                    <div class="mb-4">
+                        <label for="{{ form.contract_file.id_for_label }}" class="form-label">
+                            <strong>계약서 파일</strong>
+                        </label>
+                        {{ form.contract_file }}
+                        {% if form.contract_file.help_text %}
+                            <div class="form-text">{{ form.contract_file.help_text }}</div>
+                        {% endif %}
+                        {% if form.contract_file.errors %}
+                            <div class="text-danger">{{ form.contract_file.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- 버튼 -->
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            {% if contract %}수정하기{% else %}등록하기{% endif %}
+                        </button>
+                        <a href="{% url 'contracts:list' %}" class="btn btn-secondary">취소</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

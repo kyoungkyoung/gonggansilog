@@ -1,0 +1,5608 @@
+# Japanese translations for Space Record (空間実録)
+# Copyright (C) 2025
+# This file is distributed under the same license as the Space Record project.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Space Record 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-18 17:57+0900\n"
+"PO-Revision-Date: 2025-03-30 00:00+0900\n"
+"Last-Translator: \n"
+"Language-Team: Japanese\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: accounts/models.py:10 accounts/views.py:123 contracts/models.py:389
+#: contracts/views.py:543 contracts/views.py:593 records/models.py:613
+msgid "임차인"
+msgstr "借主"
+
+#: accounts/models.py:11 contracts/models.py:390 contracts/views.py:541
+#: contracts/views.py:591 records/models.py:614
+msgid "임대인"
+msgstr "貸主"
+
+#: accounts/models.py:18
+msgid "사용자 유형"
+msgstr "ユーザータイプ"
+
+#: accounts/templates/accounts/dashboard.html:4
+#: accounts/templates/accounts/dashboard.html:9 accounts/templates/base.html:48
+msgid "Dashboard"
+msgstr "ダッシュボード"
+
+# Dashboard
+#: accounts/templates/accounts/dashboard.html:4
+#: accounts/templates/accounts/login.html:5
+#: accounts/templates/accounts/select_user_type.html:4
+#: accounts/templates/accounts/signup.html:5 accounts/templates/base.html:35
+#: contracts/templates/contracts/accept_invitation.html:4
+#: contracts/templates/contracts/contract_confirm_delete.html:4
+#: contracts/templates/contracts/contract_detail.html:5
+#: contracts/templates/contracts/contract_extend.html:4
+#: contracts/templates/contracts/contract_list.html:4
+#: contracts/templates/contracts/contract_terminate.html:4
+#: templates/socialaccount/login.html:5 templates/socialaccount/signup.html:4
+msgid "Space Chronicle"
+msgstr "空間実録"
+
+#: accounts/templates/accounts/dashboard.html:13
+#, python-format
+msgid "Welcome, %(username)s!"
+msgstr "ようこそ、%(username)sさん！"
+
+#: accounts/templates/accounts/dashboard.html:15
+#: accounts/templates/accounts/select_user_type.html:20
+#: accounts/templates/accounts/signup.html:42
+msgid "User Type"
+msgstr "ユーザータイプ"
+
+#: accounts/templates/accounts/dashboard.html:16
+#: accounts/templates/accounts/signup.html:26
+msgid "Email"
+msgstr "メール"
+
+#: accounts/templates/accounts/dashboard.html:18
+#: accounts/templates/accounts/select_user_type.html:39
+#: accounts/templates/accounts/signup.html:34
+msgid "Phone"
+msgstr "電話番号"
+
+#: accounts/templates/accounts/dashboard.html:32
+msgid "Move-in/Move-out Record Notifications"
+msgstr "入居/退去記録の通知"
+
+#: accounts/templates/accounts/dashboard.html:33
+#: accounts/templates/accounts/dashboard.html:92
+#: accounts/templates/accounts/dashboard.html:135
+#: accounts/templates/accounts/dashboard.html:175
+#, python-format
+msgid "%(count)s items"
+msgstr "%(count)s件"
+
+#: accounts/templates/accounts/dashboard.html:71
+msgid "View"
+msgstr "確認"
+
+#: accounts/templates/accounts/dashboard.html:74
+msgid "Mark as read"
+msgstr "既読にする"
+
+#: accounts/templates/accounts/dashboard.html:91
+msgid "Recording Consent Requests"
+msgstr "録音同意リクエスト"
+
+#: accounts/templates/accounts/dashboard.html:118
+#: accounts/templates/accounts/dashboard.html:158
+#: accounts/templates/accounts/dashboard.html:198
+msgid "Review"
+msgstr "確認する"
+
+#: accounts/templates/accounts/dashboard.html:134
+#: contracts/templates/contracts/contract_detail.html:462 records/models.py:451
+#: records/templates/records/defect_detail.html:13
+#: records/templates/records/defect_list.html:4
+#: records/templates/records/defect_list.html:13
+#: records/templates/records/defect_list.html:18
+msgid "Defect Reports"
+msgstr "不具合報告"
+
+#: accounts/templates/accounts/dashboard.html:174
+#: contracts/templates/contracts/contract_detail.html:496 records/models.py:545
+#: records/templates/records/repair_list.html:4
+#: records/templates/records/repair_list.html:12
+#: records/templates/records/repair_list.html:17
+msgid "Repair Requests"
+msgstr "修繕依頼"
+
+#: accounts/templates/accounts/dashboard.html:213
+#: contracts/templates/contracts/contract_list.html:23
+#, python-format
+msgid "Pending Requests (%(count)s items)"
+msgstr "承認待ちリクエスト（%(count)s件）"
+
+#: accounts/templates/accounts/dashboard.html:224
+#: contracts/templates/contracts/contract_list.html:34
+#, python-format
+msgid ""
+"\n"
+"                                <strong>%(username)s</strong> requested "
+"<strong class=\"text-primary\">%(request_type)s</strong>.\n"
+"                                "
+msgstr ""
+"\n"
+"<strong>%(username)s</strong>さんが<strong class=\"text-"
+"primary\">%(request_type)s</strong>をリクエストしました。"
+
+#: accounts/templates/accounts/dashboard.html:228
+#: accounts/templates/accounts/dashboard.html:271
+#: contracts/templates/contracts/contract_list.html:38
+#: contracts/templates/contracts/contract_list.html:81
+#, python-format
+msgid "%(months)s months extension"
+msgstr "%(months)sヶ月延長"
+
+#: accounts/templates/accounts/dashboard.html:235
+#: accounts/templates/accounts/dashboard.html:281
+#: contracts/templates/contracts/contract_list.html:45
+#: contracts/templates/contracts/contract_list.html:91
+msgid "View Contract"
+msgstr "契約を見る"
+
+#: accounts/templates/accounts/dashboard.html:250
+#: contracts/templates/contracts/contract_detail.html:117
+#: contracts/templates/contracts/contract_list.html:60
+msgid "Your request has been approved!"
+msgstr "リクエストが承認されました！"
+
+#: accounts/templates/accounts/dashboard.html:252
+#: contracts/templates/contracts/contract_detail.html:136
+#: contracts/templates/contracts/contract_list.html:62
+msgid "Your request has been rejected"
+msgstr "リクエストが却下されました"
+
+#: accounts/templates/accounts/dashboard.html:262
+#: contracts/templates/contracts/contract_list.html:72
+#, python-format
+msgid ""
+"\n"
+"                                    <strong>%(username)s</strong> approved "
+"your <strong>%(request_type)s</strong> request.\n"
+"                                    "
+msgstr ""
+"\n"
+"<strong>%(username)s</strong>さんがあなたの<strong>%(request_type)s</strong>"
+"リクエストを承認しました。"
+
+#: accounts/templates/accounts/dashboard.html:266
+#: contracts/templates/contracts/contract_list.html:76
+#, python-format
+msgid ""
+"\n"
+"                                    <strong>%(username)s</strong> rejected "
+"your <strong>%(request_type)s</strong> request.\n"
+"                                    "
+msgstr ""
+"\n"
+"<strong>%(username)s</strong>さんがあなたの<strong>%(request_type)s</strong>"
+"リクエストを却下しました。"
+
+#: accounts/templates/accounts/dashboard.html:297
+#: accounts/templates/accounts/dashboard.html:437
+msgid "Contract Management"
+msgstr "契約管理"
+
+#: accounts/templates/accounts/dashboard.html:298
+#: accounts/templates/accounts/dashboard.html:438
+msgid "Register and manage your property contracts."
+msgstr "物件契約を登録・管理します。"
+
+#: accounts/templates/accounts/dashboard.html:301
+#: accounts/templates/accounts/dashboard.html:441
+msgid "View Contracts"
+msgstr "契約一覧"
+
+#: accounts/templates/accounts/dashboard.html:304
+#: accounts/templates/accounts/dashboard.html:444
+#: contracts/templates/contracts/contract_list.html:12
+msgid "New Contract"
+msgstr "新規契約"
+
+#: accounts/templates/accounts/dashboard.html:313
+#: accounts/templates/accounts/dashboard.html:453
+msgid "Recording Management"
+msgstr "録音管理"
+
+#: accounts/templates/accounts/dashboard.html:314
+#: accounts/templates/accounts/dashboard.html:454
+msgid "Record and manage contract discussions."
+msgstr "契約協議を録音・管理します。"
+
+#: accounts/templates/accounts/dashboard.html:317
+#: accounts/templates/accounts/dashboard.html:457
+msgid "View Recordings"
+msgstr "録音一覧"
+
+#: accounts/templates/accounts/dashboard.html:320
+#: accounts/templates/accounts/dashboard.html:460
+#: recordings/templates/recordings/recording_list.html:12
+msgid "New Recording"
+msgstr "新規録音"
+
+#: accounts/templates/accounts/dashboard.html:329
+#: contracts/templates/contracts/contract_detail.html:289
+#: records/templates/records/landlord_create_record.html:13
+#: records/templates/records/record_compare.html:13
+#: records/templates/records/record_create.html:13
+#: records/templates/records/record_detail.html:13
+#: records/templates/records/record_list.html:4
+#: records/templates/records/record_list.html:13
+#: records/templates/records/record_list.html:19
+#: records/templates/records/tenant_request_record.html:13
+msgid "Move-in/Move-out Records"
+msgstr "入居/退去記録"
+
+#: accounts/templates/accounts/dashboard.html:330
+msgid "Document property condition at move-in and move-out."
+msgstr "入居・退去時の物件状態を記録します。"
+
+#: accounts/templates/accounts/dashboard.html:331
+msgid "Select Contract to Record"
+msgstr "記録する契約を選択"
+
+#: accounts/templates/accounts/dashboard.html:339
+#: contracts/templates/contracts/contract_list.html:10
+msgid "My Contracts"
+msgstr "マイ契約一覧"
+
+#: accounts/templates/accounts/dashboard.html:348
+#: accounts/templates/accounts/dashboard.html:488
+#: blockchain/templates/blockchain/finalize_contract.html:21
+#: blockchain/templates/blockchain/verify_contract.html:52
+#: contracts/templates/contracts/contract_form.html:60
+msgid "Property Address"
+msgstr "物件住所"
+
+#: accounts/templates/accounts/dashboard.html:349
+#: accounts/templates/accounts/dashboard.html:401
+#: blockchain/templates/blockchain/finalize_contract.html:29
+#: contracts/templates/contracts/contract_confirm_delete.html:30
+#: contracts/templates/contracts/contract_detail.html:194
+#: contracts/templates/contracts/contract_form.html:113
+#: contracts/templates/contracts/contract_list.html:123
+#: countries/jp/models.py:28 countries/jp/models.py:292
+#: countries/jp/templates/countries/jp/restoration_guide.html:91
+#: records/templates/records/expense_create.html:47
+msgid "Landlord"
+msgstr "貸主"
+
+#: accounts/templates/accounts/dashboard.html:350
+#: accounts/templates/accounts/dashboard.html:409
+#: accounts/templates/accounts/dashboard.html:490
+#: accounts/templates/accounts/dashboard.html:547
+#: blockchain/templates/blockchain/finalize_contract.html:25
+#: contracts/templates/contracts/accept_invitation.html:22
+#: contracts/templates/contracts/contract_confirm_delete.html:26
+#: contracts/templates/contracts/contract_detail.html:160
+#: contracts/templates/contracts/contract_extend.html:19
+#: contracts/templates/contracts/contract_form.html:74
+#: contracts/templates/contracts/contract_list.html:117
+#: contracts/templates/contracts/contract_terminate.html:19
+#: recordings/templates/recordings/recording_detail.html:165
+#: records/templates/records/record_create.html:36
+msgid "Contract Date"
+msgstr "契約日"
+
+#: accounts/templates/accounts/dashboard.html:351
+#: accounts/templates/accounts/dashboard.html:412
+#: accounts/templates/accounts/dashboard.html:491
+#: accounts/templates/accounts/dashboard.html:550
+msgid "End Date"
+msgstr "終了日"
+
+#: accounts/templates/accounts/dashboard.html:352
+#: accounts/templates/accounts/dashboard.html:492 core/reports/admin.py:18
+#: core/reports/models.py:75
+#: core/reports/templates/reports/report_history.html:60
+#: core/reports/templates/reports/share_detail.html:74
+#: core/templates_engine/admin.py:36 records/models.py:430
+#: records/models.py:520 records/templates/records/record_detail.html:464
+msgid "Status"
+msgstr "ステータス"
+
+#: accounts/templates/accounts/dashboard.html:353
+#: accounts/templates/accounts/dashboard.html:420
+#: core/exports/templates/exports/export_options.html:29
+msgid "Records"
+msgstr "記録"
+
+#: accounts/templates/accounts/dashboard.html:380
+#: accounts/templates/accounts/dashboard.html:420
+#, python-format
+msgid "%(count)s records"
+msgstr "%(count)s件"
+
+#: accounts/templates/accounts/dashboard.html:427
+msgid "No contracts registered yet."
+msgstr "登録された契約がありません。"
+
+#: accounts/templates/accounts/dashboard.html:469
+msgid "Pending Approvals"
+msgstr "承認待ち"
+
+#: accounts/templates/accounts/dashboard.html:470
+msgid "Approve tenant's move-in/move-out records."
+msgstr "借主の入居/退去記録を承認します。"
+
+#: accounts/templates/accounts/dashboard.html:471
+msgid "Select Contract to Approve"
+msgstr "承認する契約を選択"
+
+#: accounts/templates/accounts/dashboard.html:479
+msgid "Properties Under Management"
+msgstr "管理中の物件"
+
+# User Types
+#: accounts/templates/accounts/dashboard.html:489
+#: accounts/templates/accounts/dashboard.html:539
+#: blockchain/templates/blockchain/finalize_contract.html:41
+#: contracts/templates/contracts/contract_detail.html:180
+#: contracts/templates/contracts/contract_form.html:142
+#: contracts/templates/contracts/contract_list.html:125
+#: countries/jp/models.py:29 countries/jp/models.py:293
+#: countries/jp/templates/countries/jp/restoration_guide.html:93
+#: records/templates/records/expense_create.html:48
+msgid "Tenant"
+msgstr "借主"
+
+#: accounts/templates/accounts/dashboard.html:562
+msgid "No properties under management."
+msgstr "管理中の物件がありません。"
+
+#: accounts/templates/accounts/login.html:5
+#: accounts/templates/accounts/login.html:12
+#: accounts/templates/accounts/login.html:27
+#: accounts/templates/accounts/signup.html:81 accounts/templates/base.html:60
+msgid "Login"
+msgstr "ログイン"
+
+#: accounts/templates/accounts/login.html:18
+#: accounts/templates/accounts/signup.html:18
+msgid "Username"
+msgstr "ユーザー名"
+
+#: accounts/templates/accounts/login.html:23
+#: accounts/templates/accounts/signup.html:59
+msgid "Password"
+msgstr "パスワード"
+
+#: accounts/templates/accounts/login.html:31
+msgid "Don't have an account?"
+msgstr "アカウントをお持ちでないですか？"
+
+#: accounts/templates/accounts/login.html:31
+#: accounts/templates/accounts/signup.html:5
+#: accounts/templates/accounts/signup.html:12
+#: accounts/templates/accounts/signup.html:77 accounts/templates/base.html:63
+#: templates/socialaccount/signup.html:4
+msgid "Sign Up"
+msgstr "会員登録"
+
+#: accounts/templates/accounts/login.html:37
+msgid "Or login with social account"
+msgstr "またはソーシャルアカウントでログイン"
+
+#: accounts/templates/accounts/login.html:42
+msgid "Login with Google"
+msgstr "Googleでログイン"
+
+#: accounts/templates/accounts/select_user_type.html:4
+msgid "Select User Type"
+msgstr "物件タイプを選択"
+
+#: accounts/templates/accounts/select_user_type.html:11
+msgid "Additional Information"
+msgstr "契約情報"
+
+#: accounts/templates/accounts/select_user_type.html:13
+msgid "Please enter the following information to use the service."
+msgstr "サービスをご利用いただくため、以下の情報を入力してください。"
+
+#: accounts/templates/accounts/select_user_type.html:24
+msgid "Tenant (Small Business Owner)"
+msgstr "借主（事業者）"
+
+#: accounts/templates/accounts/select_user_type.html:25
+msgid "Person who rents commercial space for business"
+msgstr "事業のために商業スペースを借りる方"
+
+#: accounts/templates/accounts/select_user_type.html:32
+msgid "Landlord (Property Owner)"
+msgstr "貸主（物件オーナー）"
+
+#: accounts/templates/accounts/select_user_type.html:33
+msgid "Person who owns and rents out commercial property"
+msgstr "商業物件を所有し賃貸する方"
+
+#: accounts/templates/accounts/select_user_type.html:44
+msgid "Required for contract-related communication."
+msgstr "契約関連の連絡に必要です。"
+
+#: accounts/templates/accounts/select_user_type.html:47
+msgid "Get Started"
+msgstr "始める"
+
+#: accounts/templates/accounts/signup.html:65
+msgid "At least 8 characters, must include numbers and letters."
+msgstr "8文字以上、数字と文字を含める必要があります。"
+
+#: accounts/templates/accounts/signup.html:70
+msgid "Confirm Password"
+msgstr "パスワード確認"
+
+#: accounts/templates/accounts/signup.html:81
+msgid "Already have an account?"
+msgstr "すでにアカウントをお持ちですか？"
+
+#: accounts/templates/accounts/signup.html:87
+msgid "Or start with social account"
+msgstr "またはソーシャルアカウントで開始"
+
+#: accounts/templates/accounts/signup.html:92
+msgid "Start with Google"
+msgstr "Googleで開始"
+
+#: accounts/templates/base.html:7
+msgid "Space Record - Property Management"
+msgstr "空間実録 - 不動産管理"
+
+#: accounts/templates/base.html:52
+#: core/exports/templates/exports/export_options.html:37
+msgid "Recordings"
+msgstr "録音"
+
+#: accounts/templates/base.html:56
+msgid "Logout"
+msgstr "ログアウト"
+
+#: accounts/templates/base.html:106
+msgid "Space Record - Property Management Service"
+msgstr "空間実録 - 不動産管理サービス"
+
+#: accounts/views.py:19
+#, python-format
+msgid "%(user_type)s으로 가입되었습니다!"
+msgstr "%(user_type)sとして登録されました！"
+
+#: accounts/views.py:39
+#, python-format
+msgid "%(username)s님, 환영합니다!"
+msgstr "%(username)sさん、ようこそ！"
+
+#: accounts/views.py:48
+msgid "사용자명 또는 비밀번호가 올바르지 않습니다."
+msgstr "ユーザー名またはパスワードが正しくありません。"
+
+#: accounts/views.py:57
+msgid "로그아웃되었습니다."
+msgstr "ログアウトしました。"
+
+#: accounts/views.py:122
+#, python-format
+msgid "%(user)s님이 %(record_type)s 기록 등록을 요청했습니다."
+msgstr "%(user)sさんが%(record_type)s記録の登録を要請しました。"
+
+#: accounts/views.py:141
+#, python-format
+msgid ""
+"%(address)s의 %(record_type)s 기록이 제출되었습니다. 확인 후 승인해주세요."
+msgstr ""
+"%(address)sの%(record_type)s記録が提出されました。確認後、承認してください。"
+
+#: accounts/views.py:163
+#, python-format
+msgid "%(address)s의 %(record_type)s 기록에 사진을 업로드해주세요."
+msgstr "%(address)sの%(record_type)s記録に写真をアップロードしてください。"
+
+#: accounts/views.py:185
+#, python-format
+msgid ""
+"%(address)s의 %(record_type)s 기록이 반려되었습니다. 수정 후 다시 제출해주세"
+"요."
+msgstr ""
+"%(address)sの%(record_type)s記録が差し戻されました。修正後、再提出してくださ"
+"い。"
+
+#: accounts/views.py:205
+#, python-format
+msgid "%(address)s의 %(record_type)s 기록이 최종 승인되었습니다."
+msgstr "%(address)sの%(record_type)s記録が最終承認されました。"
+
+#: accounts/views.py:231
+#, python-format
+msgid "%(user)s님이 녹음 기록을 등록했습니다. 동의 여부를 확인해주세요."
+msgstr "%(user)sさんが録音記録を登録しました。同意の可否をご確認ください。"
+
+#: accounts/views.py:255
+#, python-format
+msgid "%(user)s님이 하자를 신고했습니다: %(title)s"
+msgstr ""
+
+#: accounts/views.py:275
+#, python-format
+msgid "하자 \"%(title)s\"이(가) %(status)s 상태로 변경되었습니다."
+msgstr ""
+
+#: accounts/views.py:297
+#, python-format
+msgid "%(user)s님이 수리를 요청했습니다: %(title)s"
+msgstr ""
+
+#: accounts/views.py:316
+#, python-format
+msgid "수리 \"%(title)s\"이(가) %(status)s 상태입니다."
+msgstr ""
+
+#: accounts/views.py:347
+msgid "올바른 사용자 유형을 선택해주세요."
+msgstr "正しいユーザータイプを選択してください。"
+
+#: accounts/views.py:349
+msgid "전화번호를 입력해주세요."
+msgstr "電話番号を入力してください。"
+
+#: accounts/views.py:355
+#, python-format
+msgid "%(user_type)s으로 설정되었습니다!"
+msgstr "%(user_type)sに設定されました！"
+
+#: blockchain/templates/blockchain/finalize_contract.html:4
+#: contracts/templates/contracts/contract_detail.html:773
+msgid "Finalize Contract"
+msgstr "契約を確認"
+
+#: blockchain/templates/blockchain/finalize_contract.html:12
+msgid "Finalize Contract and Blockchain Registration"
+msgstr "契約確定とブロックチェーン登録"
+
+#: blockchain/templates/blockchain/finalize_contract.html:18
+#: blockchain/templates/blockchain/verify_contract.html:48
+#: contracts/templates/contracts/contract_detail.html:157
+#: contracts/templates/contracts/contract_extend.html:16
+#: contracts/templates/contracts/contract_terminate.html:16
+#: recordings/templates/recordings/recording_detail.html:161
+#: records/templates/records/record_create.html:34
+msgid "Contract Information"
+msgstr "契約情報"
+
+#: blockchain/templates/blockchain/finalize_contract.html:33
+#: blockchain/templates/blockchain/finalize_contract.html:45
+#: contracts/templates/contracts/contract_detail.html:184
+#: contracts/templates/contracts/contract_detail.html:198
+msgid "Connected"
+msgstr "連携済み"
+
+#: blockchain/templates/blockchain/finalize_contract.html:36
+#: blockchain/templates/blockchain/finalize_contract.html:48
+#: contracts/templates/contracts/contract_detail.html:188
+#: contracts/templates/contracts/contract_detail.html:202
+msgid "Not Connected"
+msgstr "未連携"
+
+#: blockchain/templates/blockchain/finalize_contract.html:60
+msgid "Files to be Registered on Blockchain"
+msgstr "ブロックチェーンに登録されるファイル"
+
+#: blockchain/templates/blockchain/finalize_contract.html:66
+#: contracts/templates/contracts/contract_detail.html:279
+#: contracts/templates/contracts/contract_form.html:172
+msgid "Contract File"
+msgstr "契約書ファイル"
+
+#: blockchain/templates/blockchain/finalize_contract.html:69
+msgid "Uploaded"
+msgstr "アップロード済み"
+
+#: blockchain/templates/blockchain/finalize_contract.html:71
+msgid "None"
+msgstr "なし"
+
+#: blockchain/templates/blockchain/finalize_contract.html:77
+msgid "Move-in/Move-out Photos"
+msgstr "入居/退去写真"
+
+#: blockchain/templates/blockchain/finalize_contract.html:80
+#: records/templates/records/add_photos.html:27
+msgid " photos"
+msgstr "写真"
+
+#: blockchain/templates/blockchain/finalize_contract.html:86
+msgid "Recording Files"
+msgstr "録音ファイル"
+
+#: blockchain/templates/blockchain/finalize_contract.html:89
+msgid " files"
+msgstr " ファイル"
+
+#: blockchain/templates/blockchain/finalize_contract.html:100
+msgid "Finalization Requirements"
+msgstr "確定条件"
+
+#: blockchain/templates/blockchain/finalize_contract.html:106
+#: contracts/templates/contracts/contract_detail.html:770
+msgid "All requirements are met. You can finalize the contract."
+msgstr "すべての条件が満たされています。契約を確定できます。"
+
+#: blockchain/templates/blockchain/finalize_contract.html:111
+#: contracts/templates/contracts/contract_detail.html:782
+msgid "The following requirements must be met to finalize the contract:"
+msgstr "契約を確定するには以下の条件を満たす必要があります："
+
+#: blockchain/templates/blockchain/finalize_contract.html:127
+#: contracts/templates/contracts/contract_detail.html:745
+msgid "Contract File Uploaded"
+msgstr "契約書ファイル"
+
+#: blockchain/templates/blockchain/finalize_contract.html:135
+#: contracts/templates/contracts/contract_detail.html:736
+msgid "Both Landlord and Tenant Connected"
+msgstr "貸主と借主の両方が連携済み"
+
+#: blockchain/templates/blockchain/finalize_contract.html:143
+#: contracts/templates/contracts/contract_detail.html:756
+msgid "Move-in Record Exists and Approved"
+msgstr "入居記録が存在し承認済み"
+
+#: blockchain/templates/blockchain/finalize_contract.html:151
+msgid "Not Yet Finalized"
+msgstr "未確定"
+
+#: blockchain/templates/blockchain/finalize_contract.html:161
+msgid "What is Blockchain Registration?"
+msgstr "ブロックチェーン登録とは？"
+
+#: blockchain/templates/blockchain/finalize_contract.html:164
+msgid ""
+"The hash (fingerprint) of the contract, photos, and recordings will be "
+"permanently recorded on the Klaytn blockchain."
+msgstr ""
+"契約書、写真、録音のハッシュ（指紋）がKlaytnブロックチェーンに永久に記録され"
+"ます。"
+
+#: blockchain/templates/blockchain/finalize_contract.html:165
+msgid "You can verify at any time whether files have been tampered with."
+msgstr "ファイルが改ざんされていないかいつでも確認できます。"
+
+#: blockchain/templates/blockchain/finalize_contract.html:166
+msgid ""
+"This can be used to prove the authenticity of evidence in legal disputes."
+msgstr "これは法的紛争において証拠の真正性を証明するために使用できます。"
+
+#: blockchain/templates/blockchain/finalize_contract.html:167
+msgid ""
+"After finalization, any file modifications will be shown as mismatched "
+"during verification."
+msgstr "確定後、ファイルの変更は検証時に不一致として表示されます。"
+
+#: blockchain/templates/blockchain/finalize_contract.html:174
+msgid "Go Back"
+msgstr "戻る"
+
+#: blockchain/templates/blockchain/finalize_contract.html:181
+msgid ""
+"Do you want to finalize the contract and register it on the blockchain?"
+"\\n\\nAfter finalization, any file changes will be shown as mismatched "
+"during verification."
+msgstr ""
+
+#: blockchain/templates/blockchain/finalize_contract.html:182
+msgid "Finalize Contract and Register on Blockchain"
+msgstr "契約を確定しブロックチェーンに登録"
+
+#: blockchain/templates/blockchain/finalize_contract.html:187
+msgid "Requirements Not Met"
+msgstr "条件未達成"
+
+#: blockchain/templates/blockchain/verify_contract.html:4
+msgid "Verification"
+msgstr "減価償却"
+
+#: blockchain/templates/blockchain/verify_contract.html:13
+#: blockchain/templates/blockchain/verify_contract.html:150
+msgid "Verification Successful"
+msgstr "検証成功"
+
+#: blockchain/templates/blockchain/verify_contract.html:15
+#: blockchain/templates/blockchain/verify_contract.html:154
+msgid "Verification Failed"
+msgstr "検証失敗"
+
+#: blockchain/templates/blockchain/verify_contract.html:26
+msgid "File Integrity Verified"
+msgstr "ファイル整合性確認済み"
+
+#: blockchain/templates/blockchain/verify_contract.html:28
+msgid "The files are identical to those at the time of contract finalization."
+msgstr "ファイルは契約確定時と同一です。"
+
+#: blockchain/templates/blockchain/verify_contract.html:29
+msgid "It has been confirmed that the files have not been tampered with."
+msgstr "ファイルが改ざんされていないことが確認されました。"
+
+#: blockchain/templates/blockchain/verify_contract.html:35
+msgid "File Mismatch Detected"
+msgstr "ファイル不一致検出"
+
+#: blockchain/templates/blockchain/verify_contract.html:37
+msgid ""
+"The current files differ from those at the time of contract finalization."
+msgstr "現在のファイルは契約確定時のファイルと異なります。"
+
+#: blockchain/templates/blockchain/verify_contract.html:38
+msgid "The files may have been modified or corrupted."
+msgstr "ファイルが変更または破損している可能性があります。"
+
+#: blockchain/templates/blockchain/verify_contract.html:56
+msgid "Contract Finalization Time"
+msgstr "契約情報"
+
+#: blockchain/templates/blockchain/verify_contract.html:60
+msgid "Blockchain Registration Time"
+msgstr "ブロックチェーン検証済み"
+
+#: blockchain/templates/blockchain/verify_contract.html:71
+msgid "Hash Comparison"
+msgstr "比較"
+
+#: blockchain/templates/blockchain/verify_contract.html:76
+msgid "Stored Hash (At Finalization)"
+msgstr "保存ハッシュ（確定時）"
+
+#: blockchain/templates/blockchain/verify_contract.html:82
+msgid "Current File Hash"
+msgstr "現在のファイルハッシュ"
+
+#: blockchain/templates/blockchain/verify_contract.html:89
+msgid "Hash Calculation Failed"
+msgstr "ハッシュ計算失敗"
+
+#: blockchain/templates/blockchain/verify_contract.html:102
+msgid "Mismatched Items"
+msgstr "テンプレート項目"
+
+#: blockchain/templates/blockchain/verify_contract.html:119
+msgid "Blockchain Transaction"
+msgstr "ブロックチェーン登録情報"
+
+#: blockchain/templates/blockchain/verify_contract.html:123
+msgid "Transaction Hash"
+msgstr "トランザクションハッシュ"
+
+#: blockchain/templates/blockchain/verify_contract.html:133
+msgid "View on Blockchain"
+msgstr "ブロックチェーンで確認"
+
+#: blockchain/templates/blockchain/verify_contract.html:146
+msgid "Verification Result Explanation"
+msgstr "検証結果説明"
+
+#: blockchain/templates/blockchain/verify_contract.html:150
+msgid ""
+"The hash of the current files matches the hash recorded on the blockchain."
+msgstr "この契約はブロックチェーンに登録されています。"
+
+#: blockchain/templates/blockchain/verify_contract.html:151
+msgid ""
+"This means the files have not been changed since the contract was finalized."
+msgstr "これは契約確定以降、ファイルが変更されていないことを意味します。"
+
+#: blockchain/templates/blockchain/verify_contract.html:152
+msgid ""
+"Third parties can independently verify this fact through the blockchain "
+"transaction."
+msgstr ""
+"第三者はブロックチェーントランザクションを通じてこの事実を独立して検証できま"
+"す。"
+
+#: blockchain/templates/blockchain/verify_contract.html:154
+msgid ""
+"The hash of the current files differs from the hash recorded on the "
+"blockchain."
+msgstr ""
+"現在のファイルのハッシュがブロックチェーンに記録されたハッシュと異なります。"
+
+#: blockchain/templates/blockchain/verify_contract.html:155
+msgid ""
+"This means the files may have been changed or corrupted since the contract "
+"was finalized."
+msgstr ""
+"これは契約確定以降、ファイルが変更または破損した可能性があることを意味しま"
+"す。"
+
+#: blockchain/templates/blockchain/verify_contract.html:156
+msgid "Recovery of the original files may be necessary."
+msgstr "元のファイルの復元が必要な場合があります。"
+
+#: blockchain/templates/blockchain/verify_contract.html:164
+#: records/templates/records/record_list.html:174
+msgid "Back to Contract Details"
+msgstr "契約に戻る"
+
+#: blockchain/templates/blockchain/verify_contract.html:169
+msgid "View on Klaytn Scope"
+msgstr "Klaytn Scopeで確認"
+
+#: blockchain/views.py:33
+msgid "계약을 확정할 권한이 없습니다."
+msgstr "契約を確定する権限がありません。"
+
+#: blockchain/views.py:69
+#, python-format
+msgid "계약이 확정되었습니다. 블록체인 트랜잭션: %(tx_hash)s..."
+msgstr "契約が確定されました。ブロックチェーントランザクション：%(tx_hash)s..."
+
+#: blockchain/views.py:79
+#, python-format
+msgid "블록체인 앵커링 실패: %(error)s"
+msgstr "ブロックチェーンアンカリング失敗：%(error)s"
+
+#: blockchain/views.py:79
+msgid "알 수 없는 오류"
+msgstr "不明なエラー"
+
+#: blockchain/views.py:92
+#, python-format
+msgid "오류가 발생했습니다: %(error)s"
+msgstr "エラーが発生しました：%(error)s"
+
+#: blockchain/views.py:126
+msgid "이 계약의 진위를 확인할 권한이 없습니다."
+msgstr "この契約の真偽を確認する権限がありません。"
+
+#: blockchain/views.py:131
+msgid "아직 블록체인에 등록되지 않은 계약입니다."
+msgstr "まだブロックチェーンに登録されていない契約です。"
+
+#: blockchain/views.py:161 blockchain/views.py:191 contracts/views.py:400
+#: contracts/views.py:417 contracts/views.py:502 contracts/views.py:556
+#: contracts/views.py:617 contracts/views.py:709 contracts/views.py:746
+#: recordings/views.py:289 records/views.py:424 records/views.py:448
+#: records/views.py:792 records/views.py:813
+msgid "권한이 없습니다."
+msgstr "権限がありません。"
+
+#: blockchain/views.py:171
+msgid "알 수 없음"
+msgstr "不明"
+
+#: blockchain/views.py:195
+msgid "재시도할 수 없는 상태입니다."
+msgstr "再試行できない状態です。"
+
+#: blockchain/views.py:221
+msgid "블록체인 앵커링 성공"
+msgstr "ブロックチェーンアンカリング成功"
+
+#: blockchain/views.py:229
+msgid "앵커링 실패"
+msgstr "アンカリング失敗"
+
+# Common
+#: config/settings.py:138 core/reports/models.py:17
+#: core/reports/templates/reports/report_history.html:79
+msgid "Korean"
+msgstr "韓国語"
+
+#: config/settings.py:139 core/reports/models.py:18
+#: core/reports/templates/reports/report_history.html:80
+msgid "English"
+msgstr "英語"
+
+#: config/settings.py:140 core/reports/models.py:19
+#: core/reports/templates/reports/report_history.html:81
+msgid "Japanese"
+msgstr "日本語"
+
+#: contracts/forms.py:12 contracts/models.py:160
+#: contracts/templates/contracts/contract_form.html:28
+#: core/templates_engine/models.py:42
+msgid "Country"
+msgstr "国"
+
+#: contracts/forms.py:15
+msgid "Select the country where the property is located."
+msgstr "物件がある国を選択してください。"
+
+#: contracts/forms.py:20 contracts/templates/contracts/contract_form.html:37
+#: core/templates_engine/models.py:48 countries/jp/models.py:52
+msgid "Property Type"
+msgstr "物件タイプ"
+
+# Property Types
+#: contracts/forms.py:23 core/templates_engine/models.py:17
+#: countries/jp/models.py:34
+msgid "Residential"
+msgstr "住居用"
+
+#: contracts/forms.py:24 core/templates_engine/models.py:18
+#: countries/jp/models.py:35
+msgid "Commercial"
+msgstr "商業用"
+
+#: contracts/forms.py:25 core/templates_engine/models.py:19
+msgid "Office"
+msgstr "オフィス"
+
+#: contracts/forms.py:28
+msgid "Select the type of property."
+msgstr "物件のタイプを選択してください。"
+
+# Templates Engine
+#: contracts/forms.py:33 contracts/models.py:171
+#: contracts/templates/contracts/contract_form.html:46
+#: core/templates_engine/models.py:81 records/models.py:124
+msgid "Inspection Template"
+msgstr "点検テンプレート"
+
+#: contracts/forms.py:36
+msgid ""
+"Select an inspection template for this contract. Leave empty to use the "
+"default."
+msgstr "この記録の点検テンプレート。レガシー記録の場合はnull。"
+
+#: contracts/forms.py:41
+msgid "Select Landlord"
+msgstr "貸主"
+
+#: contracts/forms.py:44
+msgid "Select a registered landlord or enter details below."
+msgstr "登録済みの貸主を選択するか、下に詳細を入力してください。"
+
+#: contracts/forms.py:47
+msgid "Select Tenant"
+msgstr "テンプレートを選択"
+
+#: contracts/forms.py:50
+msgid "Select a registered tenant or enter details below."
+msgstr "登録済みの借主を選択するか、下に詳細を入力してください。"
+
+#: contracts/forms.py:105
+msgid "Please enter the full address of the property."
+msgstr "差し戻し理由を入力してください。"
+
+#: contracts/forms.py:106
+msgid "You may leave this blank if the move-out date is unknown."
+msgstr "退去予定日が不明な場合は空欄でも構いません。"
+
+#: contracts/forms.py:107
+msgid "Upload a copy of the contract for safekeeping."
+msgstr "契約書のコピーをアップロードすると安全に保管されます。"
+
+#: contracts/forms.py:119
+msgid "e.g., 123 Main Street, Suite 100"
+msgstr "例：東京都新宿区西新宿1-2-3"
+
+#: contracts/forms.py:122
+msgid "YYYY-MM-DD"
+msgstr "YYYY年MM月DD日"
+
+#: contracts/forms.py:133 contracts/forms.py:137
+msgid "e.g., John Smith"
+msgstr "例：山田太郎"
+
+#: contracts/forms.py:135 contracts/forms.py:139
+msgid "e.g., 010-1234-5678"
+msgstr "例：東京都知事（1）第12345号"
+
+# General form labels
+#: contracts/forms.py:143
+msgid "Select a country"
+msgstr "国を選択"
+
+#: contracts/forms.py:152
+msgid "Select a template (auto-loaded)"
+msgstr "テンプレートを選択"
+
+#: contracts/forms.py:163 contracts/templates/contracts/contract_form.html:291
+msgid "Select a template"
+msgstr "テンプレートを選択"
+
+#: contracts/forms.py:175 contracts/forms.py:189
+msgid "Not selected (enter below)"
+msgstr "未選択（下に入力）"
+
+#: contracts/models.py:13
+msgid "진행중"
+msgstr "進行中"
+
+#: contracts/models.py:14
+msgid "종료"
+msgstr "終了"
+
+#: contracts/models.py:18
+msgid "미등록"
+msgstr "未登録"
+
+#: contracts/models.py:19 recordings/models.py:12 records/models.py:401
+msgid "처리중"
+msgstr "処理中"
+
+#: contracts/models.py:20
+msgid "등록됨"
+msgstr "登録済み"
+
+#: contracts/models.py:21 recordings/models.py:14
+msgid "실패"
+msgstr "失敗"
+
+#: contracts/models.py:65
+msgid "주소"
+msgstr ""
+
+#: contracts/models.py:163
+msgid "Country code for this contract (KR, JP, etc.)"
+msgstr "この契約の国コード（KR、JP など）"
+
+#: contracts/models.py:172
+msgid "Default inspection template for records in this contract"
+msgstr "この契約の記録のデフォルト点検テンプレート"
+
+#: contracts/models.py:239 contracts/models.py:330
+msgid "계약 연장"
+msgstr "契約延長"
+
+#: contracts/models.py:240 contracts/models.py:331
+msgid "계약 해지"
+msgstr "契約解約"
+
+#: contracts/models.py:244
+msgid "승인 대기"
+msgstr "承認待ち"
+
+#: contracts/models.py:245 records/models.py:20 records/models.py:29
+#: records/models.py:235 records/models.py:489
+msgid "승인됨"
+msgstr "承認済み"
+
+#: contracts/models.py:246
+msgid "거절됨"
+msgstr "拒否"
+
+#: contracts/models.py:329 contracts/views.py:199 contracts/views.py:220
+msgid "계약 등록"
+msgstr "契約登録"
+
+#: contracts/models.py:332
+msgid "관리자 수정"
+msgstr "管理者修正"
+
+#: contracts/templates/contracts/accept_invitation.html:4
+msgid "Accept Contract Invitation"
+msgstr "契約情報"
+
+#: contracts/templates/contracts/accept_invitation.html:13
+msgid "Contract Invitation"
+msgstr "契約情報"
+
+#: contracts/templates/contracts/accept_invitation.html:18
+msgid "Invitation Information"
+msgstr "契約情報"
+
+#: contracts/templates/contracts/accept_invitation.html:21
+#: records/templates/records/record_detail.html:34
+msgid "Contract Address"
+msgstr "契約"
+
+#: contracts/templates/contracts/accept_invitation.html:23
+#: contracts/templates/contracts/contract_detail.html:164
+#: contracts/templates/contracts/contract_extend.html:20
+#: contracts/templates/contracts/contract_form.html:85
+#: contracts/templates/contracts/contract_list.html:118
+#: contracts/templates/contracts/contract_terminate.html:20
+msgid "Move In Date"
+msgstr "入居日"
+
+#: contracts/templates/contracts/accept_invitation.html:24
+msgid "Invited By"
+msgstr "生成者"
+
+#: contracts/templates/contracts/accept_invitation.html:25
+msgid "Role"
+msgstr "役割"
+
+#: contracts/templates/contracts/accept_invitation.html:26
+#: core/reports/models.py:150
+msgid "Expires At"
+msgstr "有効期限"
+
+#: contracts/templates/contracts/accept_invitation.html:31
+#: contracts/templates/contracts/contract_detail.html:128
+#: core/reports/models.py:185
+#: core/reports/templates/reports/create_share.html:57
+#: core/reports/templates/reports/share_detail.html:85
+msgid "Note"
+msgstr "メモ"
+
+#: contracts/templates/contracts/accept_invitation.html:31
+#, python-format
+msgid ""
+"By accepting this invitation, you will be registered as the %(role)s for "
+"this contract."
+msgstr "招待を承諾すると、この契約の%(role)sとして登録されます。"
+
+#: contracts/templates/contracts/accept_invitation.html:38
+msgid "Accept Invitation"
+msgstr "有効な招待リンク"
+
+#: contracts/templates/contracts/accept_invitation.html:41
+msgid "Decline"
+msgstr "期限"
+
+#: contracts/templates/contracts/contract_confirm_delete.html:4
+#: contracts/templates/contracts/contract_confirm_delete.html:11
+msgid "Confirm Contract Deletion"
+msgstr "契約一覧"
+
+#: contracts/templates/contracts/contract_confirm_delete.html:14
+#: recordings/templates/recordings/recording_detail.html:16
+msgid "Are you sure you want to delete?"
+msgstr "本当に削除しますか？"
+
+#: contracts/templates/contracts/contract_confirm_delete.html:15
+msgid ""
+"This action cannot be undone. All move-in/move-out records related to the "
+"contract will also be deleted."
+msgstr ""
+"この操作は元に戻せません。契約に関連するすべての入居/退去記録も一緒に削除され"
+"ます。"
+
+#: contracts/templates/contracts/contract_confirm_delete.html:18
+msgid "Contract to be deleted:"
+msgstr "契約が終了しました"
+
+#: contracts/templates/contracts/contract_confirm_delete.html:22
+#: contracts/templates/contracts/contract_extend.html:18
+#: contracts/templates/contracts/contract_terminate.html:18
+#: recordings/templates/recordings/recording_detail.html:164
+#: records/templates/records/record_create.html:35
+msgid "Address"
+msgstr "住所"
+
+#: contracts/templates/contracts/contract_confirm_delete.html:40
+#: contracts/templates/contracts/contract_detail.html:44
+#: recordings/templates/recordings/recording_detail.html:19
+#: records/templates/records/record_detail.html:580
+msgid "Delete"
+msgstr "削除"
+
+#: contracts/templates/contracts/contract_confirm_delete.html:43
+#: contracts/templates/contracts/contract_detail.html:915
+#: contracts/templates/contracts/contract_detail.html:962
+#: contracts/templates/contracts/contract_extend.html:56
+#: contracts/templates/contracts/contract_form.html:196
+#: contracts/templates/contracts/contract_form.html:239
+#: contracts/templates/contracts/contract_terminate.html:55
+#: core/reports/templates/reports/create_share.html:64
+#: recordings/templates/recordings/recording_create.html:74
+#: recordings/templates/recordings/recording_detail.html:220
+#: recordings/templates/recordings/recording_detail.html:252
+#: records/templates/records/add_photos.html:217
+#: records/templates/records/defect_create.html:68
+#: records/templates/records/expense_create.html:82
+#: records/templates/records/landlord_create_record.html:73
+#: records/templates/records/record_create.html:87
+#: records/templates/records/record_detail.html:527
+#: records/templates/records/record_detail.html:552
+#: records/templates/records/record_detail.html:577
+#: records/templates/records/record_detail.html:606
+#: records/templates/records/record_detail.html:635
+#: records/templates/records/repair_create.html:68
+#: records/templates/records/tenant_request_record.html:64
+msgid "Cancel"
+msgstr "キャンセル"
+
+#: contracts/templates/contracts/contract_detail.html:5
+msgid "Contract Details"
+msgstr "契約日"
+
+#: contracts/templates/contracts/contract_detail.html:20
+msgid "Finalized"
+msgstr "確定済み"
+
+#: contracts/templates/contracts/contract_detail.html:25
+msgid "Blockchain Registered"
+msgstr "ブロックチェーン検証済み"
+
+#: contracts/templates/contracts/contract_detail.html:29
+msgid "Registering"
+msgstr "未登録"
+
+#: contracts/templates/contracts/contract_detail.html:33
+#: contracts/templates/contracts/contract_detail.html:1165
+msgid "Registration Failed"
+msgstr "原状回復特約"
+
+#: contracts/templates/contracts/contract_detail.html:41
+#: contracts/templates/contracts/contract_form.html:194
+#: contracts/templates/contracts/contract_list.html:135
+msgid "Edit"
+msgstr "編集"
+
+#: contracts/templates/contracts/contract_detail.html:52
+msgid "Extend Contract"
+msgstr "新規契約"
+
+#: contracts/templates/contracts/contract_detail.html:55
+#: contracts/templates/contracts/contract_terminate.html:52
+msgid "Terminate Contract"
+msgstr "契約を確認"
+
+#: contracts/templates/contracts/contract_detail.html:58
+msgid "Contract has ended"
+msgstr "契約が終了しました"
+
+#: contracts/templates/contracts/contract_detail.html:70
+msgid "Pending Approval Request"
+msgstr "承認待ちのリクエスト"
+
+#: contracts/templates/contracts/contract_detail.html:74
+#, python-format
+msgid ""
+"\n"
+"                            <strong>%(username)s</strong> has requested "
+"<strong>%(request_type)s</strong>.\n"
+"                            "
+msgstr ""
+"\n"
+"<strong>%(username)s</strong>さんが<strong class=\"text-"
+"primary\">%(request_type)s</strong>をリクエストしました。"
+
+#: contracts/templates/contracts/contract_detail.html:79
+#: contracts/templates/contracts/contract_detail.html:125
+#: contracts/templates/contracts/contract_detail.html:144
+#: contracts/templates/contracts/contract_extend.html:32
+msgid "Extension Period"
+msgstr "延長期間"
+
+#: contracts/templates/contracts/contract_detail.html:79
+#: contracts/templates/contracts/contract_detail.html:105
+#: contracts/templates/contracts/contract_detail.html:125
+#: contracts/templates/contracts/contract_detail.html:144
+#: contracts/templates/contracts/contract_detail.html:869
+#, python-format
+msgid "%(months)s months"
+msgstr "%(months)sヶ月延長"
+
+#: contracts/templates/contracts/contract_detail.html:85
+#: contracts/templates/contracts/contract_detail.html:964
+#: recordings/templates/recordings/recording_detail.html:100
+#: recordings/templates/recordings/recording_detail.html:225
+#: records/templates/records/record_detail.html:360
+#: records/templates/records/record_detail.html:384
+msgid "Approve"
+msgstr "承認"
+
+#: contracts/templates/contracts/contract_detail.html:88
+#: contracts/templates/contracts/contract_detail.html:917
+#: recordings/templates/recordings/recording_detail.html:103
+#: recordings/templates/recordings/recording_detail.html:254
+#: records/templates/records/record_detail.html:390
+#: records/templates/records/record_detail.html:528
+msgid "Reject"
+msgstr "却下"
+
+#: contracts/templates/contracts/contract_detail.html:98
+msgid "Request Pending"
+msgstr "リクエスト処理中"
+
+#: contracts/templates/contracts/contract_detail.html:101
+#, python-format
+msgid ""
+"\n"
+"                            Your <strong>%(request_type)s</strong> request "
+"is awaiting approval from the other party.\n"
+"                            "
+msgstr ""
+"\n"
+"あなたの<strong>%(request_type)s</strong>リクエストは相手方の承認を待っていま"
+"す。"
+
+#: contracts/templates/contracts/contract_detail.html:120
+#, python-format
+msgid ""
+"\n"
+"                                <strong>%(username)s</strong> has approved "
+"your <strong>%(request_type)s</strong> request.\n"
+"                                "
+msgstr ""
+"\n"
+"<strong>%(username)s</strong>さんがあなたの<strong>%(request_type)s</strong>"
+"リクエストを承認しました。"
+
+#: contracts/templates/contracts/contract_detail.html:139
+#, python-format
+msgid ""
+"\n"
+"                                <strong>%(username)s</strong> has rejected "
+"your <strong>%(request_type)s</strong> request.\n"
+"                                "
+msgstr ""
+"\n"
+"<strong>%(username)s</strong>さんがあなたの<strong>%(request_type)s</strong>"
+"リクエストを却下しました。"
+
+#: contracts/templates/contracts/contract_detail.html:148
+#: contracts/templates/contracts/contract_detail.html:906
+#: records/templates/records/record_detail.html:123
+#: records/templates/records/record_detail.html:522
+msgid "Rejection Reason"
+msgstr "減価償却年数"
+
+#: contracts/templates/contracts/contract_detail.html:169
+#: contracts/templates/contracts/contract_form.html:96
+#: contracts/templates/contracts/contract_list.html:120
+#: contracts/templates/contracts/contract_terminate.html:22
+#: contracts/templates/contracts/contract_terminate.html:24
+msgid "Move Out Date"
+msgstr "退去予定日"
+
+#: contracts/templates/contracts/contract_detail.html:177
+msgid "Contract Parties"
+msgstr "契約日"
+
+#: contracts/templates/contracts/contract_detail.html:212
+msgid "Invite Landlord"
+msgstr "貸主"
+
+#: contracts/templates/contracts/contract_detail.html:217
+#: contracts/templates/contracts/contract_detail.html:251
+msgid "Active Invitation Link"
+msgstr "有効な招待リンク"
+
+#: contracts/templates/contracts/contract_detail.html:219
+msgid "Share the link below with the landlord:"
+msgstr "以下のリンクを貸主と共有してください："
+
+#: contracts/templates/contracts/contract_detail.html:225
+#: contracts/templates/contracts/contract_detail.html:259
+#: core/reports/templates/reports/share_detail.html:30
+msgid "Copy"
+msgstr "コピー"
+
+# Export
+#: contracts/templates/contracts/contract_detail.html:228
+#: contracts/templates/contracts/contract_detail.html:262
+msgid "Expiry Date"
+msgstr "データエクスポート"
+
+#: contracts/templates/contracts/contract_detail.html:234
+#: contracts/templates/contracts/contract_detail.html:268
+msgid "Create Invitation Link"
+msgstr "招待リンクを作成"
+
+#: contracts/templates/contracts/contract_detail.html:238
+msgid ""
+"If the landlord has an account, they can connect to this contract through "
+"the invitation link."
+msgstr "貸主がアカウントをお持ちの場合、招待リンクからこの契約に接続できます。"
+
+# User Types
+#: contracts/templates/contracts/contract_detail.html:246
+msgid "Invite Tenant"
+msgstr "借主"
+
+#: contracts/templates/contracts/contract_detail.html:253
+msgid "Share the link below with the tenant:"
+msgstr "以下のリンクを借主と共有してください："
+
+#: contracts/templates/contracts/contract_detail.html:272
+msgid ""
+"If the tenant has an account, they can connect to this contract through the "
+"invitation link."
+msgstr "借主がアカウントをお持ちの場合、招待リンクからこの契約に接続できます。"
+
+#: contracts/templates/contracts/contract_detail.html:282
+msgid "Download Contract"
+msgstr "新規契約"
+
+# Record Types
+#: contracts/templates/contracts/contract_detail.html:298
+#: contracts/templates/contracts/contract_detail.html:315
+#: records/templates/records/landlord_create_record.html:4
+#: records/templates/records/landlord_create_record.html:22
+#: records/templates/records/record_compare.html:33
+#: records/templates/records/record_compare.html:66
+#: records/templates/records/tenant_request_record.html:4
+#: records/templates/records/tenant_request_record.html:22
+msgid "Move In"
+msgstr "入居"
+
+#: contracts/templates/contracts/contract_detail.html:304
+#: contracts/templates/contracts/contract_detail.html:342
+#: records/templates/records/record_detail.html:487
+msgid "photos"
+msgstr "写真"
+
+#: contracts/templates/contracts/contract_detail.html:307
+#: contracts/templates/contracts/contract_detail.html:345
+#: contracts/templates/contracts/contract_detail.html:390
+#: contracts/templates/contracts/contract_list.html:131
+#: recordings/templates/recordings/recording_list.html:68
+#: records/templates/records/record_list.html:77
+#: records/templates/records/record_list.html:144
+msgid "View Details"
+msgstr "詳細を見る"
+
+#: contracts/templates/contracts/contract_detail.html:319
+#: contracts/templates/contracts/contract_detail.html:358
+#: contracts/templates/contracts/contract_detail.html:404
+msgid "Create"
+msgstr "作成日時"
+
+#: contracts/templates/contracts/contract_detail.html:323
+#: contracts/templates/contracts/contract_detail.html:362
+#: contracts/templates/contracts/contract_detail.html:408
+msgid "Request"
+msgstr "リクエスト済み"
+
+#: contracts/templates/contracts/contract_detail.html:336
+#: contracts/templates/contracts/contract_detail.html:353
+#: records/templates/records/landlord_create_record.html:4
+#: records/templates/records/landlord_create_record.html:22
+#: records/templates/records/record_compare.html:44
+#: records/templates/records/record_compare.html:95
+#: records/templates/records/tenant_request_record.html:4
+#: records/templates/records/tenant_request_record.html:22
+msgid "Move Out"
+msgstr "退去"
+
+#: contracts/templates/contracts/contract_detail.html:366
+msgid "Available after move-in registration"
+msgstr "入居登録後に利用可能"
+
+#: contracts/templates/contracts/contract_detail.html:381
+#: contracts/templates/contracts/contract_detail.html:399
+msgid "Pre-Move-Out Inspection"
+msgstr "退去前事前点検"
+
+#: contracts/templates/contracts/contract_detail.html:401
+msgid "Check property condition before move-out to prevent disputes."
+msgstr "退去前に物件の状態を点検し、紛争を予防します。"
+
+#: contracts/templates/contracts/contract_detail.html:420
+msgid "View All Records"
+msgstr "録音一覧"
+
+#: contracts/templates/contracts/contract_detail.html:484
+#: records/templates/records/defect_create.html:4
+#: records/templates/records/defect_create.html:13
+#: records/templates/records/defect_create.html:20
+#: records/templates/records/defect_list.html:20
+msgid "Report Defect"
+msgstr "不具合を報告"
+
+#: contracts/templates/contracts/contract_detail.html:488
+#: contracts/templates/contracts/contract_detail.html:519
+#: contracts/templates/contracts/contract_detail.html:554
+msgid "View All"
+msgstr "すべて表示"
+
+#: contracts/templates/contracts/contract_detail.html:515
+#: records/templates/records/defect_detail.html:129
+#: records/templates/records/repair_create.html:4
+#: records/templates/records/repair_create.html:12
+#: records/templates/records/repair_create.html:18
+#: records/templates/records/repair_list.html:19
+msgid "Request Repair"
+msgstr "修繕を依頼"
+
+#: contracts/templates/contracts/contract_detail.html:527 records/models.py:657
+#: records/templates/records/expense_detail.html:12
+#: records/templates/records/expense_list.html:4
+#: records/templates/records/expense_list.html:12
+#: records/templates/records/expense_list.html:17
+msgid "Expenses"
+msgstr "費用管理"
+
+#: contracts/templates/contracts/contract_detail.html:542
+#: records/templates/records/expense_detail.html:25
+#: records/templates/records/expense_list.html:29
+#: records/templates/records/expense_list.html:37
+#: records/templates/records/expense_list.html:45
+#: records/templates/records/expense_list.html:68
+#: records/templates/records/repair_detail.html:51
+#: records/templates/records/repair_detail.html:61
+#: records/templates/records/repair_detail.html:162
+#: records/templates/records/repair_list.html:35
+msgid "won"
+msgstr "円"
+
+#: contracts/templates/contracts/contract_detail.html:550
+#: records/templates/records/expense_create.html:4
+#: records/templates/records/expense_create.html:12
+#: records/templates/records/expense_create.html:18
+#: records/templates/records/expense_list.html:19
+#: records/templates/records/repair_detail.html:242
+msgid "Add Expense"
+msgstr "費用を登録"
+
+#: contracts/templates/contracts/contract_detail.html:562
+msgid "PDF Reports"
+msgstr "PDFレポート"
+
+#: contracts/templates/contracts/contract_detail.html:567
+#: contracts/templates/contracts/contract_detail.html:568
+#: core/reports/models.py:11
+#: core/reports/templates/reports/report_history.html:30
+msgid "Move-in Report"
+msgstr "入居点検報告書"
+
+#: contracts/templates/contracts/contract_detail.html:574
+#: contracts/templates/contracts/contract_detail.html:575
+#: core/reports/models.py:12
+#: core/reports/templates/reports/report_history.html:37
+msgid "Move-out Report"
+msgstr "退去点検報告書"
+
+#: contracts/templates/contracts/contract_detail.html:581
+#: contracts/templates/contracts/contract_detail.html:582
+#: core/reports/models.py:13
+msgid "Before/After Comparison Report"
+msgstr "入居/退去比較報告書"
+
+#: contracts/templates/contracts/contract_detail.html:588
+#: core/reports/templates/reports/report_history.html:4
+#: core/reports/templates/reports/report_history.html:13
+#: core/reports/templates/reports/report_history.html:20
+msgid "Report History"
+msgstr "レポート履歴"
+
+# Export
+#: contracts/templates/contracts/contract_detail.html:594
+#: core/exports/templates/exports/export_options.html:4
+msgid "Export Data"
+msgstr "データエクスポート"
+
+#: contracts/templates/contracts/contract_detail.html:606
+#: core/exports/templates/exports/export_options.html:86
+msgid "Images ZIP"
+msgstr "画像ZIP"
+
+#: contracts/templates/contracts/contract_detail.html:613
+#: contracts/templates/contracts/contract_detail.html:614
+#: core/exports/templates/exports/export_options.html:114
+msgid "Full Package"
+msgstr "フルパッケージ"
+
+#: contracts/templates/contracts/contract_detail.html:622
+msgid "Recording Records"
+msgstr "録音ファイル"
+
+#: contracts/templates/contracts/contract_detail.html:643
+msgid "Your browser does not support audio playback"
+msgstr "お使いのブラウザはオーディオ再生をサポートしていません"
+
+#: contracts/templates/contracts/contract_detail.html:654
+msgid "Registered Date"
+msgstr "未登録"
+
+#: contracts/templates/contracts/contract_detail.html:655
+msgid "Last Modified"
+msgstr "最終更新日"
+
+#: contracts/templates/contracts/contract_detail.html:662
+msgid "Blockchain Evidence"
+msgstr "ブロックチェーン検証済み"
+
+#: contracts/templates/contracts/contract_detail.html:670
+msgid "Contract has been finalized"
+msgstr "契約書ファイル"
+
+#: contracts/templates/contracts/contract_detail.html:681
+msgid "File Hash"
+msgstr "ファイルハッシュ"
+
+#: contracts/templates/contracts/contract_detail.html:686
+#: contracts/templates/contracts/contract_detail.html:1162
+msgid "Transaction"
+msgstr "トランザクションハッシュ"
+
+#: contracts/templates/contracts/contract_detail.html:691
+msgid "Verify Authenticity"
+msgstr "真正性確認"
+
+#: contracts/templates/contracts/contract_detail.html:704
+msgid "Blockchain registration failed."
+msgstr "ブロックチェーン検証済み"
+
+#: contracts/templates/contracts/contract_detail.html:708
+#: contracts/templates/contracts/contract_detail.html:1167
+#: contracts/templates/contracts/contract_detail.html:1173
+msgid "Retry"
+msgstr "再試行"
+
+#: contracts/templates/contracts/contract_detail.html:715
+msgid "Registering on blockchain..."
+msgstr "ブロックチェーンに登録中..."
+
+#: contracts/templates/contracts/contract_detail.html:725
+msgid "Finalization Checklist"
+msgstr "契約確定チェックリスト"
+
+#: contracts/templates/contracts/contract_detail.html:778
+msgid "Only the landlord can finalize the contract"
+msgstr "貸主のみが契約を確定できます"
+
+#: contracts/templates/contracts/contract_detail.html:783
+msgid "Please complete the checklist items on the left."
+msgstr "左側のチェックリスト項目を完了してください。"
+
+#: contracts/templates/contracts/contract_detail.html:792
+#: recordings/templates/recordings/recording_detail.html:189
+#: records/templates/records/defect_detail.html:152
+#: records/templates/records/expense_detail.html:72
+#: records/templates/records/record_compare.html:133
+#: records/templates/records/record_detail.html:310
+#: records/templates/records/repair_detail.html:245
+msgid "Back to List"
+msgstr "契約に戻る"
+
+#: contracts/templates/contracts/contract_detail.html:802
+msgid "Contract History"
+msgstr "レポート履歴"
+
+#: contracts/templates/contracts/contract_detail.html:811
+msgid "Date/Time"
+msgstr "日付"
+
+#: contracts/templates/contracts/contract_detail.html:812
+#: records/templates/records/record_detail.html:380
+msgid "Action"
+msgstr "アクション"
+
+#: contracts/templates/contracts/contract_detail.html:813
+msgid "User"
+msgstr "ユーザータイプ"
+
+#: contracts/templates/contracts/contract_detail.html:877
+msgid "No history recorded yet"
+msgstr "まだ履歴がありません"
+
+#: contracts/templates/contracts/contract_detail.html:892
+msgid "Reject Request"
+msgstr "却下"
+
+#: contracts/templates/contracts/contract_detail.html:900
+#, python-format
+msgid ""
+"\n"
+"                        Are you sure you want to reject "
+"<strong>%(username)s</strong>'s <strong>%(request_type)s</strong> request?\n"
+"                        "
+msgstr ""
+"\n"
+"<strong>%(username)s</strong>さんの<strong>%(request_type)s</strong>リクエス"
+"トを却下しますか？"
+
+#: contracts/templates/contracts/contract_detail.html:910
+msgid ""
+"Please enter the reason for rejection. This will be sent to the requester."
+msgstr "拒否理由を入力してください。要請者に送信されます。"
+
+#: contracts/templates/contracts/contract_detail.html:911
+msgid "The requester will be able to see this reason."
+msgstr "リクエスターがこの理由を確認できます。"
+
+#: contracts/templates/contracts/contract_detail.html:933
+msgid "Approve Request"
+msgstr "承認"
+
+#: contracts/templates/contracts/contract_detail.html:941
+#, python-format
+msgid ""
+"\n"
+"                        Are you sure you want to approve "
+"<strong>%(username)s</strong>'s <strong>%(request_type)s</strong> request?\n"
+"                        "
+msgstr ""
+"\n"
+"<strong>%(username)s</strong>さんの<strong>%(request_type)s</strong>リクエス"
+"トを承認しますか？"
+
+#: contracts/templates/contracts/contract_detail.html:948
+#, python-format
+msgid "<strong>%(months)s months</strong> extension will be approved."
+msgstr "%(months)sヶ月延長"
+
+#: contracts/templates/contracts/contract_detail.html:953
+msgid "Approval Message"
+msgstr "エラーメッセージ"
+
+#: contracts/templates/contracts/contract_detail.html:953
+#: core/reports/templates/reports/create_share.html:57
+msgid "optional"
+msgstr "オプション"
+
+#: contracts/templates/contracts/contract_detail.html:957
+msgid "You can enter an approval message."
+msgstr "承認メッセージを入力できます。"
+
+#: contracts/templates/contracts/contract_detail.html:958
+msgid "This message will be sent to the requester."
+msgstr "このメッセージはリクエスターに送信されます。"
+
+#: contracts/templates/contracts/contract_detail.html:982
+msgid "Generating report..."
+msgstr "レポート生成"
+
+#: contracts/templates/contracts/contract_detail.html:986
+msgid "Preparing data..."
+msgstr "データを準備中..."
+
+# Messages
+#: contracts/templates/contracts/contract_detail.html:990
+msgid "Report generated successfully!"
+msgstr "変更が正常に保存されました。"
+
+#: contracts/templates/contracts/contract_detail.html:991
+msgid "Download will start automatically."
+msgstr "ダウンロードが自動的に開始されます。"
+
+#: contracts/templates/contracts/contract_detail.html:995
+msgid "Report generation failed"
+msgstr "原状回復特約"
+
+#: contracts/templates/contracts/contract_detail.html:997
+#: records/templates/records/record_detail.html:661
+msgid "Close"
+msgstr "閉じる"
+
+#: contracts/templates/contracts/contract_detail.html:1022
+msgid "generating..."
+msgstr "生成中"
+
+#: contracts/templates/contracts/contract_detail.html:1028
+msgid "Loading contract data..."
+msgstr "契約データを読み込み中..."
+
+#: contracts/templates/contracts/contract_detail.html:1029
+msgid "Processing photos..."
+msgstr "処理中"
+
+#: contracts/templates/contracts/contract_detail.html:1030
+msgid "Creating PDF layout..."
+msgstr "PDFレイアウトを作成中..."
+
+#: contracts/templates/contracts/contract_detail.html:1031
+msgid "Finalizing document..."
+msgstr "確定条件"
+
+#: contracts/templates/contracts/contract_detail.html:1059
+msgid "Report generation failed. Please try again."
+msgstr "レポート生成に失敗しました。もう一度お試しください。"
+
+#: contracts/templates/contracts/contract_detail.html:1101
+msgid "Copied!"
+msgstr "コピーしました！"
+
+#: contracts/templates/contracts/contract_detail.html:1111
+msgid "Copy failed"
+msgstr "コピーに失敗しました"
+
+#: contracts/templates/contracts/contract_detail.html:1132
+msgid "Notification marked as read"
+msgstr "通知を既読にしました"
+
+#: contracts/templates/contracts/contract_detail.html:1136
+msgid "Error marking as read"
+msgstr "既読にする"
+
+#: contracts/templates/contracts/contract_detail.html:1145
+msgid "Retry blockchain registration?"
+msgstr "ブロックチェーン登録を再試行しますか？"
+
+#: contracts/templates/contracts/contract_detail.html:1150
+#: recordings/templates/recordings/recording_detail.html:127
+msgid "Processing"
+msgstr "処理中"
+
+#: contracts/templates/contracts/contract_detail.html:1162
+msgid "Blockchain registration completed"
+msgstr "ブロックチェーン検証済み"
+
+# Japan Contract Extension
+#: contracts/templates/contracts/contract_extend.html:4
+msgid "Contract Extension"
+msgstr "日本契約拡張情報"
+
+#: contracts/templates/contracts/contract_extend.html:12
+msgid "Contract Extension Request"
+msgstr "日本契約拡張情報"
+
+#: contracts/templates/contracts/contract_extend.html:22
+#: contracts/templates/contracts/contract_extend.html:24
+msgid "Current Move Out Date"
+msgstr "退去予定日"
+
+#: contracts/templates/contracts/contract_extend.html:24
+#: contracts/templates/contracts/contract_terminate.html:24
+msgid "Not Set"
+msgstr "未連携"
+
+#: contracts/templates/contracts/contract_extend.html:34
+msgid "6 months"
+msgstr "6ヶ月"
+
+#: contracts/templates/contracts/contract_extend.html:35
+msgid "12 months (1 year)"
+msgstr "12ヶ月（1年）"
+
+#: contracts/templates/contracts/contract_extend.html:36
+msgid "24 months (2 years)"
+msgstr "24ヶ月（2年）"
+
+#: contracts/templates/contracts/contract_extend.html:37
+msgid "36 months (3 years)"
+msgstr "36ヶ月（3年）"
+
+#: contracts/templates/contracts/contract_extend.html:39
+msgid "The contract will be extended by the selected period."
+msgstr "選択した期間だけ契約が延長されます。"
+
+#: contracts/templates/contracts/contract_extend.html:43
+msgid "Caution"
+msgstr "減価償却"
+
+#: contracts/templates/contracts/contract_extend.html:45
+msgid "The extension request will be sent to the other party."
+msgstr "リクエスターがこの理由を確認できます。"
+
+#: contracts/templates/contracts/contract_extend.html:46
+msgid "The other party must approve for the contract to be extended."
+msgstr "相手方が承認して初めて契約が延長されます。"
+
+#: contracts/templates/contracts/contract_extend.html:47
+msgid "After approval, you must contact the administrator to make changes."
+msgstr "承認後、変更が必要な場合は管理者にお問い合わせください。"
+
+#: contracts/templates/contracts/contract_extend.html:53
+msgid "Request Extension"
+msgstr "リクエスト処理中"
+
+#: contracts/templates/contracts/contract_form.html:4
+msgid "Property Management"
+msgstr "管理中の物件"
+
+#: contracts/templates/contracts/contract_form.html:22
+msgid "Country & Template"
+msgstr "テンプレートを選択"
+
+#: contracts/templates/contracts/contract_form.html:49
+#: contracts/templates/contracts/contract_form.html:290
+msgid "Select country and property type first"
+msgstr "物件タイプを選択"
+
+#: contracts/templates/contracts/contract_form.html:125
+msgid "Or enter landlord details manually:"
+msgstr "または貸主情報を直接入力："
+
+#: contracts/templates/contracts/contract_form.html:127
+msgid "Landlord Name"
+msgstr "貸主"
+
+#: contracts/templates/contracts/contract_form.html:131
+msgid "Landlord Contact"
+msgstr "貸主"
+
+#: contracts/templates/contracts/contract_form.html:154
+msgid "Or enter tenant details manually:"
+msgstr "または借主情報を直接入力："
+
+# User Types
+#: contracts/templates/contracts/contract_form.html:156
+msgid "Tenant Name"
+msgstr "借主"
+
+#: contracts/templates/contracts/contract_form.html:160
+msgid "Tenant Contact"
+msgstr "日本契約"
+
+#: contracts/templates/contracts/contract_form.html:181
+msgid "Select File"
+msgstr "テンプレートを選択"
+
+#: contracts/templates/contracts/contract_form.html:183
+msgid "No file selected"
+msgstr "ファイル未選択"
+
+#: contracts/templates/contracts/contract_form.html:185
+msgid "PDF or image file (max 10MB)"
+msgstr "PDFまたは画像ファイル（最大10MB）"
+
+#: contracts/templates/contracts/contract_form.html:194
+#: records/templates/records/record_create.html:90
+msgid "Register"
+msgstr "未登録"
+
+#: contracts/templates/contracts/contract_form.html:209
+msgid "Contract Privacy Masking"
+msgstr "契約管理"
+
+#: contracts/templates/contracts/contract_form.html:214
+msgid "How to use"
+msgstr "使い方"
+
+#: contracts/templates/contracts/contract_form.html:214
+msgid "Drag with mouse to select areas (personal info) to mask"
+msgstr "マウスでドラッグして隠したい部分（個人情報）を選択してください"
+
+#: contracts/templates/contracts/contract_form.html:215
+msgid "Selected areas will be displayed in black."
+msgstr "選択した領域は黒で表示されます。"
+
+#: contracts/templates/contracts/contract_form.html:221
+msgid "Clear All"
+msgstr "すべてクリア"
+
+#: contracts/templates/contracts/contract_form.html:224
+msgid "Undo"
+msgstr "元に戻す"
+
+#: contracts/templates/contracts/contract_form.html:235
+#: contracts/templates/contracts/contract_form.html:288
+msgid "Masking Areas"
+msgstr "マスキング領域"
+
+#: contracts/templates/contracts/contract_form.html:241
+msgid "Save and Continue"
+msgstr "保存して続行"
+
+#: contracts/templates/contracts/contract_form.html:254
+msgid "Processing file"
+msgstr "処理中"
+
+#: contracts/templates/contracts/contract_form.html:283
+msgid "File size must be under 10MB"
+msgstr "ファイルサイズは10MB以下にしてください"
+
+#: contracts/templates/contracts/contract_form.html:284
+msgid "File upload failed"
+msgstr "ファイルアップロード失敗"
+
+#: contracts/templates/contracts/contract_form.html:285
+#: records/templates/records/record_detail.html:774
+msgid "Error"
+msgstr "エラー"
+
+#: contracts/templates/contracts/contract_form.html:286
+msgid "Clear all masking areas?"
+msgstr "すべてのマスキング領域をクリアしますか？"
+
+#: contracts/templates/contracts/contract_form.html:287
+msgid "File has been processed"
+msgstr "ファイルが処理されました"
+
+#: contracts/templates/contracts/contract_form.html:289
+msgid "File processing failed"
+msgstr "ファイル処理失敗"
+
+#: contracts/templates/contracts/contract_form.html:292
+msgid "Default"
+msgstr "デフォルト"
+
+#: contracts/templates/contracts/contract_form.html:293
+msgid "templates available"
+msgstr "利用可能なテンプレートがありません"
+
+#: contracts/templates/contracts/contract_form.html:294
+msgid "No templates available"
+msgstr "利用可能なテンプレートがありません"
+
+#: contracts/templates/contracts/contract_form.html:295
+msgid "No templates available for this combination"
+msgstr "利用可能なテンプレートがありません"
+
+#: contracts/templates/contracts/contract_form.html:296
+msgid "Error loading templates"
+msgstr "テンプレート読み込みエラー"
+
+#: contracts/templates/contracts/contract_list.html:4
+#: records/templates/records/landlord_create_record.html:11
+#: records/templates/records/record_compare.html:11
+#: records/templates/records/record_create.html:11
+#: records/templates/records/record_detail.html:11
+#: records/templates/records/record_list.html:11
+#: records/templates/records/tenant_request_record.html:11
+msgid "Contract List"
+msgstr "契約一覧"
+
+#: contracts/templates/contracts/contract_list.html:141
+msgid "Registered"
+msgstr "登録日"
+
+#: contracts/templates/contracts/contract_list.html:149
+msgid "No contracts registered"
+msgstr "登録された契約がありません。"
+
+#: contracts/templates/contracts/contract_list.html:151
+msgid "Register your property contract to manage move-in/move-out records."
+msgstr "借主の入居/退去記録を承認します。"
+
+#: contracts/templates/contracts/contract_list.html:153
+msgid "Register your property contract to manage it."
+msgstr "物件契約を登録・管理します。"
+
+#: contracts/templates/contracts/contract_list.html:156
+msgid "Register First Contract"
+msgstr "最初の契約を登録"
+
+#: contracts/templates/contracts/contract_terminate.html:4
+#: contracts/templates/contracts/contract_terminate.html:12
+msgid "Contract Termination"
+msgstr "契約情報"
+
+#: contracts/templates/contracts/contract_terminate.html:29
+#: records/templates/records/record_detail.html:777
+msgid "Warning"
+msgstr "警告"
+
+#: contracts/templates/contracts/contract_terminate.html:31
+msgid "The contract will be immediately changed to terminated status."
+msgstr "契約が直ちに終了状態に変更されます。"
+
+#: contracts/templates/contracts/contract_terminate.html:32
+msgid "The move-out date will be automatically set to today."
+msgstr "退去予定日が本日に自動設定されます。"
+
+#: contracts/templates/contracts/contract_terminate.html:33
+msgid "After termination, you must contact the administrator to restore."
+msgstr "解約後、復元が必要な場合は管理者にお問い合わせください。"
+
+#: contracts/templates/contracts/contract_terminate.html:34
+msgid "Recording records linked to the contract will be maintained."
+msgstr "契約に関連する録音記録は維持されます。"
+
+#: contracts/templates/contracts/contract_terminate.html:45
+msgid "I have reviewed the above and agree to terminate the contract."
+msgstr "上記の内容を確認し、契約を解約することに同意します。"
+
+#: contracts/views.py:62 records/views.py:27 records/views.py:55
+#: records/views.py:128 records/views.py:194 records/views.py:281
+#: records/views.py:886 records/views.py:903 records/views.py:952
+#: records/views.py:1019 records/views.py:1034 records/views.py:1091
+#: records/views.py:1118 records/views.py:1177 records/views.py:1199
+#: records/views.py:1222 records/views.py:1276
+msgid "접근 권한이 없습니다."
+msgstr "アクセス権限がありません。"
+
+#: contracts/views.py:196
+msgid "유효하지 않은 임차인입니다."
+msgstr "有効でない借主です。"
+
+#: contracts/views.py:213
+msgid "계약이 등록되었습니다!"
+msgstr "契約が登録されました！"
+
+#: contracts/views.py:231
+msgid ""
+"관리자만 계약을 수정할 수 있습니다. 계약 연장이나 해지가 필요하신 경우 해당 "
+"버튼을 이용해주세요."
+msgstr ""
+"管理者のみ契約を修正できます。契約延長や解約が必要な場合は該当ボタンをご利用"
+"ください。"
+
+#: contracts/views.py:262
+msgid "계약 정보가 수정되었습니다!"
+msgstr "契約情報が修正されました！"
+
+#: contracts/views.py:270
+msgid "계약 수정"
+msgstr "契約修正"
+
+#: contracts/views.py:281
+msgid "관리자만 계약을 삭제할 수 있습니다."
+msgstr "管理者のみ契約を削除できます。"
+
+#: contracts/views.py:286
+msgid "계약이 삭제되었습니다."
+msgstr "契約が削除されました。"
+
+#: contracts/views.py:301
+msgid "파일이 없습니다."
+msgstr "ファイルがありません。"
+
+#: contracts/views.py:307
+msgid "파일 크기는 10MB 이하여야 합니다."
+msgstr "ファイルサイズは10MB以下にしてください。"
+
+#: contracts/views.py:328
+msgid "지원하지 않는 파일 형식입니다."
+msgstr "サポートされていないファイル形式です。"
+
+#: contracts/views.py:351
+msgid "필수 정보가 누락되었습니다."
+msgstr "必須情報が不足しています。"
+
+#: contracts/views.py:355
+msgid "임시 파일을 찾을 수 없습니다."
+msgstr "一時ファイルが見つかりません。"
+
+#: contracts/views.py:378
+msgid "파일 처리 중 오류가 발생했습니다."
+msgstr "ファイル処理中にエラーが発生しました。"
+
+#: contracts/views.py:383
+msgid "파일이 성공적으로 처리되었습니다."
+msgstr "ファイルが正常に処理されました。"
+
+#: contracts/views.py:387
+msgid "잘못된 요청 데이터입니다."
+msgstr "不正なリクエストデータです。"
+
+#: contracts/views.py:408
+msgid "이미 임대인이 연결되어 있습니다."
+msgstr "すでに貸主が登録されています。"
+
+#: contracts/views.py:414
+msgid "이미 임차인이 연결되어 있습니다."
+msgstr "すでに借主が登録されています。"
+
+#: contracts/views.py:428
+msgid "이미 활성화된 초대 링크가 있습니다."
+msgstr "すでに有効な招待リンクがあります。"
+
+#: contracts/views.py:436
+msgid "초대 링크가 생성되었습니다!"
+msgstr "招待リンクが作成されました！"
+
+#: contracts/views.py:449
+msgid "이미 수락된 초대입니다."
+msgstr "すでに承諾された招待です。"
+
+#: contracts/views.py:451
+msgid "만료된 초대 링크입니다."
+msgstr "期限切れの招待リンクです。"
+
+#: contracts/views.py:456
+#, python-format
+msgid "이 초대는 %(user_type)s 전용입니다."
+msgstr "この招待は%(user_type)s専用です。"
+
+#: contracts/views.py:471
+msgid "이미 다른 임대인이 연결되어 있습니다."
+msgstr "すでに他の貸主が登録されています。"
+
+#: contracts/views.py:477
+msgid "이미 다른 임차인이 연결되어 있습니다."
+msgstr "すでに他の借主が登録されています。"
+
+#: contracts/views.py:481
+msgid "잘못된 초대입니다."
+msgstr "無効な招待です。"
+
+#: contracts/views.py:491
+#, python-format
+msgid "계약에 참여하셨습니다! (%(address)s)"
+msgstr "契約に参加しました！(%(address)s)"
+
+#: contracts/views.py:507
+msgid "이미 종료된 계약은 연장할 수 없습니다."
+msgstr "すでに終了した契約は延長できません。"
+
+#: contracts/views.py:518 contracts/views.py:572
+msgid "이미 처리 대기 중인 변경 요청이 있습니다."
+msgstr "すでに処理待ちの変更要請があります。"
+
+#: contracts/views.py:536
+#, python-format
+msgid "%(months)s개월 연장 요청"
+msgstr "%(months)sヶ月延長要請"
+
+#: contracts/views.py:545
+#, python-format
+msgid "계약 연장 요청이 전송되었습니다! %(other_party)s의 승인을 기다립니다."
+msgstr "契約延長要請が送信されました！%(other_party)sの承認をお待ちください。"
+
+#: contracts/views.py:561
+msgid "이미 종료된 계약입니다."
+msgstr "すでに終了した契約です。"
+
+#: contracts/views.py:586
+msgid "계약 해지 요청"
+msgstr "契約解約要請"
+
+#: contracts/views.py:595
+#, python-format
+msgid "계약 해지 요청이 전송되었습니다! %(other_party)s의 승인을 기다립니다."
+msgstr "契約解約要請が送信されました！%(other_party)sの承認をお待ちください。"
+
+#: contracts/views.py:613
+msgid "본인이 요청한 것은 승인할 수 없습니다."
+msgstr "本人が要請したものは承認できません。"
+
+#: contracts/views.py:622 contracts/views.py:714
+msgid "이미 처리된 요청입니다."
+msgstr "すでに処理された要請です。"
+
+#: contracts/views.py:657
+#, python-format
+msgid "%(months)s개월 연장 승인 (요청자: %(requester)s, 승인자: %(approver)s)"
+msgstr "%(months)sヶ月延長承認（要請者：%(requester)s、承認者：%(approver)s）"
+
+#: contracts/views.py:660
+#, python-format
+msgid "계약 연장이 승인되었습니다! 새 퇴실 예정일: %(date)s"
+msgstr "契約延長が承認されました！新しい退去予定日：%(date)s"
+
+#: contracts/views.py:677
+#, python-format
+msgid "계약 해지 승인 (요청자: %(requester)s, 승인자: %(approver)s)"
+msgstr "契約解約承認（要請者：%(requester)s、承認者：%(approver)s）"
+
+#: contracts/views.py:680
+msgid "계약 해지가 승인되었습니다."
+msgstr "契約解約が承認されました。"
+
+#: contracts/views.py:705
+msgid "본인이 요청한 것은 거절할 수 없습니다."
+msgstr "本人が要請したものは拒否できません。"
+
+#: contracts/views.py:720 recordings/views.py:309
+msgid "거절 사유를 입력해주세요."
+msgstr "拒否理由を入力してください。"
+
+#: contracts/views.py:731
+#, python-format
+msgid "%(request_type)s 요청이 거절되었습니다."
+msgstr "%(request_type)s要請が拒否されました。"
+
+#: core/exports/templates/exports/export_options.html:11
+#: core/reports/templates/reports/create_share.html:11
+#: core/reports/templates/reports/report_history.html:11
+#: core/reports/templates/reports/share_detail.html:11
+#: countries/jp/templates/countries/jp/japan_extension_form.html:11
+#: countries/jp/templates/countries/jp/restoration_guide.html:11
+#: records/templates/records/add_photos.html:11
+#: records/templates/records/defect_create.html:11
+#: records/templates/records/defect_detail.html:11
+#: records/templates/records/defect_list.html:11
+msgid "Contracts"
+msgstr "契約"
+
+#: core/exports/templates/exports/export_options.html:13
+msgid "Export"
+msgstr "エクスポート"
+
+#: core/exports/templates/exports/export_options.html:20
+msgid "Export Contract Data"
+msgstr "契約データエクスポート"
+
+#: core/exports/templates/exports/export_options.html:26
+msgid "Data Summary"
+msgstr "データ概要"
+
+#: core/exports/templates/exports/export_options.html:33
+#: records/templates/records/defect_create.html:61
+#: records/templates/records/defect_detail.html:62
+#: records/templates/records/repair_create.html:62
+msgid "Photos"
+msgstr "写真"
+
+#: core/exports/templates/exports/export_options.html:41
+#: core/reports/templates/reports/create_share.html:13
+#: core/reports/templates/reports/share_detail.html:13
+msgid "Reports"
+msgstr "レポート"
+
+#: core/exports/templates/exports/export_options.html:55
+msgid "JSON Export"
+msgstr "JSONエクスポート"
+
+#: core/exports/templates/exports/export_options.html:58
+msgid ""
+"Export all contract data as JSON format. Includes metadata, file hashes, and "
+"all records."
+msgstr ""
+"全契約データをJSON形式でエクスポート。メタデータ、ファイルハッシュ、全記録を"
+"含みます。"
+
+#: core/exports/templates/exports/export_options.html:61
+msgid "Contract information"
+msgstr "契約情報"
+
+#: core/exports/templates/exports/export_options.html:62
+msgid "Records & photos metadata"
+msgstr "記録・写真メタデータ"
+
+#: core/exports/templates/exports/export_options.html:63
+msgid "SHA-256 file hashes"
+msgstr "SHA-256ファイルハッシュ"
+
+#: core/exports/templates/exports/export_options.html:64
+msgid "Blockchain anchoring info"
+msgstr "ブロックチェーン登録情報"
+
+#: core/exports/templates/exports/export_options.html:70
+msgid "Download"
+msgstr "ダウンロード"
+
+#: core/exports/templates/exports/export_options.html:73
+#: records/templates/records/record_detail.html:869
+msgid "Preview"
+msgstr "プレビュー"
+
+#: core/exports/templates/exports/export_options.html:89
+msgid ""
+"Download all photos and files as a ZIP archive. Organized by record type and "
+"category."
+msgstr ""
+"全写真とファイルをZIPアーカイブでダウンロード。記録タイプとカテゴリ別に整理。"
+
+#: core/exports/templates/exports/export_options.html:92
+msgid "Contract documents"
+msgstr "契約書類"
+
+#: core/exports/templates/exports/export_options.html:93
+msgid "Move-in/out photos"
+msgstr "入居/退去写真"
+
+#: core/exports/templates/exports/export_options.html:94
+msgid "Recording files"
+msgstr "録音ファイル"
+
+#: core/exports/templates/exports/export_options.html:95
+msgid "Includes metadata.json"
+msgstr "metadata.json含む"
+
+#: core/exports/templates/exports/export_options.html:100
+msgid "Download ZIP"
+msgstr "ZIPダウンロード"
+
+#: core/exports/templates/exports/export_options.html:115
+msgid "Recommended"
+msgstr "推奨"
+
+#: core/exports/templates/exports/export_options.html:118
+msgid ""
+"Complete export package including JSON data, all images, recordings, and PDF "
+"reports. Best for archiving or sharing with partners."
+msgstr ""
+"JSONデータ、全画像、録音、PDFレポートを含む完全エクスポートパッケージ。アーカ"
+"イブやパートナーとの共有に最適。"
+
+#: core/exports/templates/exports/export_options.html:124
+msgid "Download Full Package"
+msgstr "フルパッケージをダウンロード"
+
+#: core/exports/templates/exports/export_options.html:127
+msgid "Without PDF Reports"
+msgstr "PDFレポートなし"
+
+#: core/exports/templates/exports/export_options.html:141
+msgid "Blockchain Verified"
+msgstr "ブロックチェーン検証済み"
+
+#: core/exports/templates/exports/export_options.html:143
+msgid "This contract has been anchored to the blockchain."
+msgstr "この契約はブロックチェーンに登録されています。"
+
+#: core/exports/templates/exports/export_options.html:155
+msgid "Japan Contract"
+msgstr "日本契約"
+
+#: core/exports/templates/exports/export_options.html:157
+msgid ""
+"This export includes Japan-specific restoration guidelines and contract "
+"extension data."
+msgstr ""
+"このエクスポートには日本固有の原状回復ガイドラインと契約拡張データが含まれま"
+"す。"
+
+#: core/exports/templates/exports/export_options.html:166
+#: countries/jp/templates/countries/jp/restoration_guide.html:161
+#: records/templates/records/defect_list.html:66
+#: records/templates/records/expense_list.html:82
+#: records/templates/records/repair_list.html:54
+msgid "Back to Contract"
+msgstr "契約に戻る"
+
+#: core/exports/views.py:152
+msgid "You do not have permission to access this contract."
+msgstr "このレポートにアクセスする権限がありません。"
+
+#: core/reports/admin.py:15
+msgid "Report Information"
+msgstr "契約情報"
+
+#: core/reports/admin.py:21
+msgid "File"
+msgstr "ファイル"
+
+#: core/reports/admin.py:24
+msgid "Metadata"
+msgstr "メタデータ"
+
+# Status
+#: core/reports/models.py:23 countries/jp/models.py:295
+#: recordings/templates/recordings/recording_detail.html:147
+#: records/templates/records/record_detail.html:439
+msgid "Pending"
+msgstr "保留中"
+
+#: core/reports/models.py:24
+msgid "Generating"
+msgstr "生成中"
+
+#: core/reports/models.py:25
+#: core/reports/templates/reports/report_history.html:87
+#: recordings/templates/recordings/recording_detail.html:117
+#: records/templates/records/repair_detail.html:232
+msgid "Completed"
+msgstr "完了"
+
+#: core/reports/models.py:26
+#: core/reports/templates/reports/report_history.html:89
+#: recordings/templates/recordings/recording_detail.html:137
+msgid "Failed"
+msgstr "失敗"
+
+#: core/reports/models.py:34
+msgid "UUID"
+msgstr "UUID"
+
+# Contract Fields
+#: core/reports/models.py:42 countries/jp/admin.py:43
+#: countries/jp/models.py:172 records/models.py:409 records/models.py:499
+#: records/models.py:619
+msgid "Contract"
+msgstr "契約"
+
+#: core/reports/models.py:52
+#: recordings/templates/recordings/recording_create.html:4
+#: recordings/templates/recordings/recording_create.html:12
+#: records/models.py:341 records/templates/records/record_detail.html:4
+#: records/templates/records/record_detail.html:23
+msgid "Record"
+msgstr "記録"
+
+#: core/reports/models.py:59
+#: core/reports/templates/reports/share_detail.html:40
+msgid "Report Type"
+msgstr "レポートタイプ"
+
+# Language Selection
+#: core/reports/models.py:67
+#: core/reports/templates/reports/create_share.html:27
+#: core/reports/templates/reports/report_history.html:59
+#: core/reports/templates/reports/share_detail.html:44
+msgid "Language"
+msgstr "言語"
+
+#: core/reports/models.py:83
+msgid "Report File"
+msgstr "レポートファイル"
+
+#: core/reports/models.py:93
+#: core/reports/templates/reports/report_history.html:61
+msgid "Generated By"
+msgstr "生成者"
+
+#: core/reports/models.py:99
+msgid "Error Message"
+msgstr "エラーメッセージ"
+
+#: core/reports/models.py:105 core/reports/models.py:198
+#: core/templates_engine/models.py:77 countries/jp/models.py:128
+#: countries/jp/models.py:262 countries/jp/models.py:340
+msgid "Created At"
+msgstr "作成日時"
+
+#: core/reports/models.py:109 core/templates_engine/models.py:78
+#: countries/jp/models.py:129 countries/jp/models.py:263
+#: countries/jp/models.py:341
+msgid "Updated At"
+msgstr "更新日時"
+
+# Reports
+#: core/reports/models.py:113
+msgid "Generated Report"
+msgstr "生成レポート"
+
+#: core/reports/models.py:114
+msgid "Generated Reports"
+msgstr "生成レポート"
+
+#: core/reports/models.py:135
+msgid "Share Token"
+msgstr "共有トークン"
+
+#: core/reports/models.py:143
+#: core/reports/templates/reports/create_share.html:26
+msgid "Report"
+msgstr "レポート"
+
+#: core/reports/models.py:151
+msgid "Leave empty for no expiration"
+msgstr "点検用テンプレートを選択してください"
+
+#: core/reports/models.py:156
+#: core/reports/templates/reports/create_share.html:46
+#: core/reports/templates/reports/share_detail.html:59
+msgid "Max Downloads"
+msgstr "ダウンロード"
+
+#: core/reports/models.py:157
+msgid "Leave empty for unlimited"
+msgstr "無制限の場合は空欄"
+
+#: core/reports/models.py:161
+msgid "Download Count"
+msgstr "ダウンロード"
+
+#: core/reports/models.py:168
+msgid "Password Hash"
+msgstr "パスワードハッシュ"
+
+#: core/reports/models.py:178
+msgid "Shared By"
+msgstr "作成者"
+
+#: core/reports/models.py:186
+msgid "Optional note for this share link"
+msgstr "このセクションの追加ガイダンス"
+
+#: core/reports/models.py:192 core/templates_engine/models.py:66
+#: countries/jp/models.py:127
+msgid "Is Active"
+msgstr "有効"
+
+#: core/reports/models.py:202
+msgid "Report Share"
+msgstr "レポートタイプ"
+
+#: core/reports/models.py:203
+msgid "Report Shares"
+msgstr "レポート"
+
+#: core/reports/templates/reports/create_share.html:4
+#: core/reports/templates/reports/create_share.html:14
+#: core/reports/templates/reports/create_share.html:21
+#: core/reports/templates/reports/report_history.html:101
+msgid "Create Share Link"
+msgstr "共有リンク作成"
+
+#: core/reports/templates/reports/create_share.html:28
+msgid "Created"
+msgstr "作成日時"
+
+#: core/reports/templates/reports/create_share.html:35
+msgid "Expires After"
+msgstr "有効期間"
+
+#: core/reports/templates/reports/create_share.html:37
+#: core/reports/templates/reports/share_detail.html:55
+msgid "Never"
+msgstr "無期限"
+
+#: core/reports/templates/reports/create_share.html:38
+msgid "1 day"
+msgstr "1日"
+
+#: core/reports/templates/reports/create_share.html:39
+msgid "7 days"
+msgstr "7日"
+
+#: core/reports/templates/reports/create_share.html:40
+msgid "30 days"
+msgstr "30日"
+
+#: core/reports/templates/reports/create_share.html:41
+msgid "90 days"
+msgstr "90日"
+
+#: core/reports/templates/reports/create_share.html:48
+#: core/reports/templates/reports/share_detail.html:63
+msgid "Unlimited"
+msgstr "無制限"
+
+#: core/reports/templates/reports/create_share.html:59
+msgid "e.g., For real estate agency"
+msgstr "不動産会社"
+
+#: core/reports/templates/reports/create_share.html:67
+msgid "Create Link"
+msgstr "作成日時"
+
+#: core/reports/templates/reports/report_history.html:24
+msgid "Generate Report"
+msgstr "レポート生成"
+
+#: core/reports/templates/reports/report_history.html:45
+msgid "Comparison Report"
+msgstr "比較レポート"
+
+#: core/reports/templates/reports/report_history.html:58
+#: countries/jp/templates/countries/jp/restoration_guide.html:76
+msgid "Type"
+msgstr "タイプ"
+
+#: core/reports/templates/reports/report_history.html:62
+#: records/templates/records/defect_detail.html:34
+#: records/templates/records/repair_detail.html:30
+msgid "Date"
+msgstr "日付"
+
+#: core/reports/templates/reports/report_history.html:63
+#: records/templates/records/repair_detail.html:144
+msgid "Actions"
+msgstr "アクション"
+
+#: core/reports/templates/reports/report_history.html:71
+#: records/templates/records/record_create.html:4
+#: records/templates/records/record_create.html:14
+#: records/templates/records/record_create.html:22
+msgid "Move-in"
+msgstr "入居"
+
+#: core/reports/templates/reports/report_history.html:73
+#: records/templates/records/record_create.html:4
+#: records/templates/records/record_create.html:14
+#: records/templates/records/record_create.html:22
+msgid "Move-out"
+msgstr "退去"
+
+#: core/reports/templates/reports/report_history.html:75
+msgid "Comparison"
+msgstr "比較"
+
+#: core/reports/templates/reports/report_history.html:116
+msgid "No reports generated yet."
+msgstr "まだレポートは生成されていません。"
+
+#: core/reports/templates/reports/share_detail.html:4
+#: core/reports/templates/reports/share_detail.html:14
+msgid "Share Link"
+msgstr "共有リンク"
+
+#: core/reports/templates/reports/share_detail.html:21
+msgid "Share Link Created"
+msgstr "共有リンク作成完了"
+
+#: core/reports/templates/reports/share_detail.html:26
+msgid "Share URL"
+msgstr "共有URL"
+
+#: core/reports/templates/reports/share_detail.html:33
+msgid "Anyone with this link can download the report."
+msgstr "このリンクを持つ誰でもレポートをダウンロードできます。"
+
+#: core/reports/templates/reports/share_detail.html:51
+msgid "Expires"
+msgstr "有効期限"
+
+#: core/reports/templates/reports/share_detail.html:70
+msgid "Downloads"
+msgstr "ダウンロード"
+
+#: core/reports/templates/reports/share_detail.html:76
+msgid "Active"
+msgstr "進行中"
+
+#: core/reports/templates/reports/share_detail.html:78
+msgid "Expired"
+msgstr "期限切れ"
+
+#: core/reports/templates/reports/share_detail.html:94
+#: countries/jp/templates/countries/jp/japan_extension_form.html:162
+msgid "Back"
+msgstr "戻る"
+
+#: core/reports/templates/reports/share_detail.html:101
+msgid "Are you sure you want to deactivate this share link?"
+msgstr "本当に削除しますか？"
+
+#: core/reports/templates/reports/share_detail.html:102
+msgid "Deactivate"
+msgstr "進行中"
+
+#: core/reports/templates/reports/share_detail.html:117
+msgid "Link copied to clipboard!"
+msgstr "リンクをクリップボードにコピーしました！"
+
+#: core/reports/templates/reports/share_expired.html:4
+msgid "Link Expired"
+msgstr "リンク期限切れ"
+
+#: core/reports/templates/reports/share_expired.html:12
+msgid "Share Link Unavailable"
+msgstr "共有リンクが利用できません"
+
+#: core/reports/templates/reports/share_expired.html:15
+msgid "Go to Home"
+msgstr "ホームに移動"
+
+#: core/reports/views.py:24 core/reports/views.py:63 core/reports/views.py:101
+#: core/reports/views.py:171
+msgid "You do not have permission to access this report."
+msgstr "このレポートにアクセスする権限がありません。"
+
+#: core/reports/views.py:51 core/reports/views.py:90 core/reports/views.py:135
+msgid "Error generating report: "
+msgstr "レポート生成エラー: "
+
+#: core/reports/views.py:109
+msgid "Both move-in and move-out records are required for comparison report."
+msgstr "比較レポートには入居と退去の両方の記録が必要です。"
+
+#: core/reports/views.py:146 core/reports/views.py:238 countries/jp/views.py:97
+msgid "You do not have permission to access this page."
+msgstr "このページにアクセスする権限がありません。"
+
+#: core/reports/views.py:175 core/reports/views.py:272
+msgid "Report file not found."
+msgstr "レポートファイルが見つかりません。"
+
+#: core/reports/views.py:192
+msgid "You do not have permission to share this report."
+msgstr "このレポートにアクセスする権限がありません。"
+
+#: core/reports/views.py:221
+msgid "Share link has been created."
+msgstr "共有リンクが作成されました。"
+
+#: core/reports/views.py:245
+msgid "Share link has been deactivated."
+msgstr "共有リンクが無効化されました。"
+
+#: core/reports/views.py:266
+msgid "This share link is no longer valid."
+msgstr "この共有リンクは無効です。"
+
+#: core/templates_engine/admin.py:30 countries/jp/admin.py:17
+msgid "Basic Information"
+msgstr "契約情報"
+
+#: core/templates_engine/admin.py:33
+msgid "Classification"
+msgstr "分類"
+
+#: core/templates_engine/admin.py:39
+msgid "Timestamps"
+msgstr "タイムスタンプ"
+
+#: core/templates_engine/admin.py:55 core/templates_engine/models.py:120
+#: records/templates/records/add_photos.html:29
+msgid "Template"
+msgstr "テンプレート項目"
+
+#: core/templates_engine/admin.py:58
+msgid "Section Information"
+msgstr "契約情報"
+
+#: core/templates_engine/admin.py:61
+msgid "Settings"
+msgstr "設定"
+
+#: core/templates_engine/admin.py:75 core/templates_engine/models.py:205
+msgid "Section"
+msgstr "アクション"
+
+#: core/templates_engine/admin.py:78
+msgid "Item Information"
+msgstr "契約情報"
+
+#: core/templates_engine/admin.py:81 countries/jp/admin.py:20
+msgid "Descriptions"
+msgstr "説明"
+
+#: core/templates_engine/admin.py:85
+msgid "Type Settings"
+msgstr "テンプレートセクション"
+
+#: core/templates_engine/admin.py:88
+msgid "Photo Settings"
+msgstr "写真原状回復タグ"
+
+#: core/templates_engine/admin.py:91
+msgid "Only applicable for PHOTO type items"
+msgstr "PHOTOタイプの項目のみ適用"
+
+#: core/templates_engine/admin.py:93
+msgid "Requirements"
+msgstr "設備"
+
+# Country/Region
+#: core/templates_engine/models.py:12
+msgid "Korea"
+msgstr "韓国"
+
+#: core/templates_engine/models.py:13
+msgid "Japan"
+msgstr "日本"
+
+#: core/templates_engine/models.py:14
+msgid "Global"
+msgstr "グローバル"
+
+#: core/templates_engine/models.py:23 core/templates_engine/models.py:132
+#: core/templates_engine/models.py:217
+msgid "Name (Korean)"
+msgstr "名前（韓国語）"
+
+# Help text
+#: core/templates_engine/models.py:25
+msgid "Template name in Korean"
+msgstr "韓国語のテンプレート名"
+
+#: core/templates_engine/models.py:28 core/templates_engine/models.py:136
+#: core/templates_engine/models.py:221
+msgid "Name (English)"
+msgstr "名前（英語）"
+
+#: core/templates_engine/models.py:31
+msgid "Template name in English"
+msgstr "英語のテンプレート名"
+
+#: core/templates_engine/models.py:34 core/templates_engine/models.py:141
+#: core/templates_engine/models.py:226
+msgid "Name (Japanese)"
+msgstr "名前（日本語）"
+
+#: core/templates_engine/models.py:37
+msgid "Template name in Japanese"
+msgstr "日本語のテンプレート名"
+
+#: core/templates_engine/models.py:56 core/templates_engine/models.py:148
+#: countries/jp/models.py:324 records/models.py:419 records/models.py:471
+#: records/models.py:516 records/models.py:570 records/models.py:632
+#: records/templates/records/defect_create.html:55
+#: records/templates/records/defect_detail.html:53
+#: records/templates/records/expense_create.html:71
+#: records/templates/records/expense_detail.html:56
+#: records/templates/records/repair_create.html:56
+msgid "Description"
+msgstr "説明"
+
+#: core/templates_engine/models.py:58
+msgid "Description of the template purpose and usage"
+msgstr "テンプレートの目的と用途の説明"
+
+#: core/templates_engine/models.py:61
+msgid "Version"
+msgstr "バージョン"
+
+#: core/templates_engine/models.py:68
+msgid "Only active templates can be selected for new contracts"
+msgstr "有効なテンプレートのみ新しい契約で選択できます"
+
+#: core/templates_engine/models.py:71
+msgid "Is Default"
+msgstr "デフォルト"
+
+#: core/templates_engine/models.py:73
+msgid "Default template for the country/property type combination"
+msgstr "国/物件タイプの組み合わせのデフォルトテンプレート"
+
+#: core/templates_engine/models.py:82
+msgid "Inspection Templates"
+msgstr "点検テンプレート"
+
+# Template Fields
+#: core/templates_engine/models.py:125 core/templates_engine/models.py:210
+msgid "Code"
+msgstr "コード"
+
+#: core/templates_engine/models.py:127
+msgid "Unique code within the template (e.g., ENTRANCE, LIVING_ROOM)"
+msgstr "テンプレート内の一意のコード（例：ENTRANCE、LIVING_ROOM）"
+
+#: core/templates_engine/models.py:150
+msgid "Additional guidance for this section"
+msgstr "このセクションの追加ガイダンス"
+
+#: core/templates_engine/models.py:155 core/templates_engine/models.py:292
+msgid "Order"
+msgstr "順序"
+
+#: core/templates_engine/models.py:157
+msgid "Display order within the template"
+msgstr "テンプレート内の表示順序"
+
+#: core/templates_engine/models.py:160 core/templates_engine/models.py:266
+msgid "Is Required"
+msgstr "必須"
+
+#: core/templates_engine/models.py:162
+msgid "Whether this section must have at least one item completed"
+msgstr "このセクションで少なくとも1つの項目を完了する必要があるかどうか"
+
+#: core/templates_engine/models.py:166
+msgid "Template Section"
+msgstr "テンプレートセクション"
+
+#: core/templates_engine/models.py:167
+msgid "Template Sections"
+msgstr "テンプレートセクション"
+
+# Template Item Types
+#: core/templates_engine/models.py:190 countries/jp/models.py:303
+msgid "Photo"
+msgstr "写真"
+
+#: core/templates_engine/models.py:191
+msgid "Checkbox"
+msgstr "チェックボックス"
+
+#: core/templates_engine/models.py:192
+msgid "Text Input"
+msgstr "テキスト入力"
+
+#: core/templates_engine/models.py:193
+msgid "Select/Dropdown"
+msgstr "選択/ドロップダウン"
+
+#: core/templates_engine/models.py:194
+msgid "Number Input"
+msgstr "数値入力"
+
+# Responsibility
+#: core/templates_engine/models.py:197
+#: countries/jp/templates/countries/jp/restoration_guide.html:37
+#: countries/jp/templates/countries/jp/restoration_guide.html:133
+msgid "Landlord Responsibility"
+msgstr "貸主責任"
+
+#: core/templates_engine/models.py:198
+#: countries/jp/templates/countries/jp/restoration_guide.html:38
+#: countries/jp/templates/countries/jp/restoration_guide.html:144
+msgid "Tenant Responsibility"
+msgstr "借主責任"
+
+#: core/templates_engine/models.py:199 countries/jp/models.py:30
+#: countries/jp/models.py:294
+#: countries/jp/templates/countries/jp/restoration_guide.html:39
+#: countries/jp/templates/countries/jp/restoration_guide.html:95
+msgid "Negotiable"
+msgstr "協議"
+
+#: core/templates_engine/models.py:212
+msgid "Unique code within the section (e.g., FLOOR, WALL_EAST)"
+msgstr "セクション内の一意のコード（例：FLOOR、WALL_EAST）"
+
+#: core/templates_engine/models.py:233 countries/jp/models.py:69
+msgid "Description (Korean)"
+msgstr "説明（韓国語）"
+
+#: core/templates_engine/models.py:235
+msgid "Guidance or instructions in Korean"
+msgstr "韓国語でのガイダンスまたは指示"
+
+#: core/templates_engine/models.py:238 countries/jp/models.py:64
+msgid "Description (English)"
+msgstr "説明（英語）"
+
+#: core/templates_engine/models.py:240
+msgid "Guidance or instructions in English"
+msgstr "英語でのガイダンスまたは指示"
+
+#: core/templates_engine/models.py:243 countries/jp/models.py:60
+msgid "Description (Japanese)"
+msgstr "説明（日本語）"
+
+#: core/templates_engine/models.py:245
+msgid "Guidance or instructions in Japanese"
+msgstr "日本語でのガイダンスまたは指示"
+
+#: core/templates_engine/models.py:250
+msgid "Item Type"
+msgstr "項目タイプ"
+
+#: core/templates_engine/models.py:258
+msgid "Options"
+msgstr "オプション"
+
+#: core/templates_engine/models.py:261
+msgid ""
+"Options for SELECT type items (list of {\"value\": \"\", \"label_ko\": \"\", "
+"\"label_en\": \"\", \"label_ja\": \"\"})"
+msgstr ""
+"SELECT タイプ項目のオプション（リスト：{\"value\": \"\", \"label_ko\": \"\", "
+"\"label_en\": \"\", \"label_ja\": \"\"}）"
+
+#: core/templates_engine/models.py:268
+msgid "Whether this item must be completed"
+msgstr "この項目を完了する必要があるかどうか"
+
+#: core/templates_engine/models.py:271
+msgid "Minimum Photos"
+msgstr "最小写真数"
+
+#: core/templates_engine/models.py:273
+msgid "Minimum number of photos required (for PHOTO type)"
+msgstr "必要な最小写真数（PHOTO タイプ用）"
+
+#: core/templates_engine/models.py:276
+msgid "Maximum Photos"
+msgstr "最大写真数"
+
+#: core/templates_engine/models.py:278
+msgid "Maximum number of photos allowed (for PHOTO type)"
+msgstr "許可される最大写真数（PHOTO タイプ用）"
+
+#: core/templates_engine/models.py:283
+msgid "Responsibility Hint"
+msgstr "責任ヒント"
+
+#: core/templates_engine/models.py:287
+msgid "Typical responsibility for restoration (informational only)"
+msgstr "原状回復の一般的な責任（参考情報のみ）"
+
+#: core/templates_engine/models.py:294
+msgid "Display order within the section"
+msgstr "セクション内の表示順序"
+
+#: core/templates_engine/models.py:298 records/models.py:279
+#: records/models.py:347
+msgid "Template Item"
+msgstr "テンプレート項目"
+
+#: core/templates_engine/models.py:299
+msgid "Template Items"
+msgstr "テンプレート項目"
+
+#: countries/jp/admin.py:23 countries/jp/models.py:76
+#: countries/jp/models.py:316
+#: countries/jp/templates/countries/jp/restoration_guide.html:75
+msgid "Responsibility"
+msgstr "責任区分"
+
+#: countries/jp/admin.py:26
+msgid "Cost Information"
+msgstr "契約情報"
+
+#: countries/jp/admin.py:46
+#: countries/jp/templates/countries/jp/japan_extension_form.html:42
+msgid "Renewal"
+msgstr "更新なし"
+
+#: countries/jp/admin.py:49
+#: countries/jp/templates/countries/jp/japan_extension_form.html:59
+msgid "Initial Costs"
+msgstr "初期費用"
+
+#: countries/jp/admin.py:52 countries/jp/models.py:237
+msgid "Restoration Clause"
+msgstr "原状回復特約"
+
+#: countries/jp/admin.py:55
+msgid "Agency Information"
+msgstr "契約情報"
+
+#: countries/jp/forms.py:33
+msgid "e.g., 100000"
+msgstr "例：100000"
+
+#: countries/jp/forms.py:37 countries/jp/forms.py:41
+msgid "e.g., 200000"
+msgstr "例：200000"
+
+#: countries/jp/forms.py:45
+msgid "e.g., 50000"
+msgstr "例：50000"
+
+#: countries/jp/forms.py:49
+msgid "e.g., 10000"
+msgstr "例：10000"
+
+#: countries/jp/forms.py:57
+msgid "Enter special restoration clause if any..."
+msgstr "原状回復特約あり"
+
+#: countries/jp/forms.py:61
+msgid "e.g., ABC Real Estate Co., Ltd."
+msgstr "例：ABC不動産株式会社"
+
+#: countries/jp/forms.py:65
+msgid "e.g., Tokyo (1) 12345"
+msgstr "例：東京都知事（1）第12345号"
+
+#: countries/jp/models.py:17
+msgid "Floor"
+msgstr "床"
+
+#: countries/jp/models.py:18
+msgid "Wall/Ceiling"
+msgstr "壁・天井"
+
+#: countries/jp/models.py:19
+msgid "Door/Window"
+msgstr "建具・窓"
+
+#: countries/jp/models.py:20
+msgid "Equipment"
+msgstr "設備"
+
+#: countries/jp/models.py:21
+msgid "Kitchen"
+msgstr "キッチン"
+
+#: countries/jp/models.py:22
+msgid "Bathroom"
+msgstr "浴室"
+
+#: countries/jp/models.py:23
+msgid "Toilet"
+msgstr "トイレ"
+
+#: countries/jp/models.py:24 records/templates/records/expense_create.html:41
+msgid "Other"
+msgstr "その他"
+
+#: countries/jp/models.py:36
+msgid "Both"
+msgstr "両方"
+
+#: countries/jp/models.py:41
+msgid "Item Code"
+msgstr "項目コード"
+
+#: countries/jp/models.py:44
+msgid "Unique code for this restoration item"
+msgstr "この原状回復項目のユニークコード"
+
+#: countries/jp/models.py:47 records/models.py:634
+#: records/templates/records/expense_create.html:36
+#: records/templates/records/expense_detail.html:28
+msgid "Category"
+msgstr "カテゴリ"
+
+# Japan Restoration Items
+#: countries/jp/models.py:61
+msgid "Japanese description of the item"
+msgstr "日本原状回復項目"
+
+#: countries/jp/models.py:66
+msgid "English description of the item"
+msgstr "項目の英語説明"
+
+#: countries/jp/models.py:71
+msgid "Korean description of the item"
+msgstr "項目の韓国語説明"
+
+#: countries/jp/models.py:79
+msgid "Who is responsible for restoration"
+msgstr "原状回復の一般的な責任（参考情報のみ）"
+
+#: countries/jp/models.py:84
+msgid "Normal Wear and Tear"
+msgstr "通常損耗"
+
+#: countries/jp/models.py:86
+msgid "Is this considered normal wear and tear (通常損耗)?"
+msgstr "これは通常損耗と見なされますか？"
+
+#: countries/jp/models.py:91
+msgid "Cost Unit"
+msgstr "費用単位"
+
+#: countries/jp/models.py:94
+msgid "Unit for cost calculation (e.g., per sqm, per item)"
+msgstr "費用計算の単位（例：㎡あたり、個あたり）"
+
+#: countries/jp/models.py:97
+msgid "Typical Cost Range"
+msgstr "一般的な費用範囲"
+
+#: countries/jp/models.py:100
+msgid "Typical cost range in JPY"
+msgstr "一般的な費用範囲"
+
+#: countries/jp/models.py:105
+msgid "Depreciation Years"
+msgstr "減価償却年数"
+
+#: countries/jp/models.py:108
+msgid "Years for depreciation calculation"
+msgstr "減価償却計算の年数"
+
+#: countries/jp/models.py:111
+msgid "Depreciation Method"
+msgstr "減価償却方法"
+
+#: countries/jp/models.py:114
+msgid "Method used for depreciation (e.g., straight-line)"
+msgstr "減価償却方法（例：定額法）"
+
+#: countries/jp/models.py:119
+msgid "Guideline Reference"
+msgstr "ガイドライン参照"
+
+#: countries/jp/models.py:122
+msgid "Reference to MLIT guideline section"
+msgstr "国土交通省ガイドライン参照箇所"
+
+#: countries/jp/models.py:126
+msgid "Display Order"
+msgstr "表示順序"
+
+# Japan Restoration Items
+#: countries/jp/models.py:132
+msgid "Japan Restoration Item"
+msgstr "日本原状回復項目"
+
+#: countries/jp/models.py:133
+msgid "Japan Restoration Items"
+msgstr "日本原状回復項目"
+
+#: countries/jp/models.py:157
+msgid "Ordinary Lease"
+msgstr "普通借家契約"
+
+#: countries/jp/models.py:158
+msgid "Fixed-term Lease"
+msgstr "定期借家契約"
+
+#: countries/jp/models.py:162
+msgid "Auto Renewal"
+msgstr "自動更新"
+
+#: countries/jp/models.py:163
+msgid "Negotiated"
+msgstr "合意更新"
+
+#: countries/jp/models.py:164
+msgid "No Renewal"
+msgstr "更新なし"
+
+#: countries/jp/models.py:177
+#: countries/jp/templates/countries/jp/japan_extension_form.html:30
+#: countries/jp/templates/countries/jp/japan_extension_form.html:33
+msgid "Contract Type"
+msgstr "契約種別"
+
+#: countries/jp/models.py:185
+#: countries/jp/templates/countries/jp/japan_extension_form.html:45
+msgid "Renewal Type"
+msgstr "更新種別"
+
+#: countries/jp/models.py:191
+#: countries/jp/templates/countries/jp/japan_extension_form.html:51
+msgid "Renewal Fee"
+msgstr "更新料"
+
+#: countries/jp/models.py:196
+msgid "Renewal fee in JPY (更新料)"
+msgstr "更新料（円）"
+
+#: countries/jp/models.py:201
+#: countries/jp/templates/countries/jp/japan_extension_form.html:64
+#: countries/jp/templates/countries/jp/japan_extension_form.html:151
+msgid "Key Money"
+msgstr "礼金"
+
+#: countries/jp/models.py:206
+msgid "Non-refundable key money in JPY (礼金)"
+msgstr "礼金（円・返金不可）"
+
+#: countries/jp/models.py:209
+#: countries/jp/templates/countries/jp/japan_extension_form.html:73
+msgid "Security Deposit"
+msgstr "敷金"
+
+#: countries/jp/models.py:214
+msgid "Refundable security deposit in JPY (敷金)"
+msgstr "敷金（円・返金可能）"
+
+#: countries/jp/models.py:217
+#: countries/jp/templates/countries/jp/japan_extension_form.html:82
+msgid "Guarantee Fee"
+msgstr "保証料"
+
+#: countries/jp/models.py:222
+msgid "Guarantee company fee in JPY (保証料)"
+msgstr "保証料（円）"
+
+#: countries/jp/models.py:227
+msgid "Management Fee"
+msgstr "管理費・共益費"
+
+#: countries/jp/models.py:232
+msgid "Monthly management fee in JPY (管理費・共益費)"
+msgstr "月額管理費・共益費（円）"
+
+#: countries/jp/models.py:239
+msgid "Special restoration clause (原状回復特約)"
+msgstr "原状回復特約あり"
+
+#: countries/jp/models.py:242
+msgid "Has Special Restoration Clause"
+msgstr "原状回復特約あり"
+
+#: countries/jp/models.py:244
+msgid "Whether contract has special restoration terms"
+msgstr "契約に特別な原状回復条項があるかどうか"
+
+#: countries/jp/models.py:249
+#: countries/jp/templates/countries/jp/japan_extension_form.html:123
+msgid "Real Estate Agency"
+msgstr "不動産会社"
+
+#: countries/jp/models.py:252
+msgid "Name of real estate agency (不動産会社)"
+msgstr "不動産会社名"
+
+#: countries/jp/models.py:255
+msgid "Agency License Number"
+msgstr "宅建業者免許番号"
+
+#: countries/jp/models.py:258
+msgid "Real estate license number (宅建業者免許番号)"
+msgstr "宅建業者免許番号"
+
+# Japan Contract Extension
+#: countries/jp/models.py:266
+msgid "Japan Contract Extension"
+msgstr "日本契約拡張情報"
+
+#: countries/jp/models.py:267
+msgid "Japan Contract Extensions"
+msgstr "日本契約拡張情報"
+
+#: countries/jp/models.py:311
+msgid "Restoration Item"
+msgstr "原状回復項目"
+
+#: countries/jp/models.py:326
+msgid "Additional description of the damage/condition"
+msgstr "このセクションの追加ガイダンス"
+
+#: countries/jp/models.py:331 records/models.py:525
+#: records/templates/records/repair_detail.html:50
+#: records/templates/records/repair_detail.html:152
+msgid "Estimated Cost"
+msgstr "見積費用"
+
+#: countries/jp/models.py:336
+msgid "Estimated restoration cost in JPY"
+msgstr "原状回復費用の見積もり（円）"
+
+#: countries/jp/models.py:348 records/models.py:628
+msgid "Created By"
+msgstr "作成者"
+
+# Photo Restoration Tag
+#: countries/jp/models.py:352
+msgid "Photo Restoration Tag"
+msgstr "写真原状回復タグ"
+
+#: countries/jp/models.py:353
+msgid "Photo Restoration Tags"
+msgstr "写真原状回復タグ"
+
+#: countries/jp/templates/countries/jp/japan_extension_form.html:4
+#: countries/jp/templates/countries/jp/japan_extension_form.html:13
+#: countries/jp/templates/countries/jp/japan_extension_form.html:20
+msgid "Japan Contract Information"
+msgstr "契約情報"
+
+#: countries/jp/templates/countries/jp/japan_extension_form.html:37
+msgid "Ordinary Lease allows renewal; Fixed-term does not."
+msgstr "普通借家は更新可能、定期借家は更新不可。"
+
+#: countries/jp/templates/countries/jp/japan_extension_form.html:64
+msgid "Non-refundable"
+msgstr "返金不可"
+
+#: countries/jp/templates/countries/jp/japan_extension_form.html:73
+msgid "Refundable"
+msgstr "返金可能"
+
+#: countries/jp/templates/countries/jp/japan_extension_form.html:91
+msgid "Monthly Management Fee"
+msgstr "管理費・共益費"
+
+# Japanese-specific terms for restoration
+#: countries/jp/templates/countries/jp/japan_extension_form.html:100
+msgid "Original Condition Restoration"
+msgstr "原状回復"
+
+#: countries/jp/templates/countries/jp/japan_extension_form.html:105
+msgid "This contract has special restoration terms"
+msgstr "原状回復特約あり"
+
+#: countries/jp/templates/countries/jp/japan_extension_form.html:109
+msgid ""
+"Check if the contract includes special clauses beyond the MLIT guidelines."
+msgstr ""
+"国土交通省ガイドラインを超える特約条項が契約に含まれているか確認してくださ"
+"い。"
+
+#: countries/jp/templates/countries/jp/japan_extension_form.html:114
+msgid "Special Restoration Clause"
+msgstr "原状回復特約あり"
+
+#: countries/jp/templates/countries/jp/japan_extension_form.html:118
+msgid "Enter any special terms regarding restoration responsibility."
+msgstr "原状回復責任に関する特約条項を入力してください。"
+
+#: countries/jp/templates/countries/jp/japan_extension_form.html:128
+msgid "Agency Name"
+msgstr "宅建業者免許番号"
+
+#: countries/jp/templates/countries/jp/japan_extension_form.html:136
+msgid "License Number"
+msgstr "宅建業者免許番号"
+
+#: countries/jp/templates/countries/jp/japan_extension_form.html:147
+msgid "Total Initial Cost"
+msgstr "初期費用合計"
+
+#: countries/jp/templates/countries/jp/japan_extension_form.html:152
+msgid "Deposit"
+msgstr "敷金"
+
+#: countries/jp/templates/countries/jp/japan_extension_form.html:153
+msgid "Guarantee"
+msgstr "保証料"
+
+#: countries/jp/templates/countries/jp/japan_extension_form.html:165
+#: recordings/templates/recordings/recording_create.html:72
+#: records/templates/records/add_photos.html:220
+#: records/templates/records/expense_create.html:84
+#: records/templates/records/record_detail.html:637
+#: records/templates/records/record_detail.html:1135
+#: records/templates/records/record_detail.html:1179
+msgid "Save"
+msgstr "保存"
+
+#: countries/jp/templates/countries/jp/japan_extension_form.html:175
+msgid "Need help understanding restoration responsibilities?"
+msgstr "原状回復の責任範囲を理解するのにお困りですか？"
+
+#: countries/jp/templates/countries/jp/japan_extension_form.html:177
+msgid "View Restoration Guide"
+msgstr "原状回復特約"
+
+#: countries/jp/templates/countries/jp/restoration_guide.html:4
+#: countries/jp/templates/countries/jp/restoration_guide.html:13
+msgid "Restoration Guide"
+msgstr "原状回復特約"
+
+# Japanese-specific terms for restoration
+#: countries/jp/templates/countries/jp/restoration_guide.html:20
+msgid "Original Condition Restoration Guide"
+msgstr "原状回復"
+
+#: countries/jp/templates/countries/jp/restoration_guide.html:25
+msgid "About This Guide"
+msgstr "このガイドについて"
+
+#: countries/jp/templates/countries/jp/restoration_guide.html:27
+msgid ""
+"This guide is based on the Ministry of Land, Infrastructure, Transport and "
+"Tourism's 'Guidelines on Troubles Related to Original Condition Restoration'."
+msgstr "国土交通省ガイドライン"
+
+#: countries/jp/templates/countries/jp/restoration_guide.html:35
+msgid "Legend"
+msgstr "凡例"
+
+#: countries/jp/templates/countries/jp/restoration_guide.html:40
+#: countries/jp/templates/countries/jp/restoration_guide.html:100
+msgid "Normal Wear"
+msgstr "通常損耗"
+
+#: countries/jp/templates/countries/jp/restoration_guide.html:74
+#: records/templates/records/record_detail.html:144
+msgid "Item"
+msgstr "項目タイプ"
+
+#: countries/jp/templates/countries/jp/restoration_guide.html:77
+msgid "Depreciation"
+msgstr "減価償却"
+
+#: countries/jp/templates/countries/jp/restoration_guide.html:102
+msgid "Damage"
+msgstr "損傷"
+
+#: countries/jp/templates/countries/jp/restoration_guide.html:107
+msgid " years"
+msgstr "年"
+
+#: countries/jp/templates/countries/jp/restoration_guide.html:121
+msgid "No restoration items found for this property type."
+msgstr "この物件タイプの原状回復項目が見つかりません。"
+
+#: countries/jp/templates/countries/jp/restoration_guide.html:128
+msgid "Key Principles"
+msgstr "基本原則"
+
+#: countries/jp/templates/countries/jp/restoration_guide.html:135
+msgid "Normal wear and tear from daily use"
+msgstr "通常損耗"
+
+#: countries/jp/templates/countries/jp/restoration_guide.html:136
+msgid "Sun discoloration of wallpaper/floors"
+msgstr "日焼けによる壁紙・床の変色"
+
+#: countries/jp/templates/countries/jp/restoration_guide.html:137
+msgid "Furniture indentation marks"
+msgstr "家具の設置跡"
+
+#: countries/jp/templates/countries/jp/restoration_guide.html:138
+msgid "Electrical marks behind appliances"
+msgstr "家電裏の電気焼け"
+
+#: countries/jp/templates/countries/jp/restoration_guide.html:139
+msgid "Equipment reaching end of life"
+msgstr "設備の耐用年数到来"
+
+#: countries/jp/templates/countries/jp/restoration_guide.html:140
+msgid "Pushpin/pin holes (small)"
+msgstr "画鋲・ピンの穴（小）"
+
+#: countries/jp/templates/countries/jp/restoration_guide.html:146
+msgid "Intentional or negligent damage"
+msgstr "故意による損傷"
+
+#: countries/jp/templates/countries/jp/restoration_guide.html:147
+msgid "Cigarette tar stains and odor"
+msgstr "タバコのヤニ汚れ・臭い"
+
+#: countries/jp/templates/countries/jp/restoration_guide.html:148
+msgid "Pet damage (scratches, odor)"
+msgstr "ペットによる傷・臭い"
+
+#: countries/jp/templates/countries/jp/restoration_guide.html:149
+msgid "Mold from neglected condensation"
+msgstr "結露放置によるカビ"
+
+#: countries/jp/templates/countries/jp/restoration_guide.html:150
+msgid "Oil stains from cleaning neglect"
+msgstr "清掃怠慢による油汚れ"
+
+#: countries/jp/templates/countries/jp/restoration_guide.html:151
+msgid "Key loss or damage"
+msgstr "鍵の紛失・破損"
+
+#: countries/jp/templates/countries/jp/restoration_guide.html:164
+msgid "Edit Contract Info"
+msgstr "契約を確認"
+
+#: countries/jp/views.py:19
+msgid "You do not have permission to edit this contract."
+msgstr "このレポートにアクセスする権限がありません。"
+
+#: countries/jp/views.py:24 countries/jp/views.py:102
+msgid "This feature is only available for Japan contracts."
+msgstr "この機能は日本の契約のみ利用可能です。"
+
+#: countries/jp/views.py:39
+msgid "Japan contract information has been saved."
+msgstr "契約情報"
+
+#: recordings/models.py:11 records/models.py:19 records/models.py:234
+msgid "대기중"
+msgstr "保留中"
+
+#: recordings/models.py:13 records/models.py:491
+msgid "완료"
+msgstr "完了"
+
+#: recordings/models.py:18
+msgid "동의 불필요"
+msgstr "同意不要"
+
+#: recordings/models.py:19
+msgid "동의 대기"
+msgstr "同意待ち"
+
+#: recordings/models.py:20
+msgid "동의 완료"
+msgstr "同意完了"
+
+#: recordings/models.py:21
+msgid "동의 거절"
+msgstr "同意拒否"
+
+#: recordings/templates/recordings/recording_create.html:4
+#: recordings/templates/recordings/recording_detail.html:4
+#: recordings/templates/recordings/recording_list.html:4
+msgid "Commercial Property Restoration Management"
+msgstr "管理中の物件"
+
+#: recordings/templates/recordings/recording_create.html:20
+#: recordings/templates/recordings/recording_create.html:194
+msgid "Ready to record"
+msgstr "録音準備完了"
+
+#: recordings/templates/recordings/recording_create.html:25
+msgid "Start Recording"
+msgstr "録音"
+
+#: recordings/templates/recordings/recording_create.html:28
+msgid "Stop Recording"
+msgstr "録音"
+
+#: recordings/templates/recordings/recording_create.html:31
+msgid "Record Again"
+msgstr "録音"
+
+#: recordings/templates/recordings/recording_create.html:39
+msgid "Recording Preview"
+msgstr "録音ファイル"
+
+#: recordings/templates/recordings/recording_create.html:48
+#: records/models.py:418 records/models.py:515 records/models.py:631
+#: records/templates/records/defect_create.html:33
+#: records/templates/records/expense_create.html:25
+#: records/templates/records/repair_create.html:42
+msgid "Title"
+msgstr "タイトル"
+
+#: recordings/templates/recordings/recording_create.html:53
+#: recordings/templates/recordings/recording_detail.html:50
+#: records/templates/records/record_detail.html:630
+msgid "Memo"
+msgstr "メモ"
+
+# General form labels
+#: recordings/templates/recordings/recording_create.html:58
+msgid "Select Contract"
+msgstr "国を選択"
+
+#: recordings/templates/recordings/recording_create.html:60
+msgid "Please select"
+msgstr "選択してください"
+
+#: recordings/templates/recordings/recording_create.html:66
+msgid "Once connected, the contract cannot be changed."
+msgstr "一度連携すると、契約は変更できません。"
+
+#: recordings/templates/recordings/recording_create.html:88
+msgid "Processing..."
+msgstr "処理中"
+
+#: recordings/templates/recordings/recording_create.html:90
+#: recordings/templates/recordings/recording_create.html:97
+msgid "Saving recording file..."
+msgstr "録音ファイル"
+
+#: recordings/templates/recordings/recording_create.html:91
+#: recordings/templates/recordings/recording_detail.html:272
+msgid "Please wait a moment"
+msgstr "少々お待ちください"
+
+#: recordings/templates/recordings/recording_create.html:101
+#: recordings/templates/recordings/recording_create.html:275
+msgid "Converting speech to text..."
+msgstr "音声をテキストに変換中..."
+
+#: recordings/templates/recordings/recording_create.html:105
+#: recordings/templates/recordings/recording_create.html:283
+msgid "AI is summarizing the content..."
+msgstr "AIが内容を要約中..."
+
+#: recordings/templates/recordings/recording_create.html:109
+msgid "Estimated time: 10-30 seconds"
+msgstr "推定時間：10〜30秒"
+
+#: recordings/templates/recordings/recording_create.html:162
+msgid "Recording..."
+msgstr "録音"
+
+#: recordings/templates/recordings/recording_create.html:169
+msgid "Microphone access permission is required"
+msgstr "マイクへのアクセス許可が必要です"
+
+#: recordings/templates/recordings/recording_create.html:183
+msgid "Recording completed"
+msgstr "録音ファイル"
+
+#: recordings/templates/recordings/recording_create.html:217
+msgid "No recorded file found."
+msgstr "レポートファイルが見つかりません。"
+
+#: recordings/templates/recordings/recording_create.html:290
+#: recordings/templates/recordings/recording_detail.html:336
+msgid "Complete!"
+msgstr "完了"
+
+#: recordings/templates/recordings/recording_create.html:291
+msgid "Recording saved and AI processing completed."
+msgstr "録音が保存され、AI処理が完了しました。"
+
+#: recordings/templates/recordings/recording_create.html:301
+msgid "Save failed"
+msgstr "保存に失敗しました"
+
+#: recordings/templates/recordings/recording_create.html:301
+msgid "Unknown error"
+msgstr "不明なエラー"
+
+#: recordings/templates/recordings/recording_create.html:308
+msgid "An error occurred while saving"
+msgstr "エラーが発生しました。再試行してください。"
+
+#: recordings/templates/recordings/recording_detail.html:28
+#: recordings/templates/recordings/recording_detail.html:215
+msgid "Recording Date"
+msgstr "録音ファイル"
+
+#: recordings/templates/recordings/recording_detail.html:32
+#: recordings/templates/recordings/recording_list.html:41
+msgid "Duration"
+msgstr "減価償却"
+
+#: recordings/templates/recordings/recording_detail.html:40
+msgid "Recording File"
+msgstr "録音ファイル"
+
+#: recordings/templates/recordings/recording_detail.html:43
+#: recordings/templates/recordings/recording_list.html:62
+msgid "Your browser does not support audio playback."
+msgstr "お使いのブラウザは音声再生に対応していません。"
+
+#: recordings/templates/recordings/recording_detail.html:60
+msgid "Mutual Consent"
+msgstr "相互同意"
+
+#: recordings/templates/recordings/recording_detail.html:65
+msgid "Both parties have consented. This recording is officially recognized."
+msgstr "双方が同意しました。この録音は公式記録として認められます。"
+
+#: recordings/templates/recordings/recording_detail.html:67
+msgid "Consented by"
+msgstr "同意者"
+
+#: recordings/templates/recordings/recording_detail.html:75
+msgid "Consent was rejected. This recording is not officially recognized."
+msgstr "同意が拒否されました。この録音は公式記録として認められません。"
+
+#: recordings/templates/recordings/recording_detail.html:77
+msgid "Reason"
+msgstr "理由"
+
+#: recordings/templates/recordings/recording_detail.html:80
+msgid "Rejected by"
+msgstr "拒否者"
+
+#: recordings/templates/recordings/recording_detail.html:90
+msgid ""
+"Waiting for the other party's consent. This recording will be officially "
+"recognized once the other party approves."
+msgstr ""
+"相手方の同意を待っています。相手方が承認すると公式記録として認められます。"
+
+#: recordings/templates/recordings/recording_detail.html:96
+msgid ""
+" has registered this recording. Do you consent to recognizing it as an "
+"official record?"
+msgstr "がこの録音を登録しました。公式記録として認めることに同意しますか？"
+
+#: recordings/templates/recordings/recording_detail.html:116
+#: recordings/templates/recordings/recording_detail.html:126
+#: recordings/templates/recordings/recording_detail.html:136
+#: recordings/templates/recordings/recording_detail.html:146
+msgid "AI Summary"
+msgstr "データ概要"
+
+#: recordings/templates/recordings/recording_detail.html:130
+msgid "AI is analyzing the recording content. Please check back shortly."
+msgstr "AIが録音内容を分析中です。しばらくしてから確認してください。"
+
+#: recordings/templates/recordings/recording_detail.html:140
+msgid "An error occurred during AI processing."
+msgstr "エラーが発生しました。再試行してください。"
+
+#: recordings/templates/recordings/recording_detail.html:150
+msgid "AI processing will start soon."
+msgstr "AI処理がまもなく開始されます。"
+
+#: recordings/templates/recordings/recording_detail.html:158
+#: recordings/templates/recordings/recording_detail.html:178
+msgid "Connected Contract"
+msgstr "新規契約"
+
+#: recordings/templates/recordings/recording_detail.html:168
+msgid "View Contract Details"
+msgstr "契約一覧"
+
+#: recordings/templates/recordings/recording_detail.html:172
+msgid "For security, contract connection cannot be changed."
+msgstr "セキュリティのため、契約接続は変更できません。"
+
+#: recordings/templates/recordings/recording_detail.html:180
+msgid "This recording is not connected to any contract."
+msgstr "この録音はどの契約にも接続されていません。"
+
+#: recordings/templates/recordings/recording_detail.html:192
+msgid "Download as MP3"
+msgstr "ZIPダウンロード"
+
+#: recordings/templates/recordings/recording_detail.html:206
+msgid "Approve Recording Consent"
+msgstr "録音同意の承認"
+
+#: recordings/templates/recordings/recording_detail.html:210
+msgid ""
+"Are you sure you want to approve this recording? Once approved, it will be "
+"officially recognized as a mutual record."
+msgstr ""
+"この録音を承認しますか？承認すると、相互同意された公式記録として認められま"
+"す。"
+
+#: recordings/templates/recordings/recording_detail.html:213
+msgid "Recording"
+msgstr "録音"
+
+#: recordings/templates/recordings/recording_detail.html:214
+msgid "Registered by"
+msgstr "登録者"
+
+#: recordings/templates/recordings/recording_detail.html:240
+msgid "Reject Recording Consent"
+msgstr "録音管理"
+
+#: recordings/templates/recordings/recording_detail.html:247
+msgid "Please enter the reason for rejecting this recording."
+msgstr "差し戻し理由を入力してください。"
+
+#: recordings/templates/recordings/recording_detail.html:249
+msgid "e.g., Recording was made without my knowledge."
+msgstr "例：知らないうちに録音されました。"
+
+#: recordings/templates/recordings/recording_detail.html:269
+msgid "Converting..."
+msgstr "読み込み中..."
+
+#: recordings/templates/recordings/recording_detail.html:271
+msgid "Converting to MP3..."
+msgstr "MP3に変換中..."
+
+#: recordings/templates/recordings/recording_detail.html:284
+msgid "Estimated time: Calculating..."
+msgstr "推定時間：計算中..."
+
+#: recordings/templates/recordings/recording_detail.html:321
+msgid "Estimated remaining time"
+msgstr "推定残り時間"
+
+#: recordings/templates/recordings/recording_detail.html:321
+msgid "seconds"
+msgstr "秒"
+
+#: recordings/templates/recordings/recording_detail.html:323
+msgid "Almost done..."
+msgstr "もうすぐ完了..."
+
+#: recordings/templates/recordings/recording_list.html:4
+msgid "Recording List"
+msgstr "録音"
+
+#: recordings/templates/recordings/recording_list.html:10
+msgid "My Recording List"
+msgstr "録音ファイル"
+
+#: recordings/templates/recordings/recording_list.html:27
+msgid "Both parties consented"
+msgstr "双方同意済み"
+
+#: recordings/templates/recordings/recording_list.html:29
+msgid "Consent pending"
+msgstr "同意待ち"
+
+#: recordings/templates/recordings/recording_list.html:31
+msgid "Consent rejected"
+msgstr "同意拒否"
+
+#: recordings/templates/recordings/recording_list.html:77
+msgid "No recordings registered."
+msgstr "登録された契約がありません。"
+
+#: recordings/templates/recordings/recording_list.html:78
+msgid "Start your first recording"
+msgstr "最初の録音を開始"
+
+#: recordings/views.py:66
+msgid "제목과 녹음 데이터는 필수입니다."
+msgstr "タイトルと録音データは必須です。"
+
+#: recordings/views.py:138
+msgid "녹음이 저장되었습니다."
+msgstr "録音が保存されました。"
+
+#: recordings/views.py:162
+msgid "녹음을 찾을 수 없습니다."
+msgstr "録音が見つかりません。"
+
+#: recordings/views.py:210
+msgid "녹음이 삭제되었습니다."
+msgstr "録音が削除されました。"
+
+#: recordings/views.py:224
+msgid "녹음 파일을 찾을 수 없습니다."
+msgstr "録音ファイルが見つかりません。"
+
+#: recordings/views.py:230
+msgid "녹음 파일이 존재하지 않습니다."
+msgstr "録音ファイルが存在しません。"
+
+#: recordings/views.py:268
+#, python-format
+msgid "MP3 변환 중 오류가 발생했습니다: %(error)s"
+msgstr "MP3変換中にエラーが発生しました：%(error)s"
+
+#: recordings/views.py:279
+msgid "계약에 연결되지 않은 녹음입니다."
+msgstr "有効でない借主です。"
+
+#: recordings/views.py:284
+msgid "본인이 등록한 녹음은 직접 동의할 수 없습니다."
+msgstr "本人が要請したものは承認できません。"
+
+#: recordings/views.py:294
+msgid "이미 처리된 녹음입니다."
+msgstr "すでに処理された要請です。"
+
+#: recordings/views.py:304
+msgid "녹음 기록에 동의하였습니다. 이 녹음은 공식 기록으로 인정됩니다."
+msgstr "この録音に同意しました。公式記録として認められます。"
+
+#: recordings/views.py:317
+msgid "녹음 기록 동의를 거절하였습니다."
+msgstr "録音が見つかりません。"
+
+#: records/models.py:12
+msgid "입실"
+msgstr "入居"
+
+#: records/models.py:13
+msgid "퇴실"
+msgstr "退去"
+
+#: records/models.py:14
+msgid "사전 점검"
+msgstr "事前点検"
+
+#: records/models.py:21 records/models.py:30 records/models.py:236
+msgid "반려됨"
+msgstr "差し戻し"
+
+#: records/models.py:26 records/models.py:487
+msgid "요청됨"
+msgstr "要請済み"
+
+#: records/models.py:27
+msgid "업로드 가능"
+msgstr "アップロード可能"
+
+#: records/models.py:28
+msgid "제출됨"
+msgstr "提出済み"
+
+#: records/models.py:125
+msgid "Selected inspection template for this record. Null for legacy records."
+msgstr "この記録の点検テンプレート。レガシー記録の場合はnull。"
+
+#: records/models.py:218
+msgid "벽면 (동쪽)"
+msgstr "壁面（東側）"
+
+#: records/models.py:219
+msgid "벽면 (서쪽)"
+msgstr "壁面（西側）"
+
+#: records/models.py:220
+msgid "벽면 (남쪽)"
+msgstr "壁面（南側）"
+
+#: records/models.py:221
+msgid "벽면 (북쪽)"
+msgstr "壁面（北側）"
+
+#: records/models.py:222
+msgid "바닥"
+msgstr "床"
+
+#: records/models.py:223
+msgid "천장"
+msgstr "天井"
+
+#: records/models.py:224
+msgid "화장실"
+msgstr "トイレ"
+
+#: records/models.py:225
+msgid "주방/싱크대"
+msgstr "キッチン/シンク"
+
+#: records/models.py:226
+msgid "전기/설비"
+msgstr "電気/設備"
+
+#: records/models.py:227
+msgid "간판 설치 부위"
+msgstr "看板設置部位"
+
+#: records/models.py:228
+msgid "출입문"
+msgstr "出入口ドア"
+
+#: records/models.py:229
+msgid "창문"
+msgstr "窓"
+
+#: records/models.py:230 records/models.py:609
+msgid "기타"
+msgstr "その他"
+
+#: records/models.py:280
+msgid "Associated template item. Null for legacy photos using category."
+msgstr "関連するテンプレート項目。カテゴリを使用するレガシー写真の場合はnull。"
+
+#: records/models.py:331
+msgid "정상"
+msgstr "正常"
+
+#: records/models.py:332
+msgid "하자 있음"
+msgstr "不具合あり"
+
+#: records/models.py:333
+msgid "노후"
+msgstr "経年劣化"
+
+#: records/models.py:334
+msgid "수리 필요"
+msgstr "修繕必要"
+
+# Blockchain
+#: records/models.py:355
+msgid "Condition Status"
+msgstr "ブロックチェーンステータス"
+
+#: records/models.py:364
+msgid "Response Value"
+msgstr ""
+
+#: records/models.py:370 records/templates/records/add_photos.html:115
+#: records/templates/records/record_create.html:41
+#: records/templates/records/record_detail.html:45
+#: records/templates/records/record_detail.html:146
+msgid "Notes"
+msgstr "メモ"
+
+# Photo Restoration Tag
+#: records/models.py:377
+msgid "Record Item Response"
+msgstr "写真原状回復タグ"
+
+#: records/models.py:378
+msgid "Record Item Responses"
+msgstr "却下"
+
+#: records/models.py:393
+msgid "경미"
+msgstr "軽微"
+
+#: records/models.py:394
+msgid "중요"
+msgstr "重要"
+
+#: records/models.py:395
+msgid "긴급"
+msgstr "緊急"
+
+#: records/models.py:399
+msgid "신고됨"
+msgstr "報告済み"
+
+#: records/models.py:400
+msgid "확인됨"
+msgstr "確認済み"
+
+#: records/models.py:402
+msgid "해결됨"
+msgstr "解決済み"
+
+#: records/models.py:415 records/templates/records/defect_detail.html:30
+msgid "Reported By"
+msgstr "レポートタイプ"
+
+#: records/models.py:420 records/models.py:517
+#: records/templates/records/defect_create.html:40
+#: records/templates/records/defect_detail.html:47
+#: records/templates/records/repair_create.html:49
+#: records/templates/records/repair_detail.html:32
+msgid "Location"
+msgstr "アクション"
+
+#: records/models.py:421
+msgid "e.g., Bathroom, Kitchen, Living Room"
+msgstr ""
+
+#: records/models.py:423 records/templates/records/defect_create.html:45
+#: records/templates/records/defect_detail.html:38
+msgid "Severity"
+msgstr "無期限"
+
+# Responsibility
+#: records/models.py:436 records/templates/records/defect_detail.html:79
+msgid "Landlord Response"
+msgstr "貸主の回答"
+
+#: records/models.py:440
+msgid "Acknowledged At"
+msgstr ""
+
+#: records/models.py:441
+msgid "Resolved At"
+msgstr ""
+
+#: records/models.py:450 records/models.py:465
+#: records/templates/records/defect_detail.html:4
+msgid "Defect Report"
+msgstr "不具合報告"
+
+#: records/models.py:468 records/models.py:565
+msgid "Image"
+msgstr "画像ZIP"
+
+#: records/models.py:475
+msgid "Defect Photo"
+msgstr "却下"
+
+#: records/models.py:476
+msgid "Defect Photos"
+msgstr "却下"
+
+#: records/models.py:488
+msgid "견적 제시"
+msgstr "見積提示"
+
+#: records/models.py:490
+msgid "수리 중"
+msgstr "修繕中"
+
+#: records/models.py:492
+msgid "취소"
+msgstr "キャンセル"
+
+#: records/models.py:506 records/templates/records/repair_detail.html:35
+msgid "Related Defect"
+msgstr "関連する不具合"
+
+#: records/models.py:512 records/templates/records/repair_detail.html:29
+msgid "Requested By"
+msgstr "依頼者"
+
+#: records/models.py:529 records/templates/records/repair_detail.html:60
+#: records/templates/records/repair_detail.html:181
+msgid "Actual Cost"
+msgstr "実際の費用"
+
+#: records/models.py:544 records/models.py:563 records/models.py:584
+#: records/templates/records/repair_detail.html:4
+msgid "Repair Request"
+msgstr "修繕依頼"
+
+#: records/models.py:556
+msgid "문제 사진"
+msgstr "問題写真"
+
+#: records/models.py:557
+msgid "시공 중"
+msgstr "施工中"
+
+#: records/models.py:558
+msgid "완료 사진"
+msgstr "完了写真"
+
+# Photos
+#: records/models.py:567
+msgid "Photo Type"
+msgstr "写真カテゴリ"
+
+#: records/models.py:574
+msgid "Repair Photo"
+msgstr "却下"
+
+#: records/models.py:575
+msgid "Repair Photos"
+msgstr "写真をアップロード"
+
+#: records/models.py:588
+msgid "Author"
+msgstr ""
+
+#: records/models.py:590
+msgid "Message"
+msgstr "エラーメッセージ"
+
+#: records/models.py:594
+msgid "Repair Comment"
+msgstr "コメント"
+
+#: records/models.py:595
+msgid "Repair Comments"
+msgstr "設備"
+
+#: records/models.py:606
+msgid "수리비"
+msgstr "修繕費"
+
+#: records/models.py:607
+msgid "청소비"
+msgstr "清掃費"
+
+#: records/models.py:608
+msgid "원상복구비"
+msgstr "原状回復費"
+
+#: records/models.py:624 records/templates/records/expense_detail.html:48
+msgid "Related Repair"
+msgstr "関連する修繕"
+
+#: records/models.py:638 records/templates/records/expense_create.html:32
+#: records/templates/records/expense_create.html:33
+#: records/templates/records/expense_detail.html:24
+#: records/templates/records/repair_detail.html:153
+msgid "Amount"
+msgstr "金額"
+
+#: records/models.py:641 records/templates/records/expense_create.html:45
+#: records/templates/records/expense_detail.html:32
+msgid "Paid By"
+msgstr "負担者"
+
+#: records/models.py:645 records/templates/records/expense_create.html:76
+msgid "Receipt Image"
+msgstr "領収書写真"
+
+#: records/models.py:648 records/templates/records/expense_create.html:54
+#: records/templates/records/expense_detail.html:39
+msgid "Expense Date"
+msgstr "費用発生日"
+
+#: records/models.py:656 records/templates/records/expense_detail.html:4
+msgid "Expense"
+msgstr "費用"
+
+#: records/templates/records/add_photos.html:4
+#: records/templates/records/add_photos.html:14
+#: records/templates/records/record_create.html:70
+#: records/templates/records/record_detail.html:199
+msgid "Add Photos"
+msgstr "写真"
+
+# Templates Engine
+#: records/templates/records/add_photos.html:21
+msgid "Inspection Checklist"
+msgstr "点検チェックリスト"
+
+#: records/templates/records/add_photos.html:26
+msgid "record - adding photos"
+msgstr "記録 - 写真追加"
+
+#: records/templates/records/add_photos.html:27
+msgid "Currently uploaded"
+msgstr "現在アップロード済み"
+
+#: records/templates/records/add_photos.html:37
+msgid "Photo Shooting Guidelines"
+msgstr "写真撮影ガイドライン"
+
+#: records/templates/records/add_photos.html:49
+msgid "Full Room Shot"
+msgstr "全体撮影"
+
+#: records/templates/records/add_photos.html:50
+msgid ""
+"Capture the entire room from corner to corner to show overall condition."
+msgstr ""
+
+#: records/templates/records/add_photos.html:54
+msgid "Close-up Defect"
+msgstr "近接撮影"
+
+#: records/templates/records/add_photos.html:55
+msgid "Take close-up photos of any damage, stains, or defects."
+msgstr ""
+
+#: records/templates/records/add_photos.html:59
+msgid "Mid-range Location"
+msgstr "位置撮影"
+
+#: records/templates/records/add_photos.html:60
+msgid "Show where the defect is located in the room for context."
+msgstr ""
+
+#: records/templates/records/add_photos.html:64
+msgid "Date Stamping"
+msgstr "日付証明"
+
+#: records/templates/records/add_photos.html:65
+msgid "Enable date stamp on your camera for proof of date."
+msgstr ""
+
+#: records/templates/records/add_photos.html:83
+#: records/templates/records/add_photos.html:94
+msgid "Required"
+msgstr "必須"
+
+#: records/templates/records/add_photos.html:107
+#: records/templates/records/record_detail.html:145
+msgid "Condition"
+msgstr "状態"
+
+#: records/templates/records/add_photos.html:117
+msgid "Optional notes"
+msgstr "メモ（任意）"
+
+#: records/templates/records/add_photos.html:128
+msgid "Min"
+msgstr "入居"
+
+#: records/templates/records/add_photos.html:128
+msgid "Max"
+msgstr "最大"
+
+#: records/templates/records/add_photos.html:133
+#: records/templates/records/record_detail.html:609
+#: records/templates/records/record_detail.html:930
+msgid "Upload"
+msgstr "写真をアップロード"
+
+#: records/templates/records/add_photos.html:139
+#: records/templates/records/add_photos.html:206
+#: records/templates/records/record_create.html:77
+#: records/templates/records/record_detail.html:298
+msgid "No photos uploaded yet"
+msgstr "まだレポートは生成されていません。"
+
+#: records/templates/records/add_photos.html:155
+msgid "Select"
+msgstr "テンプレートを選択"
+
+#: records/templates/records/add_photos.html:166
+msgid "Enter text"
+msgstr "テキスト入力"
+
+#: records/templates/records/add_photos.html:171
+msgid "Enter number"
+msgstr "数字入力"
+
+#: records/templates/records/add_photos.html:186
+#: records/templates/records/record_create.html:55
+msgid "Click the upload button for each category to add photos."
+msgstr "各カテゴリのアップロードボタンをクリックして写真を追加してください。"
+
+#: records/templates/records/add_photos.html:199
+msgid "Add"
+msgstr "住所"
+
+#: records/templates/records/add_photos.html:369
+#: records/templates/records/record_create.html:245
+#: records/templates/records/record_detail.html:929
+msgid "Error occurred during upload."
+msgstr "アップロード中にエラーが発生しました。"
+
+#: records/templates/records/defect_create.html:26
+msgid ""
+"Report any defects or damage found in the property. Photos will serve as "
+"evidence."
+msgstr ""
+
+#: records/templates/records/defect_create.html:35
+msgid "e.g., Water leak in bathroom ceiling"
+msgstr ""
+
+#: records/templates/records/defect_create.html:42
+#: records/templates/records/repair_create.html:52
+msgid "e.g., Bathroom, Kitchen"
+msgstr ""
+
+#: records/templates/records/defect_create.html:47
+#: records/templates/records/defect_list.html:36
+msgid "Minor"
+msgstr "軽微"
+
+#: records/templates/records/defect_create.html:47
+msgid "Small cosmetic issue"
+msgstr ""
+
+#: records/templates/records/defect_create.html:48
+#: records/templates/records/defect_list.html:34
+msgid "Major"
+msgstr "重要"
+
+#: records/templates/records/defect_create.html:48
+msgid "Functional problem"
+msgstr "承認待ち"
+
+#: records/templates/records/defect_create.html:49
+#: records/templates/records/defect_list.html:32
+msgid "Critical"
+msgstr "緊急"
+
+#: records/templates/records/defect_create.html:49
+msgid "Urgent safety concern"
+msgstr ""
+
+#: records/templates/records/defect_create.html:57
+msgid ""
+"Describe the defect in detail. When did you first notice it? How does it "
+"affect daily use?"
+msgstr ""
+
+#: records/templates/records/defect_create.html:63
+msgid "Attach photos of the defect. Multiple photos recommended."
+msgstr ""
+
+#: records/templates/records/defect_create.html:71
+msgid "Submit Report"
+msgstr "報告を提出"
+
+#: records/templates/records/defect_detail.html:83
+msgid "Acknowledged"
+msgstr "確認済み"
+
+#: records/templates/records/defect_detail.html:86
+msgid "Resolved"
+msgstr "解決済み"
+
+#: records/templates/records/defect_detail.html:97
+msgid "Respond to Defect Report"
+msgstr "不具合報告に回答する"
+
+#: records/templates/records/defect_detail.html:104
+msgid "Enter your response..."
+msgstr ""
+
+#: records/templates/records/defect_detail.html:109
+msgid "Acknowledge"
+msgstr "確認"
+
+#: records/templates/records/defect_detail.html:114
+msgid "Mark as In Progress"
+msgstr "対応中に変更"
+
+#: records/templates/records/defect_detail.html:118
+msgid "Mark as Resolved"
+msgstr "解決済みにする"
+
+#: records/templates/records/defect_detail.html:136
+msgid "Linked Repairs"
+msgstr "連携された修繕"
+
+#: records/templates/records/defect_list.html:60
+msgid "No defect reports yet."
+msgstr "まだ不具合報告はありません。"
+
+#: records/templates/records/expense_create.html:27
+msgid "e.g., Bathroom pipe repair cost"
+msgstr ""
+
+#: records/templates/records/expense_create.html:38
+msgid "Repair Cost"
+msgstr "修繕費"
+
+#: records/templates/records/expense_create.html:39
+msgid "Cleaning Cost"
+msgstr "清掃費"
+
+#: records/templates/records/expense_create.html:40
+msgid "Restoration Cost"
+msgstr "原状回復費"
+
+#: records/templates/records/expense_create.html:60
+msgid "Link to repair (optional)"
+msgstr "修繕に連携（任意）"
+
+#: records/templates/records/expense_create.html:62
+#: records/templates/records/repair_create.html:33
+msgid "No link"
+msgstr "連携なし"
+
+#: records/templates/records/expense_create.html:72
+msgid "Additional details (optional)"
+msgstr "不具合に連携（任意）"
+
+#: records/templates/records/expense_create.html:78
+msgid "Attach a photo of the receipt."
+msgstr ""
+
+#: records/templates/records/expense_detail.html:43
+msgid "Registered By"
+msgstr "登録者"
+
+#: records/templates/records/expense_detail.html:63
+#: records/templates/records/expense_list.html:64
+msgid "Receipt"
+msgstr "領収書"
+
+#: records/templates/records/expense_list.html:28
+msgid "Total"
+msgstr ""
+
+#: records/templates/records/expense_list.html:36
+msgid "Landlord Paid"
+msgstr "貸主負担"
+
+# User Types
+#: records/templates/records/expense_list.html:44
+msgid "Tenant Paid"
+msgstr "借主負担"
+
+#: records/templates/records/expense_list.html:63
+msgid "Paid by"
+msgstr ""
+
+#: records/templates/records/expense_list.html:76
+msgid "No expenses recorded yet."
+msgstr "まだ費用が登録されていません。"
+
+#: records/templates/records/landlord_create_record.html:4
+#: records/templates/records/landlord_create_record.html:14
+#: records/templates/records/landlord_create_record.html:22
+#: records/templates/records/landlord_create_record.html:70
+msgid "Create Record"
+msgstr "入居点検報告書"
+
+#: records/templates/records/landlord_create_record.html:28
+msgid "Landlord Record Creation"
+msgstr "契約情報"
+
+#: records/templates/records/landlord_create_record.html:29
+msgid ""
+"Once the record is created, the tenant can upload photos. You can set a "
+"deadline for uploads."
+msgstr ""
+"記録が作成されると、借主が写真をアップロードできるようになります。アップロー"
+"ドの締め切りを設定できます。"
+
+#: records/templates/records/landlord_create_record.html:36
+#: records/templates/records/record_detail.html:460
+#: records/templates/records/tenant_request_record.html:36
+msgid "Record Type"
+msgstr "レポートタイプ"
+
+#: records/templates/records/landlord_create_record.html:41
+msgid "Notes (optional)"
+msgstr "オプション"
+
+#: records/templates/records/landlord_create_record.html:46
+msgid "Upload Deadline Setting"
+msgstr "アップロード期限設定"
+
+#: records/templates/records/landlord_create_record.html:50
+#: records/templates/records/record_detail.html:351
+msgid "Days until deadline"
+msgstr "期限までの日数"
+
+#: records/templates/records/landlord_create_record.html:55
+msgid "Or select a date directly"
+msgstr "または日付を直接選択"
+
+#: records/templates/records/landlord_create_record.html:63
+#: records/templates/records/record_detail.html:348
+msgid "Deadline is required."
+msgstr "期限は必須です。"
+
+#: records/templates/records/landlord_create_record.html:63
+msgid "Please enter either days or a date."
+msgstr "差し戻し理由を入力してください。"
+
+#: records/templates/records/record_compare.html:4
+msgid "Move-in/Move-out Comparison"
+msgstr "入居/退去記録"
+
+#: records/templates/records/record_compare.html:14
+msgid "Compare"
+msgstr "比較"
+
+#: records/templates/records/record_compare.html:21
+msgid "Move-in/Move-out Photo Comparison"
+msgstr "入居/退去写真"
+
+#: records/templates/records/record_compare.html:36
+#: records/templates/records/record_compare.html:47
+#: records/templates/records/record_detail.html:177
+#: records/templates/records/record_list.html:51
+#: records/templates/records/record_list.html:118
+#, python-format
+msgid "%(count)s photos"
+msgstr "%(count)s件"
+
+#: records/templates/records/record_compare.html:74
+msgid "Move-in Photo"
+msgstr "入居/退去写真"
+
+#: records/templates/records/record_compare.html:84
+#: records/templates/records/record_compare.html:113
+msgid "No photo"
+msgstr "写真"
+
+#: records/templates/records/record_compare.html:103
+msgid "Move-out Photo"
+msgstr "入居/退去写真"
+
+#: records/templates/records/record_compare.html:125
+msgid "No photos to compare."
+msgstr "まだレポートは生成されていません。"
+
+#: records/templates/records/record_compare.html:136
+msgid "Move In Details"
+msgstr "入居日"
+
+#: records/templates/records/record_compare.html:139
+msgid "Move Out Details"
+msgstr "退去予定日"
+
+# Photo Restoration Tag
+#: records/templates/records/record_create.html:4
+#: records/templates/records/record_create.html:14
+#: records/templates/records/record_create.html:22
+msgid "Record Registration"
+msgstr "写真原状回復タグ"
+
+#: records/templates/records/record_create.html:43
+msgid "Enter any special notes or memos (optional)"
+msgstr "特記事項やメモを入力（任意）"
+
+#: records/templates/records/record_create.html:50
+#: records/templates/records/record_detail.html:592
+msgid "Upload Photos"
+msgstr "写真をアップロード"
+
+#: records/templates/records/record_detail.html:38
+#: records/templates/records/record_detail.html:490
+#: records/templates/records/record_list.html:47
+#: records/templates/records/record_list.html:114
+msgid "Registration Date"
+msgstr "原状回復項目"
+
+#: records/templates/records/record_detail.html:54
+msgid "Waiting for Approval"
+msgstr "承認待ち"
+
+#: records/templates/records/record_detail.html:58
+msgid ""
+"The tenant has requested record registration. Please approve and set the "
+"deadline below."
+msgstr "借主が記録登録を要請しました。以下で承認し、期限を設定してください。"
+
+#: records/templates/records/record_detail.html:60
+msgid "Waiting for landlord approval."
+msgstr "貸主の承認を待っています。"
+
+#: records/templates/records/record_detail.html:67
+msgid "Photo Upload Available"
+msgstr "利用可能なテンプレートがありません"
+
+#: records/templates/records/record_detail.html:72
+#: records/templates/records/record_detail.html:473
+#: records/templates/records/record_list.html:57
+#: records/templates/records/record_list.html:124
+msgid "Deadline"
+msgstr "期限"
+
+#: records/templates/records/record_detail.html:79
+msgid "Deadline has passed. Photo upload/edit/delete is no longer available."
+msgstr "期限が過ぎました。写真のアップロード/編集/削除はできなくなりました。"
+
+#: records/templates/records/record_detail.html:83
+msgid "Please contact admin if you need to change the deadline."
+msgstr "期限の変更が必要な場合は管理者にお問い合わせください。"
+
+#: records/templates/records/record_detail.html:87
+msgid "Deadline has not been set."
+msgstr "期限が設定されていません。"
+
+#: records/templates/records/record_detail.html:93
+msgid "Submission Complete"
+msgstr "提出完了"
+
+#: records/templates/records/record_detail.html:95
+#: records/templates/records/record_detail.html:495
+msgid "Submission Date"
+msgstr "提出日"
+
+#: records/templates/records/record_detail.html:98
+msgid ""
+"The tenant has completed photo upload and submitted. Please review and "
+"approve/reject."
+msgstr ""
+"借主が写真アップロードを完了し提出しました。確認して承認/差し戻ししてくださ"
+"い。"
+
+#: records/templates/records/record_detail.html:100
+msgid "Waiting for landlord's final confirmation."
+msgstr "貸主の最終確認を待っています。"
+
+#: records/templates/records/record_detail.html:107
+#: records/templates/records/record_detail.html:431
+#: records/templates/records/record_detail.html:956
+#: records/templates/records/repair_detail.html:220
+msgid "Approved"
+msgstr "承認済み"
+
+#: records/templates/records/record_detail.html:109
+#: records/templates/records/record_detail.html:120
+#: records/templates/records/record_detail.html:501
+msgid "Processing Date"
+msgstr "処理中"
+
+#: records/templates/records/record_detail.html:112
+msgid "Comment"
+msgstr "コメント"
+
+#: records/templates/records/record_detail.html:118
+#: records/templates/records/record_detail.html:435
+#: records/templates/records/record_detail.html:1018
+msgid "Rejected"
+msgstr "却下"
+
+#: records/templates/records/record_detail.html:127
+msgid "Please modify the photos and resubmit."
+msgstr "写真を修正して再提出してください。"
+
+#: records/templates/records/record_detail.html:138
+msgid "Inspection Results"
+msgstr "点検結果"
+
+#: records/templates/records/record_detail.html:155
+msgid "Normal"
+msgstr "正常"
+
+#: records/templates/records/record_detail.html:157
+msgid "Defective"
+msgstr "不具合あり"
+
+#: records/templates/records/record_detail.html:159
+msgid "Aged"
+msgstr "経年劣化"
+
+#: records/templates/records/record_detail.html:161
+msgid "Needs Repair"
+msgstr "修繕必要"
+
+# Photos
+#: records/templates/records/record_detail.html:176
+msgid "Photo Gallery"
+msgstr "写真カテゴリ"
+
+#: records/templates/records/record_detail.html:254
+#: records/templates/records/record_detail.html:262
+msgid "View Memo"
+msgstr "確認"
+
+#: records/templates/records/record_detail.html:314
+#: records/templates/records/record_list.html:23
+msgid "Compare View"
+msgstr "比較"
+
+#: records/templates/records/record_detail.html:324
+#: records/templates/records/record_detail.html:555
+msgid "Submit"
+msgstr "提出"
+
+#: records/templates/records/record_detail.html:341
+msgid "Request Approval"
+msgstr "承認待ち"
+
+#: records/templates/records/record_detail.html:352
+msgid "e.g.: 7"
+msgstr "例：7"
+
+#: records/templates/records/record_detail.html:353
+msgid "Enter the number of days from today to set as deadline."
+msgstr "今日からの日数を入力して期限を設定してください。"
+
+#: records/templates/records/record_detail.html:356
+msgid "Or select date directly"
+msgstr "または日付を直接選択"
+
+#: records/templates/records/record_detail.html:373
+msgid "Final Approval"
+msgstr "承認待ち"
+
+#: records/templates/records/record_detail.html:395
+msgid "Comment (required for rejection)"
+msgstr "コメント（差し戻しの場合必須）"
+
+#: records/templates/records/record_detail.html:396
+msgid "Enter comment or rejection reason"
+msgstr "コメントまたは差し戻し理由を入力"
+
+#: records/templates/records/record_detail.html:399
+#: records/templates/records/tenant_request_record.html:49
+msgid "Process"
+msgstr "処理中"
+
+#: records/templates/records/record_detail.html:411
+msgid "Photo Approval Status"
+msgstr "写真承認状況"
+
+#: records/templates/records/record_detail.html:418
+msgid "Approval Progress"
+msgstr "承認進捗"
+
+#: records/templates/records/record_detail.html:419
+msgid "Checking..."
+msgstr "確認中..."
+
+#: records/templates/records/record_detail.html:444
+msgid "Click the"
+msgstr "各写真の"
+
+#: records/templates/records/record_detail.html:444
+msgid "or"
+msgstr "または"
+
+#: records/templates/records/record_detail.html:444
+msgid "button on each photo to approve/reject individually."
+msgstr "ボタンをクリックして個別に承認/差し戻ししてください。"
+
+#: records/templates/records/record_detail.html:454
+msgid "Record Information"
+msgstr "契約情報"
+
+#: records/templates/records/record_detail.html:481
+msgid "Change: Contact admin"
+msgstr "変更：管理者にお問い合わせ"
+
+# Photos
+#: records/templates/records/record_detail.html:486
+msgid "Photo Count"
+msgstr "写真カテゴリ"
+
+#: records/templates/records/record_detail.html:515
+msgid "Reject Photo"
+msgstr "却下"
+
+#: records/templates/records/record_detail.html:519
+msgid "Rejecting this photo. Please enter the rejection reason."
+msgstr "この写真を差し戻します。差し戻し理由を入力してください。"
+
+#: records/templates/records/record_detail.html:523
+msgid "e.g.: Photo is blurry. Please retake."
+msgstr "例：写真がぼやけています。撮り直してください。"
+
+#: records/templates/records/record_detail.html:539
+msgid "Final Submission"
+msgstr "最終提出"
+
+#: records/templates/records/record_detail.html:544
+msgid "Do you want to submit?"
+msgstr "提出しますか？"
+
+#: records/templates/records/record_detail.html:546
+msgid "After final submission,"
+msgstr "最終提出後、"
+
+#: records/templates/records/record_detail.html:547
+msgid "adding/editing/deleting photos will not be possible"
+msgstr "写真の追加/編集/削除はできなくなります"
+
+#: records/templates/records/record_detail.html:567
+msgid "Delete Photo"
+msgstr "削除"
+
+#: records/templates/records/record_detail.html:572
+msgid "Do you want to delete this photo?"
+msgstr "本当に削除しますか？"
+
+#: records/templates/records/record_detail.html:573
+msgid "Deleted photos cannot be recovered."
+msgstr "削除された写真は復元できません。"
+
+#: records/templates/records/record_detail.html:597
+msgid ""
+"You can add a memo to each photo. If there are any issues, please record "
+"them in the memo."
+msgstr "各写真にメモを追加できます。問題がある場合はメモに記録してください。"
+
+# Photos
+#: records/templates/records/record_detail.html:621
+#: records/templates/records/record_detail.html:649
+msgid "Photo Memo"
+msgstr "写真カテゴリ"
+
+#: records/templates/records/record_detail.html:631
+msgid "Enter memo for the photo"
+msgstr "写真のメモを入力"
+
+#: records/templates/records/record_detail.html:672
+#: records/templates/records/record_detail.html:780
+msgid "Notice"
+msgstr "お知らせ"
+
+#: records/templates/records/record_detail.html:679
+msgid "OK"
+msgstr "OK"
+
+#: records/templates/records/record_detail.html:771
+msgid "Success"
+msgstr "成功"
+
+#: records/templates/records/record_detail.html:806
+msgid "Please approve all photos before final approval."
+msgstr "最終承認前にすべての写真を承認してください。"
+
+#: records/templates/records/record_detail.html:840
+msgid "approved"
+msgstr "承認済み"
+
+#: records/templates/records/record_detail.html:873
+msgid "Enter memo for the photo (optional)"
+msgstr "写真のメモを入力（任意）"
+
+#: records/templates/records/record_detail.html:907
+msgid "Uploading..."
+msgstr "読み込み中..."
+
+#: records/templates/records/record_detail.html:960
+#: records/templates/records/record_detail.html:965
+msgid "Error occurred during approval."
+msgstr "承認中にエラーが発生しました。"
+
+#: records/templates/records/record_detail.html:984
+msgid "Please enter the rejection reason."
+msgstr "差し戻し理由を入力してください。"
+
+#: records/templates/records/record_detail.html:1022
+#: records/templates/records/record_detail.html:1028
+msgid "Error occurred during rejection."
+msgstr "差し戻し中にエラーが発生しました。"
+
+#: records/templates/records/record_detail.html:1068
+msgid "Photo has been deleted."
+msgstr "リクエストが却下されました"
+
+#: records/templates/records/record_detail.html:1070
+#: records/templates/records/record_detail.html:1076
+msgid "Error occurred during deletion."
+msgstr "削除中にエラーが発生しました。"
+
+#: records/templates/records/record_detail.html:1103
+msgid "No memo."
+msgstr "メモなし。"
+
+#: records/templates/records/record_detail.html:1172
+msgid "Memo has been saved."
+msgstr "メモが保存されました。"
+
+#: records/templates/records/record_detail.html:1174
+#: records/templates/records/record_detail.html:1182
+msgid "Error occurred during save."
+msgstr "保存中にエラーが発生しました。"
+
+#: records/templates/records/record_list.html:36
+msgid "Move-in Record"
+msgstr "入居点検報告書"
+
+#: records/templates/records/record_list.html:82
+msgid "No move-in record yet."
+msgstr "入居点検報告書"
+
+#: records/templates/records/record_list.html:86
+msgid "Create Move-in Record"
+msgstr "入居点検報告書"
+
+#: records/templates/records/record_list.html:90
+msgid "Request Move-in Record"
+msgstr "入居点検報告書"
+
+#: records/templates/records/record_list.html:103
+msgid "Move-out Record"
+msgstr "退去点検報告書"
+
+#: records/templates/records/record_list.html:149
+msgid "No move-out record yet."
+msgstr "退去点検報告書"
+
+#: records/templates/records/record_list.html:154
+msgid "Create Move-out Record"
+msgstr "退去点検報告書"
+
+#: records/templates/records/record_list.html:158
+msgid "Request Move-out Record"
+msgstr "退去点検報告書"
+
+#: records/templates/records/record_list.html:163
+msgid "Please register move-in record first"
+msgstr "まず入居記録を登録してください"
+
+#: records/templates/records/repair_create.html:26
+msgid "Linked to defect:"
+msgstr "連携された不具合:"
+
+#: records/templates/records/repair_create.html:31
+msgid "Link to defect (optional)"
+msgstr "不具合に連携（任意）"
+
+#: records/templates/records/repair_create.html:45
+msgid "e.g., Fix bathroom ceiling leak"
+msgstr ""
+
+#: records/templates/records/repair_create.html:58
+msgid "Describe what repair is needed and any relevant details."
+msgstr ""
+
+#: records/templates/records/repair_create.html:64
+msgid "Attach photos showing the problem."
+msgstr ""
+
+#: records/templates/records/repair_create.html:70
+#: records/templates/records/tenant_request_record.html:61
+msgid "Submit Request"
+msgstr "リクエスト済み"
+
+#: records/templates/records/repair_detail.html:12
+msgid "Repairs"
+msgstr "修繕必要"
+
+#: records/templates/records/repair_detail.html:71
+msgid "Problem Photos"
+msgstr "問題の写真"
+
+#: records/templates/records/repair_detail.html:80
+msgid "In Progress Photos"
+msgstr "施工中の写真"
+
+#: records/templates/records/repair_detail.html:89
+msgid "Completed Photos"
+msgstr "完了写真"
+
+#: records/templates/records/repair_detail.html:101
+msgid "Comments"
+msgstr "コメント"
+
+#: records/templates/records/repair_detail.html:121
+msgid "No comments yet."
+msgstr "まだコメントはありません。"
+
+#: records/templates/records/repair_detail.html:129
+msgid "Add a comment..."
+msgstr "コメントを入力..."
+
+#: records/templates/records/repair_detail.html:156
+msgid "Provide Quote"
+msgstr "見積を提示"
+
+#: records/templates/records/repair_detail.html:162
+msgid "Estimated:"
+msgstr "見積:"
+
+#: records/templates/records/repair_detail.html:165
+msgid "Approve Quote"
+msgstr "見積を承認"
+
+#: records/templates/records/repair_detail.html:171
+msgid "Progress photos"
+msgstr "施工中の写真"
+
+#: records/templates/records/repair_detail.html:175
+msgid "Start Repair"
+msgstr "修繕開始"
+
+#: records/templates/records/repair_detail.html:185
+msgid "Completed photos"
+msgstr "完了写真"
+
+#: records/templates/records/repair_detail.html:189
+msgid "Complete Repair"
+msgstr "修繕完了"
+
+#: records/templates/records/repair_detail.html:194
+msgid "Are you sure?"
+msgstr "本当によろしいですか？"
+
+#: records/templates/records/repair_detail.html:195
+msgid "Cancel Request"
+msgstr "依頼をキャンセル"
+
+#: records/templates/records/repair_detail.html:204
+msgid "Status Timeline"
+msgstr "ステータスタイムライン"
+
+#: records/templates/records/repair_detail.html:209
+msgid "Requested"
+msgstr "依頼済み"
+
+#: records/templates/records/repair_detail.html:214
+msgid "Quote Provided"
+msgstr "見積提示済み"
+
+#: records/templates/records/repair_detail.html:226
+msgid "Repair Started"
+msgstr "修繕開始"
+
+#: records/templates/records/repair_list.html:48
+msgid "No repair requests yet."
+msgstr "まだ修繕依頼はありません。"
+
+#: records/templates/records/tenant_request_record.html:4
+#: records/templates/records/tenant_request_record.html:14
+msgid "Record Request"
+msgstr "却下"
+
+# Photo Restoration Tag
+#: records/templates/records/tenant_request_record.html:22
+msgid "Record Registration Request"
+msgstr "写真原状回復タグ"
+
+#: records/templates/records/tenant_request_record.html:28
+msgid "Tenant Record Request"
+msgstr "却下"
+
+#: records/templates/records/tenant_request_record.html:29
+msgid ""
+"Request the landlord to register a record. Once the landlord approves, you "
+"can upload photos."
+msgstr ""
+"貸主に記録登録を要請します。貸主が承認すると写真をアップロードできます。"
+
+#: records/templates/records/tenant_request_record.html:41
+msgid "Request Notes (optional)"
+msgstr "承認待ち"
+
+#: records/templates/records/tenant_request_record.html:43
+msgid "Please enter the reason for the request or any special notes."
+msgstr "拒否理由を入力してください。要請者に送信されます。"
+
+#: records/templates/records/tenant_request_record.html:51
+msgid "The tenant requests record registration. (Current step)"
+msgstr "借主が記録登録を要請しました。以下で承認し、期限を設定してください。"
+
+#: records/templates/records/tenant_request_record.html:52
+msgid "The landlord reviews and approves the request."
+msgstr "貸主が要請を確認し承認します。"
+
+#: records/templates/records/tenant_request_record.html:53
+msgid "The tenant uploads photos by the deadline."
+msgstr "借主が期限までに写真をアップロードします。"
+
+#: records/templates/records/tenant_request_record.html:54
+msgid "The tenant clicks the 'Submit' button to complete."
+msgstr "借主が「提出」ボタンをクリックして完了します。"
+
+#: records/templates/records/tenant_request_record.html:55
+msgid "The landlord gives final approval."
+msgstr "貸主が最終承認します。"
+
+#: records/views.py:70 records/views.py:552 records/views.py:689
+#, python-format
+msgid "이미 %(record_type)s 기록이 있습니다."
+msgstr "すでに%(record_type)s記録があります。"
+
+#: records/views.py:80 records/views.py:562
+msgid "입실 기록을 먼저 등록해주세요."
+msgstr "入居記録を先に登録してください。"
+
+#: records/views.py:107
+#, python-format
+msgid "%(record_type)s 기록이 등록되었습니다!"
+msgstr "%(record_type)s記録が登録されました！"
+
+#: records/views.py:133
+msgid "마감일이 지나 자동으로 제출 처리되었습니다."
+msgstr "期限が過ぎたため、自動的に提出処理されました。"
+
+#: records/views.py:208
+msgid "입실/퇴실 기록이 모두 있어야 비교할 수 있습니다."
+msgstr "入居/退去記録がすべてなければ比較できません。"
+
+#: records/views.py:242 records/views.py:479
+msgid "임대인만 승인할 수 있습니다."
+msgstr "貸主のみ承認できます。"
+
+#: records/views.py:247
+msgid "현재 상태에서는 승인/반려할 수 없습니다."
+msgstr "現在の状態では承認/差し戻しできません。"
+
+#: records/views.py:261
+#, python-format
+msgid "%(record_type)s 기록이 승인되었습니다."
+msgstr "%(record_type)s記録が承認されました。"
+
+#: records/views.py:263
+#, python-format
+msgid "%(record_type)s 기록이 반려되었습니다."
+msgstr "%(record_type)s記録が差し戻されました。"
+
+#: records/views.py:287
+msgid "승인된 기록에는 사진을 추가할 수 없습니다."
+msgstr "承認済みの記録には写真を追加できません。"
+
+#: records/views.py:289
+msgid "아직 승인되지 않은 요청입니다. 임대인의 승인을 기다려주세요."
+msgstr "まだ承認されていない要請です。貸主の承認をお待ちください。"
+
+#: records/views.py:291
+msgid "이미 제출된 기록입니다. 임대인의 처리를 기다려주세요."
+msgstr "すでに提出された記録です。貸主の処理をお待ちください。"
+
+#: records/views.py:293
+msgid "업로드 마감일이 지났습니다. 임대인에게 마감일 연장을 요청해주세요."
+msgstr "アップロード期限が過ぎました。貸主に期限延長を依頼してください。"
+
+#: records/views.py:295
+msgid "현재 상태에서는 사진을 추가할 수 없습니다."
+msgstr "現在の状態では写真を追加できません。"
+
+#: records/views.py:358
+#, python-format
+msgid "%(count)s개의 사진이 추가되었습니다."
+msgstr "%(count)s枚の写真が追加されました。"
+
+#: records/views.py:360
+msgid "점검 항목이 저장되었습니다."
+msgstr "点検項目が保存されました。"
+
+#: records/views.py:428
+msgid "승인된 기록의 사진은 삭제할 수 없습니다."
+msgstr "承認済み記録の写真は削除できません。"
+
+#: records/views.py:432
+msgid "마감일이 지나 사진을 삭제할 수 없습니다."
+msgstr "期限が過ぎたため写真を削除できません。"
+
+#: records/views.py:452
+msgid "승인된 기록의 사진은 수정할 수 없습니다."
+msgstr "承認済み記録の写真は修正できません。"
+
+#: records/views.py:456
+msgid "마감일이 지나 사진을 수정할 수 없습니다."
+msgstr "期限が過ぎたため写真を修正できません。"
+
+#: records/views.py:505
+msgid "임대인만 반려할 수 있습니다."
+msgstr "貸主のみ差し戻しできます。"
+
+#: records/views.py:509
+msgid "반려 사유를 입력해주세요."
+msgstr "差し戻し理由を入力してください。"
+
+#: records/views.py:537
+msgid "임대인만 기록을 생성할 수 있습니다."
+msgstr "貸主のみ記録を作成できます。"
+
+#: records/views.py:578
+#, python-format
+msgid ""
+"%(record_type)s 기록이 생성되었습니다. 임차인이 사진을 업로드할 수 있습니다."
+msgstr ""
+"%(record_type)s記録が作成されました。借主が写真をアップロードできます。"
+
+#: records/views.py:599
+msgid "임대인만 요청을 승인할 수 있습니다."
+msgstr "貸主のみ要請を承認できます。"
+
+#: records/views.py:604
+msgid "승인 대기 중인 요청이 아닙니다."
+msgstr "承認待ちの要請ではありません。"
+
+#: records/views.py:615
+#, python-format
+msgid ""
+"%(record_type)s 요청이 승인되었습니다. 임차인이 사진을 업로드할 수 있습니다."
+msgstr ""
+"%(record_type)s要請が承認されました。借主が写真をアップロードできます。"
+
+#: records/views.py:632
+msgid "임대인만 최종 승인할 수 있습니다."
+msgstr "貸主のみ最終承認できます。"
+
+#: records/views.py:637
+msgid "제출된 기록만 승인/반려할 수 있습니다."
+msgstr "提出された記録のみ承認/差し戻しできます。"
+
+#: records/views.py:653
+#, python-format
+msgid "%(record_type)s 기록이 최종 승인되었습니다."
+msgstr "%(record_type)s記録が最終承認されました。"
+
+#: records/views.py:655
+#, python-format
+msgid ""
+"%(record_type)s 기록이 반려되었습니다. 임차인이 수정 후 다시 제출할 수 있습니"
+"다."
+msgstr "%(record_type)s記録が差し戻されました。借主が修正後、再提出できます。"
+
+#: records/views.py:674
+msgid "임차인만 기록 등록을 요청할 수 있습니다."
+msgstr "借主のみ記録登録を要請できます。"
+
+#: records/views.py:699
+msgid "입실 기록이 먼저 등록되어야 퇴실 기록을 요청할 수 있습니다."
+msgstr "入居記録が先に登録されてから退去記録を要請できます。"
+
+#: records/views.py:714
+#, python-format
+msgid ""
+"%(record_type)s 기록 등록이 요청되었습니다. 임대인의 승인을 기다려주세요."
+msgstr "%(record_type)s記録登録が要請されました。貸主の承認をお待ちください。"
+
+#: records/views.py:735
+msgid "임차인만 기록을 제출할 수 있습니다."
+msgstr "借主のみ記録を提出できます。"
+
+#: records/views.py:740
+msgid "현재 상태에서는 제출할 수 없습니다."
+msgstr "現在の状態では提出できません。"
+
+#: records/views.py:745
+msgid "사진을 하나 이상 업로드한 후 제출해주세요."
+msgstr "写真を1枚以上アップロードしてから提出してください。"
+
+#: records/views.py:765
+#, python-format
+msgid "필수 항목이 완료되지 않았습니다: %(items)s"
+msgstr "必須項目が完了していません: %(items)s"
+
+#: records/views.py:770
+msgid "마감일이 지났습니다. 임대인에게 문의해주세요."
+msgstr "期限が過ぎました。貸主にお問い合わせください。"
+
+#: records/views.py:779
+msgid "기록이 제출되었습니다. 임대인의 최종 승인을 기다려주세요."
+msgstr "記録が提出されました。貸主の最終承認をお待ちください。"
+
+#: records/views.py:913 records/views.py:1049
+msgid "제목과 설명을 입력해주세요."
+msgstr "タイトルと説明を入力してください。"
+
+#: records/views.py:937
+msgid "하자 통지가 등록되었습니다."
+msgstr "不具合報告が登録されました。"
+
+#: records/views.py:977
+msgid "임대인만 응답할 수 있습니다."
+msgstr "貸主のみ回答できます。"
+
+#: records/views.py:989
+msgid "하자 통지를 확인하였습니다."
+msgstr "不具合報告を確認しました。"
+
+#: records/views.py:996
+msgid "처리 중으로 변경되었습니다."
+msgstr "対応中に変更されました。"
+
+#: records/views.py:1000
+msgid "해결 내용을 입력해주세요."
+msgstr "解決内容を入力してください。"
+
+#: records/views.py:1007
+msgid "하자가 해결 처리되었습니다."
+msgstr "不具合が解決されました。"
+
+#: records/views.py:1073
+msgid "수리 요청이 등록되었습니다."
+msgstr "修繕依頼が登録されました。"
+
+#: records/views.py:1126
+msgid "견적 금액을 입력해주세요."
+msgstr "見積金額を入力してください。"
+
+#: records/views.py:1132
+msgid "견적이 제시되었습니다."
+msgstr "見積が提示されました。"
+
+#: records/views.py:1139
+msgid "견적이 승인되었습니다."
+msgstr "見積が承認されました。"
+
+#: records/views.py:1148
+msgid "수리가 시작되었습니다."
+msgstr "修繕が開始されました。"
+
+#: records/views.py:1160
+msgid "수리가 완료 처리되었습니다."
+msgstr "修繕が完了しました。"
+
+#: records/views.py:1165
+msgid "수리 요청이 취소되었습니다."
+msgstr "修繕依頼がキャンセルされました。"
+
+#: records/views.py:1237
+msgid "제목, 금액, 날짜는 필수입니다."
+msgstr "タイトル、金額、日付は必須です。"
+
+#: records/views.py:1259
+msgid "비용이 등록되었습니다."
+msgstr "費用が登録されました。"
+
+#: templates/admin/base_site.html:4
+msgid "Django site admin"
+msgstr "Django サイト管理"
+
+#: templates/admin/login.html:235
+msgid "Please correct the error below."
+msgstr "以下のエラーを修正してください。"
+
+#: templates/admin/login.html:235
+msgid "Please correct the errors below."
+msgstr "以下のエラーを修正してください。"
+
+#: templates/admin/login.html:258
+msgid "Log in"
+msgstr "ログイン"
+
+#: templates/socialaccount/login.html:5 templates/socialaccount/login.html:12
+msgid "Social Login"
+msgstr "ソーシャルログイン"
+
+#: templates/socialaccount/login.html:15
+#, python-format
+msgid "Do you want to log in with %(provider_name)s?"
+msgstr "%(provider_name)sでログインしますか？"
+
+#: templates/socialaccount/login.html:24
+#, python-format
+msgid "Continue with %(provider_name)s"
+msgstr "%(provider_name)sで続ける"
+
+#: templates/socialaccount/login.html:29
+msgid "← Back to Login"
+msgstr "契約に戻る"
+
+#: templates/socialaccount/signup.html:11
+msgid "Sign Up Error"
+msgstr "会員登録"
+
+#: templates/socialaccount/signup.html:12
+msgid "Automatic registration failed."
+msgstr "ブロックチェーン検証済み"
+
+#: templates/socialaccount/signup.html:13
+msgid "This page should not appear. Please contact the administrator."
+msgstr "このページは表示されないはずです。管理者にお問い合わせください。"
+
+#: templates/socialaccount/signup.html:16
+msgid "Back to Login"
+msgstr "契約に戻る"
+
+#~ msgid ""
+#~ "Click the upload button for each section to add photos for that item."
+#~ msgstr ""
+#~ "各セクションのアップロードボタンをクリックして、その項目の写真を追加してく"
+#~ "ださい。"
+
+#~ msgid "Please select photos to upload."
+#~ msgstr "アップロードする写真を選択してください。"
+
+#~ msgid "업로드할 사진을 선택해주세요."
+#~ msgstr "アップロードする写真を選択してください。"
+
+#~ msgid "Contract has not been finalized yet"
+#~ msgstr "契約がまだ確定されていません"
+
+#~ msgid ""
+#~ "When finalized, the contract will be permanently recorded on blockchain"
+#~ msgstr "確定すると、契約はブロックチェーンに永久記録されます"
+
+#~ msgid "Site Maps"
+#~ msgstr "サイトマップ"
+
+#~ msgid "Static Files"
+#~ msgstr "契約書ファイル"
+
+#~ msgid "Email address"
+#~ msgstr "住所"
+
+#~ msgid "File path"
+#~ msgstr "ファイルハッシュ"
+
+#~ msgid "IPv4 address"
+#~ msgstr "住所"
+
+#~ msgid "IP address"
+#~ msgstr "住所"
+
+#~ msgid "Time"
+#~ msgstr "日付"
+
+#~ msgid "No file was submitted."
+#~ msgstr "ファイル未選択"
+
+#~ msgid "Clear"
+#~ msgstr "すべてクリア"
+
+#~ msgid "Currently"
+#~ msgstr "現在のファイルハッシュ"
+
+#~ msgid "No"
+#~ msgstr "なし"
+
+#~ msgid "Sat"
+#~ msgstr "ステータス"
+
+#, python-format
+#~ msgid "%(num)d month"
+#~ msgid_plural "%(num)d months"
+#~ msgstr[0] "%(num)dヶ月"
+
+#, python-format
+#~ msgid "No %(verbose_name_plural)s available"
+#~ msgstr "利用可能な%(verbose_name_plural)sがありません"
+
+#~ msgid "Home"
+#~ msgstr "ホーム"
+
+#~ msgid "Open"
+#~ msgstr "アップロード可能"
+
+#~ msgid "Submitted"
+#~ msgstr "提出済み"
+
+#~ msgid "Anchored"
+#~ msgstr "登録済み"
+
+#~ msgid "Select Language"
+#~ msgstr "言語を選択"
+
+#~ msgid "Negligent Damage"
+#~ msgstr "過失による損傷"
+
+#~ msgid "Natural Deterioration"
+#~ msgstr "自然劣化"
+
+#~ msgid "Is Typical Wear"
+#~ msgstr "通常損耗である"
+
+# Japanese Room Names
+#~ msgid "Entrance"
+#~ msgstr "玄関"
+
+#~ msgid "Entrance/Hallway"
+#~ msgstr "玄関/廊下"
+
+#~ msgid "Living/Dining"
+#~ msgstr "リビング/ダイニング"
+
+#~ msgid "Bedroom"
+#~ msgstr "寝室/居室"
+
+#~ msgid "Japanese Room"
+#~ msgstr "和室"
+
+#~ msgid "Washroom"
+#~ msgstr "洗面所"
+
+#~ msgid "Balcony"
+#~ msgstr "ベランダ/バルコニー"
+
+#~ msgid "Equipment/Others"
+#~ msgstr "設備/その他"
+
+# Commercial terms
+#~ msgid "Exterior/Signage"
+#~ msgstr "外部/看板"
+
+#~ msgid "Sales Floor"
+#~ msgstr "営業スペース"
+
+#~ msgid "Interior/Fixtures"
+#~ msgstr "内装/造作"
+
+#~ msgid "Kitchen/Food Prep"
+#~ msgstr "厨房/調理設備"
+
+#~ msgid "Office/Storage"
+#~ msgstr "事務室/倉庫"
+
+#~ msgid "Electrical/Equipment"
+#~ msgstr "電気/設備"
+
+#~ msgid "Fire/Safety"
+#~ msgstr "消防/安全"
+
+#~ msgid "Optional - leave blank for default"
+#~ msgstr "オプション - 空欄でデフォルト"

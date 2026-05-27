@@ -1,0 +1,107 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static %}
+
+{% block extrahead %}
+    {{ block.super }}
+    {{ media }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">홈</a>
+    &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+    &rsaquo; <a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
+    &rsaquo; <a href="{% url opts|admin_urlname:'change' object.pk|admin_urlquote %}">{{ object|truncatewords:"18" }}</a>
+    &rsaquo; 이력
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    <div class="module">
+        <h2>계약 변경 이력 (ContractHistory)</h2>
+        <p class="help">계약 연장, 해지, 관리자 수정 등의 이력입니다.</p>
+
+        {% if contract_histories %}
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th style="width: 15%;">날짜/시간</th>
+                    <th style="width: 15%;">사용자</th>
+                    <th style="width: 15%;">액션</th>
+                    <th style="width: 55%;">메모</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for history in contract_histories %}
+                <tr>
+                    <td>{{ history.created_at|date:"Y-m-d H:i:s" }}</td>
+                    <td>
+                        {% if history.action_by %}
+                            {{ history.action_by.username }}
+                        {% else %}
+                            <span style="color: #999;">-</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if history.action_type == 'CREATED' %}
+                            <span style="color: #007bff; font-weight: bold;">{{ history.get_action_type_display }}</span>
+                        {% elif history.action_type == 'EXTENDED' %}
+                            <span style="color: #28a745; font-weight: bold;">{{ history.get_action_type_display }}</span>
+                        {% elif history.action_type == 'TERMINATED' %}
+                            <span style="color: #ffc107; font-weight: bold;">{{ history.get_action_type_display }}</span>
+                        {% elif history.action_type == 'MODIFIED' %}
+                            <span style="color: #dc3545; font-weight: bold;">{{ history.get_action_type_display }}</span>
+                        {% else %}
+                            {{ history.get_action_type_display }}
+                        {% endif %}
+                    </td>
+                    <td style="white-space: pre-wrap;">{{ history.note }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>계약 변경 이력이 없습니다.</p>
+        {% endif %}
+    </div>
+
+    <div class="module" style="margin-top: 30px;">
+        <h2>관리자 액션 이력 (Django Admin)</h2>
+        <p class="help">Django admin에서의 일반적인 추가/수정/삭제 액션입니다.</p>
+
+        {% if admin_logs %}
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th style="width: 15%;">날짜/시간</th>
+                    <th style="width: 15%;">사용자</th>
+                    <th style="width: 15%;">액션</th>
+                    <th style="width: 55%;">변경 메시지</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in admin_logs %}
+                <tr>
+                    <td>{{ log.action_time|date:"Y-m-d H:i:s" }}</td>
+                    <td>{{ log.user.get_username }}</td>
+                    <td>
+                        {% if log.is_addition %}
+                            <span style="color: #28a745; font-weight: bold;">추가</span>
+                        {% elif log.is_change %}
+                            <span style="color: #17a2b8; font-weight: bold;">수정</span>
+                        {% elif log.is_deletion %}
+                            <span style="color: #dc3545; font-weight: bold;">삭제</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ log.get_change_message }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>관리자 액션 이력이 없습니다.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

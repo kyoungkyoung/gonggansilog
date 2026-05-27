@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Share Link" %} - {{ report.get_report_type_display }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'contracts:list' %}">{% trans "Contracts" %}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'contracts:detail' contract.pk %}">{{ contract.get_display_address|truncatechars:20 }}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'reports:history' contract.pk %}">{% trans "Reports" %}</a></li>
+                <li class="breadcrumb-item active">{% trans "Share Link" %}</li>
+            </ol>
+        </nav>
+
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-check-circle"></i> {% trans "Share Link Created" %}
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-4">
+                    <label class="form-label fw-bold">{% trans "Share URL" %}</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="{{ share_url }}" id="shareUrl" readonly>
+                        <button class="btn btn-outline-secondary" type="button" onclick="copyToClipboard()">
+                            <i class="bi bi-clipboard"></i> {% trans "Copy" %}
+                        </button>
+                    </div>
+                    <small class="text-muted">{% trans "Anyone with this link can download the report." %}</small>
+                </div>
+
+                <hr>
+
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <strong>{% trans "Report Type" %}:</strong><br>
+                        {{ report.get_report_type_display }}
+                    </div>
+                    <div class="col-6">
+                        <strong>{% trans "Language" %}:</strong><br>
+                        {{ report.get_language_display }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <strong>{% trans "Expires" %}:</strong><br>
+                        {% if share.expires_at %}
+                            {{ share.expires_at|date:"Y-m-d H:i" }}
+                        {% else %}
+                            {% trans "Never" %}
+                        {% endif %}
+                    </div>
+                    <div class="col-6">
+                        <strong>{% trans "Max Downloads" %}:</strong><br>
+                        {% if share.max_downloads %}
+                            {{ share.max_downloads }}
+                        {% else %}
+                            {% trans "Unlimited" %}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <strong>{% trans "Downloads" %}:</strong><br>
+                        {{ share.download_count }}
+                    </div>
+                    <div class="col-6">
+                        <strong>{% trans "Status" %}:</strong><br>
+                        {% if share.is_valid %}
+                            <span class="badge bg-success">{% trans "Active" %}</span>
+                        {% else %}
+                            <span class="badge bg-danger">{% trans "Expired" %}</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if share.note %}
+                <div class="mb-3">
+                    <strong>{% trans "Note" %}:</strong><br>
+                    {{ share.note }}
+                </div>
+                {% endif %}
+
+                <hr>
+
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'reports:history' contract.pk %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> {% trans "Back" %}
+                    </a>
+                    {% if share.is_active %}
+                    <form method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="deactivate">
+                        <button type="submit" class="btn btn-danger"
+                                onclick="return confirm('{% trans "Are you sure you want to deactivate this share link?" %}')">
+                            <i class="bi bi-x-circle"></i> {% trans "Deactivate" %}
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function copyToClipboard() {
+    const urlInput = document.getElementById('shareUrl');
+    urlInput.select();
+    document.execCommand('copy');
+    alert('{% trans "Link copied to clipboard!" %}');
+}
+</script>
+{% endblock %}

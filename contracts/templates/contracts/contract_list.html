@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Contract List" %} - {% trans "Space Chronicle" %}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>{% trans "My Contracts" %}</h1>
+            <a href="{% url 'contracts:create' %}" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> {% trans "New Contract" %}
+            </a>
+        </div>
+
+        <!-- 알림 섹션 -->
+        {% if pending_requests or my_processed_requests %}
+        <div class="alert-section mb-4">
+            <!-- 승인 대기 중인 요청 -->
+            {% if pending_requests %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <h5 class="alert-heading">
+                    <i class="bi bi-exclamation-triangle-fill"></i> {% blocktrans with count=pending_requests.count %}Pending Requests ({{ count }} items){% endblocktrans %}
+                </h5>
+                <hr>
+                {% for req in pending_requests %}
+                <div class="mb-3 pb-3 {% if not forloop.last %}border-bottom{% endif %}">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="mb-1">
+                                <strong>{{ req.contract.get_display_address }}</strong>
+                            </p>
+                            <p class="mb-1">
+                                {% blocktrans with username=req.requested_by.username request_type=req.get_request_type_display %}
+                                <strong>{{ username }}</strong> requested <strong class="text-primary">{{ request_type }}</strong>.
+                                {% endblocktrans %}
+                                {% if req.request_type == 'EXTEND' %}
+                                    <span class="badge bg-info">{% blocktrans with months=req.extend_months %}{{ months }} months extension{% endblocktrans %}</span>
+                                {% endif %}
+                            </p>
+                            <small class="text-muted">{{ req.created_at|date:"Y-m-d H:i" }}</small>
+                        </div>
+                        <div>
+                            <a href="{% url 'contracts:detail' req.contract.pk %}" class="btn btn-sm btn-primary">
+                                {% trans "View Contract" %} <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- 최근 처리된 요청 -->
+            {% if my_processed_requests %}
+                {% for req in my_processed_requests %}
+                <div class="alert alert-{% if req.status == 'APPROVED' %}success{% else %}danger{% endif %} alert-dismissible fade show" role="alert">
+                    <h6 class="alert-heading">
+                        {% if req.status == 'APPROVED' %}
+                            <i class="bi bi-check-circle-fill"></i> {% trans "Your request has been approved!" %}
+                        {% else %}
+                            <i class="bi bi-x-circle-fill"></i> {% trans "Your request has been rejected" %}
+                        {% endif %}
+                    </h6>
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="mb-1">
+                                <strong>{{ req.contract.get_display_address }}</strong>
+                            </p>
+                            <p class="mb-1">
+                                {% if req.status == 'APPROVED' %}
+                                    {% blocktrans with username=req.responded_by.username request_type=req.get_request_type_display %}
+                                    <strong>{{ username }}</strong> approved your <strong>{{ request_type }}</strong> request.
+                                    {% endblocktrans %}
+                                {% else %}
+                                    {% blocktrans with username=req.responded_by.username request_type=req.get_request_type_display %}
+                                    <strong>{{ username }}</strong> rejected your <strong>{{ request_type }}</strong> request.
+                                    {% endblocktrans %}
+                                {% endif %}
+                                {% if req.request_type == 'EXTEND' and req.status == 'APPROVED' %}
+                                    <span class="badge bg-light text-dark">{% blocktrans with months=req.extend_months %}{{ months }} months extension{% endblocktrans %}</span>
+                                {% endif %}
+                            </p>
+                            {% if req.response_note %}
+                                <p class="mb-1 fst-italic">"{{ req.response_note }}"</p>
+                            {% endif %}
+                            <small class="text-muted">{{ req.responded_at|date:"Y-m-d H:i" }}</small>
+                        </div>
+                        <div>
+                            <a href="{% url 'contracts:detail' req.contract.pk %}" class="btn btn-sm btn-{% if req.status == 'APPROVED' %}success{% else %}danger{% endif %}">
+                                {% trans "View Contract" %} <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% if contracts %}
+            <div class="row">
+                {% for contract in contracts %}
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ contract.get_display_address }}</h5>
+
+                            <div class="mb-3">
+                                <span class="badge bg-{% if contract.get_current_status == 'ACTIVE' %}success{% else %}secondary{% endif %}">
+                                    {{ contract.get_current_status_display }}
+                                </span>
+                            </div>
+
+                            <p class="card-text">
+                                <strong>{% trans "Contract Date" %}:</strong> {{ contract.contract_date }}<br>
+                                <strong>{% trans "Move In Date" %}:</strong> {{ contract.move_in_date }}<br>
+                                {% if contract.move_out_date %}
+                                    <strong>{% trans "Move Out Date" %}:</strong> {{ contract.move_out_date }}<br>
+                                {% endif %}
+                                {% if user.user_type == 'TENANT' %}
+                                    <strong>{% trans "Landlord" %}:</strong> {{ contract.landlord_name }}<br>
+                                {% else %}
+                                    <strong>{% trans "Tenant" %}:</strong> {{ contract.tenant.username }}<br>
+                                {% endif %}
+                            </p>
+
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'contracts:detail' contract.pk %}" class="btn btn-sm btn-outline-primary">
+                                    {% trans "View Details" %}
+                                </a>
+                                {% if user.is_staff or user.is_superuser %}
+                                    <a href="{% url 'contracts:update' contract.pk %}" class="btn btn-sm btn-outline-secondary">
+                                        <i class="bi bi-pencil"></i> {% trans "Edit" %}
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="card-footer text-muted">
+                            <small>{% trans "Registered" %}: {{ contract.created_at|date:"Y-m-d" }}</small>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                <h4 class="alert-heading">{% trans "No contracts registered" %}</h4>
+                {% if user.user_type == 'TENANT' %}
+                    <p>{% trans "Register your property contract to manage move-in/move-out records." %}</p>
+                {% else %}
+                    <p>{% trans "Register your property contract to manage it." %}</p>
+                {% endif %}
+                <a href="{% url 'contracts:create' %}" class="btn btn-primary">
+                    {% trans "Register First Contract" %}
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

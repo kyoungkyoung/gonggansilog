@@ -1,0 +1,206 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Japan Contract Information" %} - {{ contract.get_display_address|truncatechars:30 }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'contracts:list' %}">{% trans "Contracts" %}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'contracts:detail' contract.pk %}">{{ contract.get_display_address|truncatechars:20 }}</a></li>
+                <li class="breadcrumb-item active">{% trans "Japan Contract Information" %}</li>
+            </ol>
+        </nav>
+
+        <div class="card shadow">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-file-earmark-text"></i> {% trans "Japan Contract Information" %}
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+
+                    <!-- Contract Type -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5 class="border-bottom pb-2 mb-3">{% trans "Contract Type" %}</h5>
+                            <div class="mb-3">
+                                <label for="{{ form.contract_type.id_for_label }}" class="form-label">
+                                    {% trans "Contract Type" %} <span class="text-danger">*</span>
+                                </label>
+                                {{ form.contract_type }}
+                                <small class="form-text text-muted">
+                                    {% trans "Ordinary Lease allows renewal; Fixed-term does not." %}
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="border-bottom pb-2 mb-3">{% trans "Renewal" %}</h5>
+                            <div class="mb-3">
+                                <label for="{{ form.renewal_type.id_for_label }}" class="form-label">
+                                    {% trans "Renewal Type" %}
+                                </label>
+                                {{ form.renewal_type }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{ form.renewal_fee.id_for_label }}" class="form-label">
+                                    {% trans "Renewal Fee" %} (JPY)
+                                </label>
+                                {{ form.renewal_fee }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Initial Costs -->
+                    <h5 class="border-bottom pb-2 mb-3">{% trans "Initial Costs" %}</h5>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.key_money.id_for_label }}" class="form-label">
+                                    {% trans "Key Money" %} ({% trans "Non-refundable" %}) (JPY)
+                                </label>
+                                {{ form.key_money }}
+                                <small class="form-text text-muted">礼金 - 返金不可</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.deposit.id_for_label }}" class="form-label">
+                                    {% trans "Security Deposit" %} ({% trans "Refundable" %}) (JPY)
+                                </label>
+                                {{ form.deposit }}
+                                <small class="form-text text-muted">敷金 - 返金可能（原状回復費用差引後）</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.guarantee_fee.id_for_label }}" class="form-label">
+                                    {% trans "Guarantee Fee" %} (JPY)
+                                </label>
+                                {{ form.guarantee_fee }}
+                                <small class="form-text text-muted">保証料 - 保証会社利用時</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.management_fee.id_for_label }}" class="form-label">
+                                    {% trans "Monthly Management Fee" %} (JPY)
+                                </label>
+                                {{ form.management_fee }}
+                                <small class="form-text text-muted">管理費・共益費（月額）</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Restoration Clause -->
+                    <h5 class="border-bottom pb-2 mb-3">{% trans "Original Condition Restoration" %}</h5>
+                    <div class="mb-3">
+                        <div class="form-check">
+                            {{ form.has_special_restoration_clause }}
+                            <label class="form-check-label" for="{{ form.has_special_restoration_clause.id_for_label }}">
+                                {% trans "This contract has special restoration terms" %}
+                            </label>
+                        </div>
+                        <small class="form-text text-muted">
+                            {% trans "Check if the contract includes special clauses beyond the MLIT guidelines." %}
+                        </small>
+                    </div>
+                    <div class="mb-4">
+                        <label for="{{ form.restoration_clause.id_for_label }}" class="form-label">
+                            {% trans "Special Restoration Clause" %}
+                        </label>
+                        {{ form.restoration_clause }}
+                        <small class="form-text text-muted">
+                            {% trans "Enter any special terms regarding restoration responsibility." %}
+                        </small>
+                    </div>
+
+                    <!-- Agency Information -->
+                    <h5 class="border-bottom pb-2 mb-3">{% trans "Real Estate Agency" %}</h5>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.agency_name.id_for_label }}" class="form-label">
+                                    {% trans "Agency Name" %}
+                                </label>
+                                {{ form.agency_name }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.agency_license.id_for_label }}" class="form-label">
+                                    {% trans "License Number" %}
+                                </label>
+                                {{ form.agency_license }}
+                                <small class="form-text text-muted">宅建業者免許番号</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Summary -->
+                    {% if extension %}
+                    <div class="alert alert-info">
+                        <h6>{% trans "Total Initial Cost" %}</h6>
+                        <p class="mb-0">
+                            <strong>¥ {{ extension.total_initial_cost|default:"0" }}</strong>
+                            <small class="text-muted">
+                                ({% trans "Key Money" %}: ¥{{ extension.key_money|default:"0" }} +
+                                {% trans "Deposit" %}: ¥{{ extension.deposit|default:"0" }} +
+                                {% trans "Guarantee" %}: ¥{{ extension.guarantee_fee|default:"0" }})
+                            </small>
+                        </p>
+                    </div>
+                    {% endif %}
+
+                    <!-- Actions -->
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'contracts:detail' contract.pk %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> {% trans "Back" %}
+                        </a>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-check"></i> {% trans "Save" %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Restoration Guide Link -->
+        <div class="card shadow mt-3">
+            <div class="card-body text-center">
+                <p class="mb-2">{% trans "Need help understanding restoration responsibilities?" %}</p>
+                <a href="{% url 'japan:restoration_guide' contract.pk %}" class="btn btn-outline-danger">
+                    <i class="bi bi-book"></i> {% trans "View Restoration Guide" %}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const contractType = document.getElementById('{{ form.contract_type.id_for_label }}');
+    const renewalType = document.getElementById('{{ form.renewal_type.id_for_label }}');
+    const renewalFee = document.getElementById('{{ form.renewal_fee.id_for_label }}');
+
+    function updateRenewalFields() {
+        if (contractType.value === 'FIXED_TERM') {
+            renewalType.value = 'NONE';
+            renewalType.disabled = true;
+            renewalFee.disabled = true;
+            renewalFee.value = '';
+        } else {
+            renewalType.disabled = false;
+            renewalFee.disabled = false;
+        }
+    }
+
+    contractType.addEventListener('change', updateRenewalFields);
+    updateRenewalFields();
+});
+</script>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Add Expense" %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'contracts:detail' contract.pk %}">{{ contract.get_display_address|truncatechars:20 }}</a></li>
+                <li class="breadcrumb-item active">{% trans "Add Expense" %}</li>
+            </ol>
+        </nav>
+
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="bi bi-receipt"></i> {% trans "Add Expense" %}</h4>
+            </div>
+            <div class="card-body p-4">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label"><strong>{% trans "Title" %} *</strong></label>
+                        <input type="text" name="title" class="form-control" required
+                               placeholder="{% trans 'e.g., Bathroom pipe repair cost' %}">
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label"><strong>{% trans "Amount" %} *</strong></label>
+                            <input type="number" name="amount" class="form-control" required placeholder="{% trans 'Amount' %}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label"><strong>{% trans "Category" %}</strong></label>
+                            <select name="category" class="form-select">
+                                <option value="REPAIR">{% trans "Repair Cost" %}</option>
+                                <option value="CLEANING">{% trans "Cleaning Cost" %}</option>
+                                <option value="RESTORATION">{% trans "Restoration Cost" %}</option>
+                                <option value="OTHER">{% trans "Other" %}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label"><strong>{% trans "Paid By" %}</strong></label>
+                            <select name="paid_by" class="form-select">
+                                <option value="LANDLORD">{% trans "Landlord" %}</option>
+                                <option value="TENANT">{% trans "Tenant" %}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label"><strong>{% trans "Expense Date" %} *</strong></label>
+                        <input type="date" name="expense_date" class="form-control" required>
+                    </div>
+
+                    {% if repairs %}
+                    <div class="mb-3">
+                        <label class="form-label">{% trans "Link to repair (optional)" %}</label>
+                        <select name="repair_request" class="form-select">
+                            <option value="">-- {% trans "No link" %} --</option>
+                            {% for r in repairs %}
+                            <option value="{{ r.pk }}" {% if repair_id and repair_id == r.pk|stringformat:"d" %}selected{% endif %}>{{ r.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <label class="form-label">{% trans "Description" %}</label>
+                        <textarea name="description" class="form-control" rows="2" placeholder="{% trans 'Additional details (optional)' %}"></textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label"><strong>{% trans "Receipt Image" %}</strong></label>
+                        <input type="file" name="receipt_image" class="form-control" accept="image/*">
+                        <div class="form-text">{% trans "Attach a photo of the receipt." %}</div>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'records:expense_list' contract.pk %}" class="btn btn-secondary">{% trans "Cancel" %}</a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i> {% trans "Save" %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

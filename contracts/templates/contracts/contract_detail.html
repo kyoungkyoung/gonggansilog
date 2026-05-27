@@ -1,0 +1,1178 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load humanize %}
+
+{% block title %}{% trans "Contract Details" %} - {% trans "Space Chronicle" %}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-body p-4">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-start mb-4 gap-3">
+                    <div>
+                        <h2 class="card-title mb-2">{{ contract.get_display_address }}</h2>
+                        <span class="badge bg-{% if contract.get_current_status == 'ACTIVE' %}success{% else %}secondary{% endif %}">
+                            {{ contract.get_current_status_display }}
+                        </span>
+                        {% if contract.is_finalized %}
+                            <span class="badge bg-primary">
+                                <i class="bi bi-shield-check"></i> {% trans "Finalized" %}
+                            </span>
+                        {% endif %}
+                        {% if contract.blockchain_status == 'ANCHORED' %}
+                            <span class="badge bg-info">
+                                <i class="bi bi-box"></i> {% trans "Blockchain Registered" %}
+                            </span>
+                        {% elif contract.blockchain_status == 'PENDING' %}
+                            <span class="badge bg-warning">
+                                <i class="bi bi-hourglass-split"></i> {% trans "Registering" %}
+                            </span>
+                        {% elif contract.blockchain_status == 'FAILED' %}
+                            <span class="badge bg-danger">
+                                <i class="bi bi-exclamation-circle"></i> {% trans "Registration Failed" %}
+                            </span>
+                        {% endif %}
+                    </div>
+                    {% if user.is_staff or user.is_superuser %}
+                        <!-- Admin only: Edit/Delete -->
+                        <div class="btn-group w-100 w-md-auto">
+                            <a href="{% url 'contracts:update' contract.pk %}" class="btn btn-outline-primary">
+                                <i class="bi bi-pencil"></i> {% trans "Edit" %}
+                            </a>
+                            <a href="{% url 'contracts:delete' contract.pk %}" class="btn btn-outline-danger">
+                                <i class="bi bi-trash"></i> {% trans "Delete" %}
+                            </a>
+                        </div>
+                    {% elif user == contract.tenant or user == contract.landlord %}
+                        <!-- Regular users: Extend/Terminate contract -->
+                        <div class="btn-group w-100 w-md-auto">
+                            {% if contract.get_current_status == 'ACTIVE' %}
+                                <a href="{% url 'contracts:extend' contract.pk %}" class="btn btn-outline-success">
+                                    <i class="bi bi-calendar-plus"></i> <span class="d-none d-sm-inline">{% trans "Extend Contract" %}</span><span class="d-sm-none">{% trans "Extend Contract" %}</span>
+                                </a>
+                                <a href="{% url 'contracts:terminate' contract.pk %}" class="btn btn-outline-warning">
+                                    <i class="bi bi-x-circle"></i> <span class="d-none d-sm-inline">{% trans "Terminate Contract" %}</span><span class="d-sm-none">{% trans "Terminate Contract" %}</span>
+                                </a>
+                            {% else %}
+                                <span class="text-muted">{% trans "Contract has ended" %}</span>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <hr>
+
+                <!-- Pending change request notification (requests I need to approve) -->
+                {% if pending_request %}
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <h5 class="alert-heading">
+                            <i class="bi bi-exclamation-triangle-fill"></i> {% trans "Pending Approval Request" %}
+                        </h5>
+                        <hr>
+                        <p>
+                            {% blocktrans with username=pending_request.requested_by.username request_type=pending_request.get_request_type_display %}
+                            <strong>{{ username }}</strong> has requested <strong>{{ request_type }}</strong>.
+                            {% endblocktrans %}
+                        </p>
+                        {% if pending_request.request_type == 'EXTEND' %}
+                            <p class="mb-2"><strong>{% trans "Extension Period" %}:</strong> {% blocktrans with months=pending_request.extend_months %}{{ months }} months{% endblocktrans %}</p>
+                        {% endif %}
+                        <p class="mb-3"><small class="text-muted">{{ pending_request.created_at|date:"Y-m-d H:i" }}</small></p>
+
+                        <div class="d-grid gap-2 d-sm-flex">
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approveModal">
+                                <i class="bi bi-check-circle"></i> {% trans "Approve" %}
+                            </button>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal">
+                                <i class="bi bi-x-circle"></i> {% trans "Reject" %}
+                            </button>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <!-- My pending request -->
+                {% if my_pending_request %}
+                    <div class="alert alert-info" role="alert">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-hourglass-split"></i> {% trans "Request Pending" %}
+                        </h6>
+                        <p class="mb-0">
+                            {% blocktrans with request_type=my_pending_request.get_request_type_display %}
+                            Your <strong>{{ request_type }}</strong> request is awaiting approval from the other party.
+                            {% endblocktrans %}
+                            {% if my_pending_request.request_type == 'EXTEND' %}
+                                ({% blocktrans with months=my_pending_request.extend_months %}{{ months }} months{% endblocktrans %})
+                            {% endif %}
+                        </p>
+                        <small class="text-muted">{{ my_pending_request.created_at|date:"Y-m-d H:i" }}</small>
+                    </div>
+                {% endif %}
+
+                <!-- My processed request notification (within last 24 hours) -->
+                {% if my_processed_request %}
+                    {% if my_processed_request.status == 'APPROVED' %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <h6 class="alert-heading">
+                                <i class="bi bi-check-circle-fill"></i> {% trans "Your request has been approved!" %}
+                            </h6>
+                            <p class="mb-1">
+                                {% blocktrans with username=my_processed_request.responded_by.username request_type=my_processed_request.get_request_type_display %}
+                                <strong>{{ username }}</strong> has approved your <strong>{{ request_type }}</strong> request.
+                                {% endblocktrans %}
+                            </p>
+                            {% if my_processed_request.request_type == 'EXTEND' %}
+                                <p class="mb-1"><strong>{% trans "Extension Period" %}:</strong> {% blocktrans with months=my_processed_request.extend_months %}{{ months }} months{% endblocktrans %}</p>
+                            {% endif %}
+                            {% if my_processed_request.response_note %}
+                                <p class="mb-1"><strong>{% trans "Note" %}:</strong> {{ my_processed_request.response_note }}</p>
+                            {% endif %}
+                            <small class="text-muted">{{ my_processed_request.responded_at|date:"Y-m-d H:i" }}</small>
+                            <button type="button" class="btn-close mark-as-read" data-request-id="{{ my_processed_request.pk }}" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% elif my_processed_request.status == 'REJECTED' %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <h6 class="alert-heading">
+                                <i class="bi bi-x-circle-fill"></i> {% trans "Your request has been rejected" %}
+                            </h6>
+                            <p class="mb-1">
+                                {% blocktrans with username=my_processed_request.responded_by.username request_type=my_processed_request.get_request_type_display %}
+                                <strong>{{ username }}</strong> has rejected your <strong>{{ request_type }}</strong> request.
+                                {% endblocktrans %}
+                            </p>
+                            {% if my_processed_request.request_type == 'EXTEND' %}
+                                <p class="mb-1"><strong>{% trans "Extension Period" %}:</strong> {% blocktrans with months=my_processed_request.extend_months %}{{ months }} months{% endblocktrans %}</p>
+                            {% endif %}
+                            {% if my_processed_request.response_note %}
+                                <hr>
+                                <p class="mb-1"><strong>{% trans "Rejection Reason" %}:</strong></p>
+                                <p class="mb-1">{{ my_processed_request.response_note }}</p>
+                            {% endif %}
+                            <small class="text-muted">{{ my_processed_request.responded_at|date:"Y-m-d H:i" }}</small>
+                            <button type="button" class="btn-close mark-as-read" data-request-id="{{ my_processed_request.pk }}" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+                <h5 class="mb-3">{% trans "Contract Information" %}</h5>
+                <div class="row g-2 mb-3">
+                    <div class="col-12">
+                        <strong class="text-muted small d-block">{% trans "Contract Date" %}</strong>
+                        <span>{{ contract.contract_date }}</span>
+                    </div>
+                    <div class="col-12">
+                        <strong class="text-muted small d-block">{% trans "Move In Date" %}</strong>
+                        <span>{{ contract.move_in_date }}</span>
+                    </div>
+                    {% if contract.move_out_date %}
+                    <div class="col-12">
+                        <strong class="text-muted small d-block">{% trans "Move Out Date" %}</strong>
+                        <span>{{ contract.move_out_date }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <hr>
+
+                <h5 class="mb-3">{% trans "Contract Parties" %}</h5>
+                <div class="row g-3 mb-3">
+                    <div class="col-12">
+                        <strong class="text-muted small d-block mb-1">{% trans "Tenant" %}</strong>
+                        <div>
+                            {% if contract.tenant %}
+                                {{ contract.tenant.username }}
+                                <span class="badge bg-success ms-1">{% trans "Connected" %}</span>
+                                <small class="d-block text-muted">{{ contract.tenant.email }}</small>
+                            {% else %}
+                                {{ contract.tenant_name }}
+                                <span class="badge bg-warning ms-1">{% trans "Not Connected" %}</span>
+                                <small class="d-block text-muted">{{ contract.tenant_phone }}</small>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <strong class="text-muted small d-block mb-1">{% trans "Landlord" %}</strong>
+                        <div>
+                            {% if contract.landlord %}
+                                {{ contract.landlord.username }}
+                                <span class="badge bg-success ms-1">{% trans "Connected" %}</span>
+                                <small class="d-block text-muted">{{ contract.landlord.email }}</small>
+                            {% else %}
+                                {{ contract.landlord_name }}
+                                <span class="badge bg-warning ms-1">{% trans "Not Connected" %}</span>
+                                <small class="d-block text-muted">{{ contract.landlord_phone }}</small>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                {% if user == contract.tenant and not contract.landlord %}
+                <hr>
+                <h5 class="mb-3">
+                    <i class="bi bi-person-plus"></i> {% trans "Invite Landlord" %}
+                </h5>
+                {% if active_invitation %}
+                    <div class="alert alert-success">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-check-circle"></i> {% trans "Active Invitation Link" %}
+                        </h6>
+                        <p class="mb-2">{% trans "Share the link below with the landlord:" %}</p>
+                        <div class="input-group mb-2 flex-nowrap">
+                            <input type="text" class="form-control text-truncate" id="invitationLink"
+                                   value="{{ request.scheme }}://{{ request.get_host }}{% url 'contracts:accept_invitation' active_invitation.token %}"
+                                   readonly>
+                            <button class="btn btn-outline-secondary flex-shrink-0" type="button" id="copyLinkBtn">
+                                <i class="bi bi-clipboard"></i><span class="d-none d-sm-inline"> {% trans "Copy" %}</span>
+                            </button>
+                        </div>
+                        <small class="text-muted">{% trans "Expiry Date" %}: {{ active_invitation.expires_at|date:"Y-m-d H:i" }}</small>
+                    </div>
+                {% else %}
+                    <form method="post" action="{% url 'contracts:create_invitation' contract.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-link-45deg"></i> {% trans "Create Invitation Link" %}
+                        </button>
+                    </form>
+                    <p class="text-muted mt-2">
+                        <small>{% trans "If the landlord has an account, they can connect to this contract through the invitation link." %}</small>
+                    </p>
+                {% endif %}
+                {% endif %}
+
+                {% if user == contract.landlord and not contract.tenant %}
+                <hr>
+                <h5 class="mb-3">
+                    <i class="bi bi-person-plus"></i> {% trans "Invite Tenant" %}
+                </h5>
+                {% if active_invitation %}
+                    <div class="alert alert-success">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-check-circle"></i> {% trans "Active Invitation Link" %}
+                        </h6>
+                        <p class="mb-2">{% trans "Share the link below with the tenant:" %}</p>
+                        <div class="input-group mb-2 flex-nowrap">
+                            <input type="text" class="form-control text-truncate" id="invitationLink"
+                                   value="{{ request.scheme }}://{{ request.get_host }}{% url 'contracts:accept_invitation' active_invitation.token %}"
+                                   readonly>
+                            <button class="btn btn-outline-secondary flex-shrink-0" type="button" id="copyLinkBtn">
+                                <i class="bi bi-clipboard"></i><span class="d-none d-sm-inline"> {% trans "Copy" %}</span>
+                            </button>
+                        </div>
+                        <small class="text-muted">{% trans "Expiry Date" %}: {{ active_invitation.expires_at|date:"Y-m-d H:i" }}</small>
+                    </div>
+                {% else %}
+                    <form method="post" action="{% url 'contracts:create_invitation' contract.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-link-45deg"></i> {% trans "Create Invitation Link" %}
+                        </button>
+                    </form>
+                    <p class="text-muted mt-2">
+                        <small>{% trans "If the tenant has an account, they can connect to this contract through the invitation link." %}</small>
+                    </p>
+                {% endif %}
+                {% endif %}
+
+                {% if contract.contract_file %}
+                <hr>
+                <h5 class="mb-3">{% trans "Contract File" %}</h5>
+                <p>
+                    <a href="{{ contract.contract_file.url }}" class="btn btn-outline-primary" target="_blank">
+                        <i class="bi bi-file-earmark-text"></i> {% trans "Download Contract" %}
+                    </a>
+                </p>
+                {% endif %}
+
+                <hr>
+                <h5 class="mb-3">
+                    <i class="bi bi-camera-fill text-primary"></i> {% trans "Move-in/Move-out Records" %}
+                </h5>
+                <div class="row g-3 mb-3">
+                    <!-- Move-in record -->
+                    <div class="col-6">
+                        {% if move_in_record %}
+                            <div class="card border-success h-100">
+                                <div class="card-body p-3">
+                                    <h6 class="card-title text-success mb-2">
+                                        <i class="bi bi-box-arrow-in-right"></i> {% trans "Move In" %}
+                                    </h6>
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="badge bg-{% if move_in_record.status == 'APPROVED' %}success{% elif move_in_record.status == 'REJECTED' %}danger{% elif move_in_record.status == 'SUBMITTED' %}info{% elif move_in_record.status == 'REQUESTED' %}secondary{% else %}warning{% endif %}">
+                                            {{ move_in_record.get_status_display }}
+                                        </span>
+                                        <small class="text-muted">{{ move_in_record.photos.count }}{% trans "photos" %}</small>
+                                    </div>
+                                    <a href="{% url 'records:detail' move_in_record.pk %}" class="btn btn-sm btn-outline-success w-100">
+                                        {% trans "View Details" %}
+                                    </a>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="card h-100 bg-light">
+                                <div class="card-body p-3 text-center">
+                                    <h6 class="card-title text-muted mb-3">
+                                        <i class="bi bi-box-arrow-in-right"></i> {% trans "Move In" %}
+                                    </h6>
+                                    {% if user == contract.landlord %}
+                                        <a href="{% url 'records:landlord_create' contract.pk %}?type=MOVE_IN" class="btn btn-sm btn-success">
+                                            <i class="bi bi-plus"></i> {% trans "Create" %}
+                                        </a>
+                                    {% elif user == contract.tenant %}
+                                        <a href="{% url 'records:tenant_request' contract.pk %}?type=MOVE_IN" class="btn btn-sm btn-info">
+                                            <i class="bi bi-send"></i> {% trans "Request" %}
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <!-- Move-out record -->
+                    <div class="col-6">
+                        {% if move_out_record %}
+                            <div class="card border-warning h-100">
+                                <div class="card-body p-3">
+                                    <h6 class="card-title text-warning mb-2">
+                                        <i class="bi bi-box-arrow-right"></i> {% trans "Move Out" %}
+                                    </h6>
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="badge bg-{% if move_out_record.status == 'APPROVED' %}success{% elif move_out_record.status == 'REJECTED' %}danger{% elif move_out_record.status == 'SUBMITTED' %}info{% elif move_out_record.status == 'REQUESTED' %}secondary{% else %}warning{% endif %}">
+                                            {{ move_out_record.get_status_display }}
+                                        </span>
+                                        <small class="text-muted">{{ move_out_record.photos.count }}{% trans "photos" %}</small>
+                                    </div>
+                                    <a href="{% url 'records:detail' move_out_record.pk %}" class="btn btn-sm btn-outline-warning w-100">
+                                        {% trans "View Details" %}
+                                    </a>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="card h-100 bg-light">
+                                <div class="card-body p-3 text-center">
+                                    <h6 class="card-title text-muted mb-3">
+                                        <i class="bi bi-box-arrow-right"></i> {% trans "Move Out" %}
+                                    </h6>
+                                    {% if move_in_record %}
+                                        {% if user == contract.landlord %}
+                                            <a href="{% url 'records:landlord_create' contract.pk %}?type=MOVE_OUT" class="btn btn-sm btn-warning">
+                                                <i class="bi bi-plus"></i> {% trans "Create" %}
+                                            </a>
+                                        {% elif user == contract.tenant %}
+                                            <a href="{% url 'records:tenant_request' contract.pk %}?type=MOVE_OUT" class="btn btn-sm btn-info">
+                                                <i class="bi bi-send"></i> {% trans "Request" %}
+                                            </a>
+                                        {% endif %}
+                                    {% else %}
+                                        <small class="text-muted">{% trans "Available after move-in registration" %}</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <!-- Pre-move-out inspection -->
+                {% if move_in_record %}
+                <div class="row g-3 mb-3 mt-2">
+                    <div class="col-12">
+                        {% if pre_move_out_record %}
+                            <div class="card border-info">
+                                <div class="card-body p-3">
+                                    <h6 class="card-title text-info mb-2">
+                                        <i class="bi bi-clipboard-check"></i> {% trans "Pre-Move-Out Inspection" %}
+                                    </h6>
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="badge bg-{% if pre_move_out_record.status == 'APPROVED' %}success{% elif pre_move_out_record.status == 'REJECTED' %}danger{% elif pre_move_out_record.status == 'SUBMITTED' %}info{% else %}warning{% endif %}">
+                                            {{ pre_move_out_record.get_status_display }}
+                                        </span>
+                                        <small class="text-muted">{{ pre_move_out_record.created_at|date:"Y-m-d" }}</small>
+                                    </div>
+                                    <a href="{% url 'records:detail' pre_move_out_record.pk %}" class="btn btn-sm btn-outline-info w-100">
+                                        {% trans "View Details" %}
+                                    </a>
+                                </div>
+                            </div>
+                        {% else %}
+                            {% if not move_out_record %}
+                            <div class="card bg-light">
+                                <div class="card-body p-3 text-center">
+                                    <h6 class="card-title text-muted mb-2">
+                                        <i class="bi bi-clipboard-check"></i> {% trans "Pre-Move-Out Inspection" %}
+                                    </h6>
+                                    <small class="text-muted d-block mb-2">{% trans "Check property condition before move-out to prevent disputes." %}</small>
+                                    {% if user == contract.landlord %}
+                                        <a href="{% url 'records:landlord_create' contract.pk %}?type=PRE_MOVE_OUT" class="btn btn-sm btn-info">
+                                            <i class="bi bi-plus"></i> {% trans "Create" %}
+                                        </a>
+                                    {% elif user == contract.tenant %}
+                                        <a href="{% url 'records:tenant_request' contract.pk %}?type=PRE_MOVE_OUT" class="btn btn-sm btn-info">
+                                            <i class="bi bi-send"></i> {% trans "Request" %}
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <a href="{% url 'records:list' contract.pk %}" class="btn btn-outline-primary btn-sm">
+                    <i class="bi bi-list"></i> {% trans "View All Records" %}
+                </a>
+
+                <!-- Japan contract specific features -->
+                {% if contract.country == 'JP' %}
+                <hr>
+                <h5 class="mb-3">
+                    <i class="bi bi-flag text-danger"></i> 日本契約専用
+                </h5>
+                <div class="row g-2">
+                    <div class="col-6">
+                        <a href="{% url 'japan:edit_extension' contract.pk %}" class="btn btn-outline-danger w-100">
+                            <i class="bi bi-file-earmark-text"></i>
+                            <span class="d-none d-sm-inline">契約情報</span>
+                            <span class="d-sm-none">契約</span>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="{% url 'japan:restoration_guide' contract.pk %}" class="btn btn-outline-danger w-100">
+                            <i class="bi bi-book"></i>
+                            <span class="d-none d-sm-inline">原状回復ガイド</span>
+                            <span class="d-sm-none">ガイド</span>
+                        </a>
+                    </div>
+                </div>
+                {% if contract.japan_extension %}
+                <div class="alert alert-light mt-3 mb-0 small">
+                    <div class="row">
+                        <div class="col-6">
+                            <strong>礼金:</strong> ¥{{ contract.japan_extension.key_money|default:"0"|intcomma }}
+                        </div>
+                        <div class="col-6">
+                            <strong>敷金:</strong> ¥{{ contract.japan_extension.deposit|default:"0"|intcomma }}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endif %}
+
+                <!-- Defect Reports -->
+                <hr>
+                <h5 class="mb-3">
+                    <i class="bi bi-exclamation-triangle text-warning"></i> {% trans "Defect Reports" %}
+                    {% if contract.defect_reports.exists %}
+                    <span class="badge bg-secondary">{{ contract.defect_reports.count }}</span>
+                    {% endif %}
+                </h5>
+                {% if contract.defect_reports.exists %}
+                <div class="list-group mb-2">
+                    {% for defect in contract.defect_reports.all|slice:":3" %}
+                    <a href="{% url 'records:defect_detail' defect.pk %}" class="list-group-item list-group-item-action py-2">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="badge {% if defect.severity == 'CRITICAL' %}bg-danger{% elif defect.severity == 'MAJOR' %}bg-warning text-dark{% else %}bg-secondary{% endif %} me-1">{{ defect.get_severity_display }}</span>
+                                <small>{{ defect.title|truncatechars:25 }}</small>
+                            </div>
+                            <span class="badge {% if defect.status == 'RESOLVED' %}bg-success{% elif defect.status == 'REPORTED' %}bg-danger{% else %}bg-info{% endif %}">{{ defect.get_status_display }}</span>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <div class="d-flex gap-2">
+                    <a href="{% url 'records:defect_create' contract.pk %}" class="btn btn-outline-warning btn-sm">
+                        <i class="bi bi-plus-circle"></i> {% trans "Report Defect" %}
+                    </a>
+                    {% if contract.defect_reports.exists %}
+                    <a href="{% url 'records:defect_list' contract.pk %}" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-list"></i> {% trans "View All" %}
+                    </a>
+                    {% endif %}
+                </div>
+
+                <!-- Repair Requests -->
+                <hr>
+                <h5 class="mb-3">
+                    <i class="bi bi-tools text-primary"></i> {% trans "Repair Requests" %}
+                    {% if contract.repair_requests.exists %}
+                    <span class="badge bg-secondary">{{ contract.repair_requests.count }}</span>
+                    {% endif %}
+                </h5>
+                {% if contract.repair_requests.exists %}
+                <div class="list-group mb-2">
+                    {% for repair in contract.repair_requests.all|slice:":3" %}
+                    <a href="{% url 'records:repair_detail' repair.pk %}" class="list-group-item list-group-item-action py-2">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small>{{ repair.title|truncatechars:25 }}</small>
+                            <span class="badge {% if repair.status == 'COMPLETED' %}bg-success{% elif repair.status == 'IN_PROGRESS' %}bg-warning text-dark{% else %}bg-info{% endif %}">{{ repair.get_status_display }}</span>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <div class="d-flex gap-2">
+                    <a href="{% url 'records:repair_create' contract.pk %}" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-plus-circle"></i> {% trans "Request Repair" %}
+                    </a>
+                    {% if contract.repair_requests.exists %}
+                    <a href="{% url 'records:repair_list' contract.pk %}" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-list"></i> {% trans "View All" %}
+                    </a>
+                    {% endif %}
+                </div>
+
+                <!-- Expenses -->
+                <hr>
+                <h5 class="mb-3">
+                    <i class="bi bi-receipt text-success"></i> {% trans "Expenses" %}
+                    {% if contract.expenses.exists %}
+                    <span class="badge bg-secondary">{{ contract.expenses.count }}</span>
+                    {% endif %}
+                </h5>
+                {% if contract.expenses.exists %}
+                <div class="list-group mb-2">
+                    {% load humanize %}
+                    {% for expense in contract.expenses.all|slice:":3" %}
+                    <a href="{% url 'records:expense_detail' expense.pk %}" class="list-group-item list-group-item-action py-2">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="badge bg-secondary me-1">{{ expense.get_category_display }}</span>
+                                <small>{{ expense.title|truncatechars:20 }}</small>
+                            </div>
+                            <strong class="{% if expense.paid_by == 'TENANT' %}text-warning{% else %}text-success{% endif %}">{{ expense.amount|intcomma }}{% trans "won" %}</strong>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <div class="d-flex gap-2">
+                    <a href="{% url 'records:expense_create' contract.pk %}" class="btn btn-outline-success btn-sm">
+                        <i class="bi bi-plus-circle"></i> {% trans "Add Expense" %}
+                    </a>
+                    {% if contract.expenses.exists %}
+                    <a href="{% url 'records:expense_list' contract.pk %}" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-list"></i> {% trans "View All" %}
+                    </a>
+                    {% endif %}
+                </div>
+
+                <!-- PDF Reports -->
+                <hr>
+                <h5 class="mb-3">
+                    <i class="bi bi-file-earmark-pdf text-danger"></i> {% trans "PDF Reports" %}
+                </h5>
+                <div class="row g-2 mb-2">
+                    {% if move_in_record %}
+                    <div class="col-6">
+                        <button onclick="generateReport('{% url 'reports:move_in' move_in_record.pk %}', '{% trans "Move-in Report" %}')" class="btn btn-outline-danger btn-sm w-100">
+                            <i class="bi bi-file-pdf"></i> {% trans "Move-in Report" %}
+                        </button>
+                    </div>
+                    {% endif %}
+                    {% if move_out_record %}
+                    <div class="col-6">
+                        <button onclick="generateReport('{% url 'reports:move_out' move_out_record.pk %}', '{% trans "Move-out Report" %}')" class="btn btn-outline-danger btn-sm w-100">
+                            <i class="bi bi-file-pdf"></i> {% trans "Move-out Report" %}
+                        </button>
+                    </div>
+                    {% endif %}
+                    {% if move_in_record and move_out_record %}
+                    <div class="col-12">
+                        <button onclick="generateReport('{% url 'reports:comparison' contract.pk %}', '{% trans "Before/After Comparison Report" %}')" class="btn btn-outline-dark btn-sm w-100">
+                            <i class="bi bi-files"></i> {% trans "Before/After Comparison Report" %}
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+                <a href="{% url 'reports:history' contract.pk %}" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-clock-history"></i> {% trans "Report History" %}
+                </a>
+
+                <!-- Export features -->
+                <hr>
+                <h5 class="mb-3">
+                    <i class="bi bi-download text-info"></i> {% trans "Export Data" %}
+                </h5>
+                <div class="row g-2 mb-3">
+                    <div class="col-6 col-md-4">
+                        <a href="{% url 'exports:json' contract.pk %}" class="btn btn-outline-primary w-100">
+                            <i class="bi bi-filetype-json"></i>
+                            <span class="d-none d-sm-inline">JSON</span>
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <a href="{% url 'exports:images_zip' contract.pk %}" class="btn btn-outline-success w-100">
+                            <i class="bi bi-file-earmark-zip"></i>
+                            <span class="d-none d-sm-inline">{% trans "Images ZIP" %}</span>
+                            <span class="d-sm-none">ZIP</span>
+                        </a>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <a href="{% url 'exports:options' contract.pk %}" class="btn btn-outline-warning w-100">
+                            <i class="bi bi-box-seam"></i>
+                            <span class="d-none d-sm-inline">{% trans "Full Package" %}</span>
+                            <span class="d-sm-none">{% trans "Full Package" %}</span>
+                        </a>
+                    </div>
+                </div>
+
+                {% if contract.recordings.all %}
+                <hr>
+                <h5 class="mb-3">
+                    <i class="bi bi-mic-fill text-danger"></i> {% trans "Recording Records" %}
+                    <span class="badge bg-secondary">{{ contract.recordings.count }}</span>
+                </h5>
+                <div class="list-group">
+                    {% for recording in contract.recordings.all %}
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <h6 class="mb-1">
+                                    <a href="{% url 'recordings:detail' recording.pk %}" class="text-decoration-none">
+                                        {{ recording.get_display_title }}
+                                    </a>
+                                </h6>
+                                <small class="text-muted">
+                                    {{ recording.recorded_at|date:"Y-m-d H:i" }} ·
+                                    {{ recording.get_duration_display }}
+                                </small>
+                            </div>
+                        </div>
+                        <audio controls class="w-100 mt-2" style="height: 40px;">
+                            <source src="{{ recording.audio_file.url }}" type="audio/webm">
+                            {% trans "Your browser does not support audio playback" %}
+                        </audio>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <hr>
+
+                <div class="text-muted">
+                    <small>
+                        {% trans "Registered Date" %}: {{ contract.created_at|date:"Y-m-d H:i" }}<br>
+                        {% trans "Last Modified" %}: {{ contract.updated_at|date:"Y-m-d H:i" }}
+                    </small>
+                </div>
+
+                <!-- Blockchain Evidence & Finalization -->
+                <hr>
+                <h5 class="mb-3">
+                    <i class="bi bi-shield-lock text-primary"></i> {% trans "Blockchain Evidence" %}
+                </h5>
+
+                {% if contract.is_finalized %}
+                    <div class="alert alert-success">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="bi bi-shield-check fs-4 me-2"></i>
+                            <div>
+                                <strong>{% trans "Contract has been finalized" %}</strong>
+                                <small class="d-block text-muted">
+                                    {{ contract.finalized_at|date:"Y-m-d H:i" }}
+                                </small>
+                            </div>
+                        </div>
+
+                        {% if contract.blockchain_status == 'ANCHORED' %}
+                            <hr class="my-2">
+                            <small class="d-block mb-2">
+                                <i class="bi bi-fingerprint text-primary"></i>
+                                <strong>{% trans "File Hash" %}:</strong>
+                                <code class="text-break">{{ contract.blockchain_final_hash }}</code>
+                            </small>
+                            <small class="d-block mb-2">
+                                <i class="bi bi-link-45deg text-info"></i>
+                                <strong>{% trans "Transaction" %}:</strong>
+                                <code class="text-break">{{ contract.blockchain_tx_hash }}</code>
+                            </small>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <a href="{% url 'blockchain:verify' contract.pk %}" class="btn btn-sm btn-outline-success">
+                                    <i class="bi bi-check2-circle"></i> {% trans "Verify Authenticity" %}
+                                </a>
+                                {% if contract.blockchain_tx_hash %}
+                                    <a href="https://{% if klaytn_chain_id == '8217' %}kaiascan.io{% else %}kairos.kaiascan.io{% endif %}/tx/0x{{ contract.blockchain_tx_hash }}"
+                                       target="_blank" class="btn btn-sm btn-outline-info">
+                                        <i class="bi bi-box-arrow-up-right"></i> Kaia Scope
+                                    </a>
+                                {% endif %}
+                            </div>
+                        {% elif contract.blockchain_status == 'FAILED' %}
+                            <hr class="my-2">
+                            <small class="text-danger d-block">
+                                <i class="bi bi-exclamation-triangle"></i>
+                                {% trans "Blockchain registration failed." %}
+                            </small>
+                            {% if user == contract.landlord or user.is_staff %}
+                                <button type="button" class="btn btn-sm btn-warning mt-2" id="retryAnchoringBtn">
+                                    <i class="bi bi-arrow-clockwise"></i> {% trans "Retry" %}
+                                </button>
+                            {% endif %}
+                        {% elif contract.blockchain_status == 'PENDING' %}
+                            <hr class="my-2">
+                            <small class="text-warning">
+                                <i class="bi bi-hourglass-split"></i>
+                                {% trans "Registering on blockchain..." %}
+                            </small>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div class="row g-3 align-items-stretch">
+                        <!-- Checklist (left) -->
+                        <div class="col-md-7">
+                            <div class="card border-primary h-100 d-flex flex-column">
+                                <div class="card-header bg-primary text-white">
+                                    <h6 class="mb-0"><i class="bi bi-list-check"></i> {% trans "Finalization Checklist" %}</h6>
+                                </div>
+                                <div class="card-body p-0 d-flex flex-column flex-grow-1">
+                                    <ul class="list-group list-group-flush d-flex flex-column flex-grow-1">
+                                        <!-- 1. Landlord & Tenant connected -->
+                                        <li class="list-group-item d-flex align-items-center flex-grow-1">
+                                            {% if contract.tenant and contract.landlord %}
+                                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                            {% else %}
+                                                <i class="bi bi-circle text-muted me-2"></i>
+                                            {% endif %}
+                                            {% trans "Both Landlord and Tenant Connected" %}
+                                        </li>
+                                        <!-- 2. Contract file uploaded -->
+                                        <li class="list-group-item d-flex align-items-center flex-grow-1">
+                                            {% if contract.contract_file %}
+                                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                            {% else %}
+                                                <i class="bi bi-circle text-muted me-2"></i>
+                                            {% endif %}
+                                            {% trans "Contract File Uploaded" %}
+                                        </li>
+                                        <!-- 3. Move-in record exists and approved -->
+                                        <li class="list-group-item d-flex align-items-center flex-grow-1">
+                                            {% if move_in_record and move_in_record.status == 'APPROVED' %}
+                                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                            {% elif move_in_record %}
+                                                <i class="bi bi-dash-circle text-warning me-2"></i>
+                                            {% else %}
+                                                <i class="bi bi-circle text-muted me-2"></i>
+                                            {% endif %}
+                                            {% trans "Move-in Record Exists and Approved" %}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Finalize button (right) -->
+                        <div class="col-md-5">
+                            <div class="card h-100 {% if contract.tenant and contract.landlord and contract.contract_file and move_in_record and move_in_record.status == 'APPROVED' %}border-success{% else %}border-secondary{% endif %}">
+                                <div class="card-body d-flex flex-column justify-content-center text-center">
+                                    <i class="bi bi-shield-lock fs-1 mb-3 {% if contract.tenant and contract.landlord and contract.contract_file and move_in_record and move_in_record.status == 'APPROVED' %}text-success{% else %}text-muted{% endif %}"></i>
+
+                                    {% if contract.tenant and contract.landlord and contract.contract_file and move_in_record and move_in_record.status == 'APPROVED' %}
+                                        <p class="text-success fw-semibold mb-3">{% trans "All requirements are met. You can finalize the contract." %}</p>
+                                        {% if user == contract.landlord %}
+                                            <a href="{% url 'blockchain:finalize' contract.pk %}" class="btn btn-success">
+                                                <i class="bi bi-shield-check"></i> {% trans "Finalize Contract" %}
+                                            </a>
+                                        {% else %}
+                                            <small class="text-muted">
+                                                <i class="bi bi-info-circle"></i>
+                                                {% trans "Only the landlord can finalize the contract" %}
+                                            </small>
+                                        {% endif %}
+                                    {% else %}
+                                        <p class="text-muted mb-3">{% trans "The following requirements must be met to finalize the contract:" %}</p>
+                                        <small class="text-muted">{% trans "Please complete the checklist items on the left." %}</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="mt-4">
+                    <a href="{% url 'contracts:list' %}" class="btn btn-secondary">{% trans "Back to List" %}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mt-4 mt-md-0">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-clock-history"></i> {% trans "Contract History" %}
+                </h5>
+
+                {% if contract.histories.exists %}
+                    <!-- Desktop: Table -->
+                    <div class="table-responsive d-none d-md-block">
+                        <table class="table table-hover table-sm">
+                            <thead>
+                                <tr>
+                                    <th>{% trans "Date/Time" %}</th>
+                                    <th>{% trans "Action" %}</th>
+                                    <th>{% trans "User" %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for history in contract.histories.all %}
+                                <tr>
+                                    <td>{{ history.created_at|date:"m-d H:i" }}</td>
+                                    <td>
+                                        {% if history.action_type == 'CREATED' %}
+                                            <span class="badge bg-primary">{{ history.get_action_type_display }}</span>
+                                        {% elif history.action_type == 'EXTENDED' %}
+                                            <span class="badge bg-success">{{ history.get_action_type_display }}</span>
+                                        {% elif history.action_type == 'TERMINATED' %}
+                                            <span class="badge bg-warning">{{ history.get_action_type_display }}</span>
+                                        {% elif history.action_type == 'MODIFIED' %}
+                                            <span class="badge bg-danger">{{ history.get_action_type_display }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if history.action_by %}
+                                            {{ history.action_by.username }}
+                                        {% else %}
+                                            <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Mobile: List -->
+                    <div class="d-md-none">
+                        {% for history in contract.histories.all %}
+                        <div class="border-bottom pb-2 mb-2">
+                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                <div>
+                                    {% if history.action_type == 'CREATED' %}
+                                        <span class="badge bg-primary">{{ history.get_action_type_display }}</span>
+                                    {% elif history.action_type == 'EXTENDED' %}
+                                        <span class="badge bg-success">{{ history.get_action_type_display }}</span>
+                                    {% elif history.action_type == 'TERMINATED' %}
+                                        <span class="badge bg-warning">{{ history.get_action_type_display }}</span>
+                                    {% elif history.action_type == 'MODIFIED' %}
+                                        <span class="badge bg-danger">{{ history.get_action_type_display }}</span>
+                                    {% endif %}
+                                </div>
+                                <small class="text-muted">{{ history.created_at|date:"m-d H:i" }}</small>
+                            </div>
+                            <small>
+                                {% if history.action_by %}
+                                    {{ history.action_by.username }}
+                                {% else %}
+                                    <span class="text-muted">-</span>
+                                {% endif %}
+                                {% if history.action_type == 'EXTENDED' %}
+                                    <span class="text-muted">(+{% blocktrans with months=history.extend_months %}{{ months }} months{% endblocktrans %})</span>
+                                {% endif %}
+                            </small>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted mb-0">
+                        <i class="bi bi-info-circle"></i> {% trans "No history recorded yet" %}
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Rejection reason input modal -->
+{% if pending_request %}
+<div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="rejectModalLabel">
+                    <i class="bi bi-x-circle text-danger"></i> {% trans "Reject Request" %}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="{% url 'contracts:reject_change_request' pending_request.pk %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <p class="mb-3">
+                        {% blocktrans with username=pending_request.requested_by.username request_type=pending_request.get_request_type_display %}
+                        Are you sure you want to reject <strong>{{ username }}</strong>'s <strong>{{ request_type }}</strong> request?
+                        {% endblocktrans %}
+                    </p>
+                    <div class="mb-3">
+                        <label for="response_note" class="form-label">
+                            {% trans "Rejection Reason" %} <span class="text-danger">*</span>
+                        </label>
+                        <textarea class="form-control" id="response_note" name="response_note"
+                                  rows="4" required
+                                  placeholder="{% trans "Please enter the reason for rejection. This will be sent to the requester." %}"></textarea>
+                        <div class="form-text">{% trans "The requester will be able to see this reason." %}</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-x-circle"></i> {% trans "Reject" %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Approval message input modal -->
+{% if pending_request %}
+<div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="approveModalLabel">
+                    <i class="bi bi-check-circle text-success"></i> {% trans "Approve Request" %}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="{% url 'contracts:approve_change_request' pending_request.pk %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <p class="mb-3">
+                        {% blocktrans with username=pending_request.requested_by.username request_type=pending_request.get_request_type_display %}
+                        Are you sure you want to approve <strong>{{ username }}</strong>'s <strong>{{ request_type }}</strong> request?
+                        {% endblocktrans %}
+                    </p>
+                    {% if pending_request.request_type == 'EXTEND' %}
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle"></i>
+                            {% blocktrans with months=pending_request.extend_months %}<strong>{{ months }} months</strong> extension will be approved.{% endblocktrans %}
+                        </div>
+                    {% endif %}
+                    <div class="mb-3">
+                        <label for="approve_response_note" class="form-label">
+                            {% trans "Approval Message" %} <span class="text-muted">({% trans "optional" %})</span>
+                        </label>
+                        <textarea class="form-control" id="approve_response_note" name="response_note"
+                                  rows="3"
+                                  placeholder="{% trans "You can enter an approval message." %}"></textarea>
+                        <div class="form-text">{% trans "This message will be sent to the requester." %}</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-check-circle"></i> {% trans "Approve" %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Report Generation Modal -->
+<div class="modal fade" id="reportModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center py-5">
+                <div id="reportGenerating">
+                    <div class="spinner-border text-danger mb-3" style="width: 3rem; height: 3rem;" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <h5 id="reportModalTitle" class="mb-3">{% trans "Generating report..." %}</h5>
+                    <div class="progress mx-4" style="height: 8px;">
+                        <div id="reportProgress" class="progress-bar progress-bar-striped progress-bar-animated bg-danger" style="width: 0%"></div>
+                    </div>
+                    <p class="text-muted small mt-3" id="reportStepText">{% trans "Preparing data..." %}</p>
+                </div>
+                <div id="reportComplete" style="display: none;">
+                    <i class="bi bi-check-circle-fill text-success" style="font-size: 3rem;"></i>
+                    <h5 class="mt-3">{% trans "Report generated successfully!" %}</h5>
+                    <p class="text-muted small">{% trans "Download will start automatically." %}</p>
+                </div>
+                <div id="reportError" style="display: none;">
+                    <i class="bi bi-exclamation-circle-fill text-danger" style="font-size: 3rem;"></i>
+                    <h5 class="mt-3">{% trans "Report generation failed" %}</h5>
+                    <p class="text-muted small" id="reportErrorMsg"></p>
+                    <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">{% trans "Close" %}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Report generation with progress modal
+function generateReport(url, title) {
+    const modal = new bootstrap.Modal(document.getElementById('reportModal'));
+    const progress = document.getElementById('reportProgress');
+    const stepText = document.getElementById('reportStepText');
+    const generating = document.getElementById('reportGenerating');
+    const complete = document.getElementById('reportComplete');
+    const error = document.getElementById('reportError');
+    const modalTitle = document.getElementById('reportModalTitle');
+
+    // Reset modal state
+    generating.style.display = '';
+    complete.style.display = 'none';
+    error.style.display = 'none';
+    progress.style.width = '0%';
+    modalTitle.textContent = title + ' {% trans "generating..." %}';
+
+    modal.show();
+
+    // Simulate progress steps
+    const steps = [
+        { pct: 15, text: '{% trans "Loading contract data..." %}' },
+        { pct: 35, text: '{% trans "Processing photos..." %}' },
+        { pct: 60, text: '{% trans "Creating PDF layout..." %}' },
+        { pct: 85, text: '{% trans "Finalizing document..." %}' },
+    ];
+    let stepIndex = 0;
+    const stepInterval = setInterval(() => {
+        if (stepIndex < steps.length) {
+            progress.style.width = steps[stepIndex].pct + '%';
+            stepText.textContent = steps[stepIndex].text;
+            stepIndex++;
+        }
+    }, 800);
+
+    // Fetch report
+    fetch(url)
+        .then(response => {
+            clearInterval(stepInterval);
+            if (!response.ok) throw new Error('Server error');
+
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/pdf')) {
+                const disposition = response.headers.get('content-disposition');
+                let filename = 'report.pdf';
+                if (disposition) {
+                    const match = disposition.match(/filename="?([^"]+)"?/);
+                    if (match) filename = match[1];
+                }
+                return response.blob().then(blob => ({ blob, filename }));
+            } else {
+                // Redirected (error case) - the server sent HTML
+                throw new Error('{% trans "Report generation failed. Please try again." %}');
+            }
+        })
+        .then(({ blob, filename }) => {
+            // Show completion
+            progress.style.width = '100%';
+            generating.style.display = 'none';
+            complete.style.display = '';
+
+            // Trigger download
+            const downloadUrl = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = downloadUrl;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(downloadUrl);
+
+            // Auto-close modal after 2 seconds
+            setTimeout(() => modal.hide(), 2000);
+        })
+        .catch(err => {
+            clearInterval(stepInterval);
+            generating.style.display = 'none';
+            error.style.display = '';
+            document.getElementById('reportErrorMsg').textContent = err.message;
+        });
+}
+
+// Invitation link copy functionality
+const copyLinkBtn = document.getElementById('copyLinkBtn');
+if (copyLinkBtn) {
+    copyLinkBtn.addEventListener('click', function() {
+        const invitationLink = document.getElementById('invitationLink');
+        invitationLink.select();
+        invitationLink.setSelectionRange(0, 99999); // For mobile
+
+        try {
+            document.execCommand('copy');
+            // Temporarily change button text
+            const originalHTML = copyLinkBtn.innerHTML;
+            copyLinkBtn.innerHTML = '<i class="bi bi-check"></i> {% trans "Copied!" %}';
+            copyLinkBtn.classList.remove('btn-outline-secondary');
+            copyLinkBtn.classList.add('btn-success');
+
+            setTimeout(() => {
+                copyLinkBtn.innerHTML = originalHTML;
+                copyLinkBtn.classList.remove('btn-success');
+                copyLinkBtn.classList.add('btn-outline-secondary');
+            }, 2000);
+        } catch (err) {
+            alert('{% trans "Copy failed" %}');
+        }
+    });
+}
+
+// Mark notification as read
+document.querySelectorAll('.mark-as-read').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        const requestId = this.getAttribute('data-request-id');
+
+        // AJAX request to mark as read
+        fetch(`/contracts/change-request/${requestId}/mark-read/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('{% trans "Notification marked as read" %}');
+            }
+        })
+        .catch(error => {
+            console.error('{% trans "Error marking as read" %}:', error);
+        });
+    });
+});
+
+// Blockchain anchoring retry
+const retryBtn = document.getElementById('retryAnchoringBtn');
+if (retryBtn) {
+    retryBtn.addEventListener('click', function() {
+        if (!confirm('{% trans "Retry blockchain registration?" %}')) {
+            return;
+        }
+
+        retryBtn.disabled = true;
+        retryBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> {% trans "Processing" %}...';
+
+        fetch('{% url "blockchain:retry" contract.pk %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('{% trans "Blockchain registration completed" %}!\n{% trans "Transaction" %}: ' + data.tx_hash);
+                location.reload();
+            } else {
+                alert('{% trans "Registration Failed" %}: ' + (data.error || 'Unknown error'));
+                retryBtn.disabled = false;
+                retryBtn.innerHTML = '<i class="bi bi-arrow-clockwise"></i> {% trans "Retry" %}';
+            }
+        })
+        .catch(error => {
+            alert('Error: ' + error);
+            retryBtn.disabled = false;
+            retryBtn.innerHTML = '<i class="bi bi-arrow-clockwise"></i> {% trans "Retry" %}';
+        });
+    });
+}
+</script>
+{% endblock %}

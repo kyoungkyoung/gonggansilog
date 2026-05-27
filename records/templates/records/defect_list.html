@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Defect Reports" %} - {{ contract.get_display_address|truncatechars:30 }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'contracts:list' %}">{% trans "Contracts" %}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'contracts:detail' contract.pk %}">{{ contract.get_display_address|truncatechars:20 }}</a></li>
+                <li class="breadcrumb-item active">{% trans "Defect Reports" %}</li>
+            </ol>
+        </nav>
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="bi bi-exclamation-triangle"></i> {% trans "Defect Reports" %}</h2>
+            <a href="{% url 'records:defect_create' contract.pk %}" class="btn btn-danger">
+                <i class="bi bi-plus-circle"></i> {% trans "Report Defect" %}
+            </a>
+        </div>
+
+        {% if defects %}
+        <div class="list-group">
+            {% for defect in defects %}
+            <a href="{% url 'records:defect_detail' defect.pk %}" class="list-group-item list-group-item-action">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h6 class="mb-1">
+                            {% if defect.severity == 'CRITICAL' %}
+                                <span class="badge bg-danger me-1">{% trans "Critical" %}</span>
+                            {% elif defect.severity == 'MAJOR' %}
+                                <span class="badge bg-warning text-dark me-1">{% trans "Major" %}</span>
+                            {% else %}
+                                <span class="badge bg-secondary me-1">{% trans "Minor" %}</span>
+                            {% endif %}
+                            {{ defect.title }}
+                        </h6>
+                        <p class="mb-1 text-muted small">
+                            {{ defect.description|truncatewords:20 }}
+                        </p>
+                        <small class="text-muted">
+                            <i class="bi bi-person"></i> {{ defect.reported_by.username }}
+                            · <i class="bi bi-calendar"></i> {{ defect.created_at|date:"Y-m-d" }}
+                            {% if defect.location %}
+                            · <i class="bi bi-geo-alt"></i> {{ defect.location }}
+                            {% endif %}
+                        </small>
+                    </div>
+                    <span class="badge rounded-pill {% if defect.status == 'RESOLVED' %}bg-success{% elif defect.status == 'REPORTED' %}bg-danger{% elif defect.status == 'IN_PROGRESS' %}bg-warning text-dark{% else %}bg-info{% endif %}">
+                        {{ defect.get_status_display }}
+                    </span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert alert-secondary text-center">
+            <i class="bi bi-check-circle"></i> {% trans "No defect reports yet." %}
+        </div>
+        {% endif %}
+
+        <div class="mt-4">
+            <a href="{% url 'contracts:detail' contract.pk %}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> {% trans "Back to Contract" %}
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

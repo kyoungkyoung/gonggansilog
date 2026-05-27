@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Contract Extension" %} - {% trans "Space Chronicle" %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-body p-4">
+                <h2 class="card-title mb-4">
+                    <i class="bi bi-calendar-plus text-success"></i> {% trans "Contract Extension Request" %}
+                </h2>
+
+                <div class="alert alert-info">
+                    <h5 class="alert-heading">{% trans "Contract Information" %}</h5>
+                    <hr>
+                    <p class="mb-1"><strong>{% trans "Address" %}:</strong> {{ contract.get_display_address }}</p>
+                    <p class="mb-1"><strong>{% trans "Contract Date" %}:</strong> {{ contract.contract_date }}</p>
+                    <p class="mb-1"><strong>{% trans "Move In Date" %}:</strong> {{ contract.move_in_date }}</p>
+                    {% if contract.move_out_date %}
+                        <p class="mb-0"><strong>{% trans "Current Move Out Date" %}:</strong> {{ contract.move_out_date }}</p>
+                    {% else %}
+                        <p class="mb-0"><strong>{% trans "Current Move Out Date" %}:</strong> <span class="text-muted">{% trans "Not Set" %}</span></p>
+                    {% endif %}
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="extend_months" class="form-label"><strong>{% trans "Extension Period" %}</strong></label>
+                        <select class="form-select" id="extend_months" name="extend_months" required>
+                            <option value="6">{% trans "6 months" %}</option>
+                            <option value="12" selected>{% trans "12 months (1 year)" %}</option>
+                            <option value="24">{% trans "24 months (2 years)" %}</option>
+                            <option value="36">{% trans "36 months (3 years)" %}</option>
+                        </select>
+                        <div class="form-text">{% trans "The contract will be extended by the selected period." %}</div>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle"></i> <strong>{% trans "Caution" %}</strong>
+                        <ul class="mb-0 mt-2">
+                            <li>{% trans "The extension request will be sent to the other party." %}</li>
+                            <li>{% trans "The other party must approve for the contract to be extended." %}</li>
+                            <li>{% trans "After approval, you must contact the administrator to make changes." %}</li>
+                        </ul>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-send"></i> {% trans "Request Extension" %}
+                        </button>
+                        <a href="{% url 'contracts:detail' contract.pk %}" class="btn btn-secondary">
+                            {% trans "Cancel" %}
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

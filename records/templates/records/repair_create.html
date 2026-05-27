@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Request Repair" %} - {{ contract.get_display_address|truncatechars:30 }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'contracts:detail' contract.pk %}">{{ contract.get_display_address|truncatechars:20 }}</a></li>
+                <li class="breadcrumb-item active">{% trans "Request Repair" %}</li>
+            </ol>
+        </nav>
+
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="bi bi-tools"></i> {% trans "Request Repair" %}</h4>
+            </div>
+            <div class="card-body p-4">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    {% if defect %}
+                    <div class="alert alert-info">
+                        <i class="bi bi-link-45deg"></i> {% trans "Linked to defect:" %} <strong>{{ defect.title }}</strong>
+                        <input type="hidden" name="defect_report" value="{{ defect.pk }}">
+                    </div>
+                    {% elif open_defects %}
+                    <div class="mb-3">
+                        <label class="form-label">{% trans "Link to defect (optional)" %}</label>
+                        <select name="defect_report" class="form-select">
+                            <option value="">-- {% trans "No link" %} --</option>
+                            {% for d in open_defects %}
+                            <option value="{{ d.pk }}">[{{ d.get_severity_display }}] {{ d.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <label class="form-label"><strong>{% trans "Title" %} *</strong></label>
+                        <input type="text" name="title" class="form-control" required
+                               value="{{ defect.title|default:'' }}"
+                               placeholder="{% trans 'e.g., Fix bathroom ceiling leak' %}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label"><strong>{% trans "Location" %}</strong></label>
+                        <input type="text" name="location" class="form-control"
+                               value="{{ defect.location|default:'' }}"
+                               placeholder="{% trans 'e.g., Bathroom, Kitchen' %}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label"><strong>{% trans "Description" %} *</strong></label>
+                        <textarea name="description" class="form-control" rows="4" required
+                                  placeholder="{% trans 'Describe what repair is needed and any relevant details.' %}"></textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label"><strong>{% trans "Photos" %}</strong></label>
+                        <input type="file" name="images" class="form-control" accept="image/*" multiple>
+                        <div class="form-text">{% trans "Attach photos showing the problem." %}</div>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'contracts:detail' contract.pk %}" class="btn btn-secondary">{% trans "Cancel" %}</a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-tools"></i> {% trans "Submit Request" %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

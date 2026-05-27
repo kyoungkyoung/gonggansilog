@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Confirm Contract Deletion" %} - {% trans "Space Chronicle" %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-body p-4">
+                <h2 class="card-title text-danger mb-4">{% trans "Confirm Contract Deletion" %}</h2>
+
+                <div class="alert alert-warning">
+                    <h5 class="alert-heading">{% trans "Are you sure you want to delete?" %}</h5>
+                    <p>{% trans "This action cannot be undone. All move-in/move-out records related to the contract will also be deleted." %}</p>
+                </div>
+
+                <h6 class="mb-3">{% trans "Contract to be deleted:" %}</h6>
+                <table class="table table-borderless">
+                    <tbody>
+                        <tr>
+                            <th style="width: 120px;">{% trans "Address" %}</th>
+                            <td>{{ contract.get_display_address }}</td>
+                        </tr>
+                        <tr>
+                            <th>{% trans "Contract Date" %}</th>
+                            <td>{{ contract.contract_date }}</td>
+                        </tr>
+                        <tr>
+                            <th>{% trans "Landlord" %}</th>
+                            <td>{{ contract.landlord_name }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <form method="post" class="mt-4">
+                    {% csrf_token %}
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-danger">
+                            {% trans "Delete" %}
+                        </button>
+                        <a href="{% url 'contracts:detail' contract.pk %}" class="btn btn-secondary">
+                            {% trans "Cancel" %}
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

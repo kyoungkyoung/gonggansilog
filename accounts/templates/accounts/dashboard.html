@@ -1,0 +1,639 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Dashboard" %} - {% trans "Space Chronicle" %}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">{% trans "Dashboard" %}</h1>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h5 class="card-title">{% blocktrans with username=user.username %}Welcome, {{ username }}!{% endblocktrans %}</h5>
+                <p class="card-text">
+                    {% trans "User Type" %}: <strong>{{ user.get_user_type_display }}</strong><br>
+                    {% trans "Email" %}: {{ user.email }}<br>
+                    {% if user.phone_number %}
+                    {% trans "Phone" %}: {{ user.phone_number }}<br>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+        <!-- 알림 섹션 -->
+        {% if pending_requests or my_processed_requests or record_notifications or recording_notifications or defect_notifications or repair_notifications %}
+        <div class="alert-section mb-4">
+            <!-- 입실/퇴실 기록 관련 알림 -->
+            {% if record_notifications %}
+            <div class="card shadow-sm mb-3 border-0">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-camera"></i> {% trans "Move-in/Move-out Record Notifications" %}
+                        <span class="badge bg-light text-primary">{% blocktrans with count=record_notifications|length %}{{ count }} items{% endblocktrans %}</span>
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    {% for notif in record_notifications %}
+                    <div class="p-3 {% if not forloop.last %}border-bottom{% endif %} record-notification" id="record-notif-{{ notif.record.pk }}">
+                        <div class="d-flex align-items-start">
+                            <div class="me-3">
+                                <span class="badge rounded-pill bg-{{ notif.alert_class }} p-2">
+                                    <i class="bi {{ notif.icon }}"></i>
+                                </span>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <p class="mb-1 fw-semibold">
+                                            {{ notif.record.contract.get_display_address }}
+                                            <span class="badge bg-{% if notif.record.record_type == 'MOVE_IN' %}success{% else %}warning{% endif %}">
+                                                {{ notif.record.get_record_type_display }}
+                                            </span>
+                                        </p>
+                                        <p class="mb-1 text-muted">{{ notif.message }}</p>
+                                        {% if notif.deadline_message %}
+                                        <p class="mb-1">
+                                            <span class="badge bg-{% if notif.deadline_status == 'expired' %}danger{% elif notif.deadline_status == 'urgent' %}warning{% else %}info{% endif %}">
+                                                <i class="bi bi-clock"></i> {{ notif.deadline_message }}
+                                            </span>
+                                        </p>
+                                        {% endif %}
+                                        {% if notif.comment %}
+                                        <p class="mb-1 small fst-italic text-danger">
+                                            <i class="bi bi-quote"></i> {{ notif.comment }}
+                                        </p>
+                                        {% endif %}
+                                        <small class="text-muted">{{ notif.record.created_at|date:"Y-m-d H:i" }}</small>
+                                    </div>
+                                    <div class="ms-2 d-flex flex-column gap-1">
+                                        <a href="{% url 'records:detail' notif.record.pk %}" class="btn btn-sm btn-{{ notif.alert_class }}">
+                                            {% trans "View" %} <i class="bi bi-arrow-right"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary mark-record-read" data-record-id="{{ notif.record.pk }}">
+                                            <i class="bi bi-check"></i> {% trans "Mark as read" %}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- 녹음 동의 요청 알림 -->
+            {% if recording_notifications %}
+            <div class="card shadow-sm mb-3 border-0">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-mic-fill"></i> {% trans "Recording Consent Requests" %}
+                        <span class="badge bg-light text-danger">{% blocktrans with count=recording_notifications|length %}{{ count }} items{% endblocktrans %}</span>
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    {% for notif in recording_notifications %}
+                    <div class="p-3 {% if not forloop.last %}border-bottom{% endif %}">
+                        <div class="d-flex align-items-start">
+                            <div class="me-3">
+                                <span class="badge rounded-pill bg-{{ notif.alert_class }} p-2">
+                                    <i class="bi {{ notif.icon }}"></i>
+                                </span>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <p class="mb-1 fw-semibold">
+                                            {{ notif.recording.get_display_title }}
+                                        </p>
+                                        <p class="mb-1 text-muted">{{ notif.message }}</p>
+                                        <small class="text-muted">
+                                            <i class="bi bi-building"></i> {{ notif.recording.contract.get_display_address }}
+                                            · {{ notif.recording.recorded_at|date:"Y-m-d H:i" }}
+                                            · {{ notif.recording.get_duration_display }}
+                                        </small>
+                                    </div>
+                                    <a href="{% url 'recordings:detail' notif.recording.pk %}" class="btn btn-sm btn-warning ms-2">
+                                        {% trans "Review" %} <i class="bi bi-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- 하자 통지 알림 -->
+            {% if defect_notifications %}
+            <div class="card shadow-sm mb-3 border-0">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="bi bi-exclamation-triangle"></i> {% trans "Defect Reports" %}
+                        <span class="badge bg-dark">{% blocktrans with count=defect_notifications|length %}{{ count }} items{% endblocktrans %}</span>
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    {% for notif in defect_notifications %}
+                    <div class="p-3 {% if not forloop.last %}border-bottom{% endif %}">
+                        <div class="d-flex align-items-start">
+                            <div class="me-3">
+                                <span class="badge rounded-pill bg-{{ notif.alert_class }} p-2">
+                                    <i class="bi {{ notif.icon }}"></i>
+                                </span>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <p class="mb-1 fw-semibold">{{ notif.defect.title }}</p>
+                                        <p class="mb-1 text-muted">{{ notif.message }}</p>
+                                        <small class="text-muted">
+                                            <i class="bi bi-building"></i> {{ notif.defect.contract.get_display_address }}
+                                            · {{ notif.defect.created_at|date:"Y-m-d H:i" }}
+                                        </small>
+                                    </div>
+                                    <a href="{% url 'records:defect_detail' notif.defect.pk %}" class="btn btn-sm btn-{{ notif.alert_class }} ms-2">
+                                        {% trans "Review" %} <i class="bi bi-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- 수리 요청 알림 -->
+            {% if repair_notifications %}
+            <div class="card shadow-sm mb-3 border-0">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-tools"></i> {% trans "Repair Requests" %}
+                        <span class="badge bg-light text-primary">{% blocktrans with count=repair_notifications|length %}{{ count }} items{% endblocktrans %}</span>
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    {% for notif in repair_notifications %}
+                    <div class="p-3 {% if not forloop.last %}border-bottom{% endif %}">
+                        <div class="d-flex align-items-start">
+                            <div class="me-3">
+                                <span class="badge rounded-pill bg-{{ notif.alert_class }} p-2">
+                                    <i class="bi {{ notif.icon }}"></i>
+                                </span>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <p class="mb-1 fw-semibold">{{ notif.repair.title }}</p>
+                                        <p class="mb-1 text-muted">{{ notif.message }}</p>
+                                        <small class="text-muted">
+                                            <i class="bi bi-building"></i> {{ notif.repair.contract.get_display_address }}
+                                            · {{ notif.repair.created_at|date:"Y-m-d" }}
+                                        </small>
+                                    </div>
+                                    <a href="{% url 'records:repair_detail' notif.repair.pk %}" class="btn btn-sm btn-{{ notif.alert_class }} ms-2">
+                                        {% trans "Review" %} <i class="bi bi-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- 승인 대기 중인 요청 -->
+            {% if pending_requests %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <h5 class="alert-heading">
+                    <i class="bi bi-exclamation-triangle-fill"></i> {% blocktrans with count=pending_requests.count %}Pending Requests ({{ count }} items){% endblocktrans %}
+                </h5>
+                <hr>
+                {% for req in pending_requests %}
+                <div class="mb-3 pb-3 {% if not forloop.last %}border-bottom{% endif %}">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="mb-1">
+                                <strong>{{ req.contract.get_display_address }}</strong>
+                            </p>
+                            <p class="mb-1">
+                                {% blocktrans with username=req.requested_by.username request_type=req.get_request_type_display %}
+                                <strong>{{ username }}</strong> requested <strong class="text-primary">{{ request_type }}</strong>.
+                                {% endblocktrans %}
+                                {% if req.request_type == 'EXTEND' %}
+                                    <span class="badge bg-info">{% blocktrans with months=req.extend_months %}{{ months }} months extension{% endblocktrans %}</span>
+                                {% endif %}
+                            </p>
+                            <small class="text-muted">{{ req.created_at|date:"Y-m-d H:i" }}</small>
+                        </div>
+                        <div>
+                            <a href="{% url 'contracts:detail' req.contract.pk %}" class="btn btn-sm btn-primary">
+                                {% trans "View Contract" %} <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- 최근 처리된 요청 -->
+            {% if my_processed_requests %}
+                {% for req in my_processed_requests %}
+                <div class="alert alert-{% if req.status == 'APPROVED' %}success{% else %}danger{% endif %} alert-dismissible fade show" role="alert">
+                    <h6 class="alert-heading">
+                        {% if req.status == 'APPROVED' %}
+                            <i class="bi bi-check-circle-fill"></i> {% trans "Your request has been approved!" %}
+                        {% else %}
+                            <i class="bi bi-x-circle-fill"></i> {% trans "Your request has been rejected" %}
+                        {% endif %}
+                    </h6>
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="mb-1">
+                                <strong>{{ req.contract.get_display_address }}</strong>
+                            </p>
+                            <p class="mb-1">
+                                {% if req.status == 'APPROVED' %}
+                                    {% blocktrans with username=req.responded_by.username request_type=req.get_request_type_display %}
+                                    <strong>{{ username }}</strong> approved your <strong>{{ request_type }}</strong> request.
+                                    {% endblocktrans %}
+                                {% else %}
+                                    {% blocktrans with username=req.responded_by.username request_type=req.get_request_type_display %}
+                                    <strong>{{ username }}</strong> rejected your <strong>{{ request_type }}</strong> request.
+                                    {% endblocktrans %}
+                                {% endif %}
+                                {% if req.request_type == 'EXTEND' and req.status == 'APPROVED' %}
+                                    <span class="badge bg-light text-dark">{% blocktrans with months=req.extend_months %}{{ months }} months extension{% endblocktrans %}</span>
+                                {% endif %}
+                            </p>
+                            {% if req.response_note %}
+                                <p class="mb-1 fst-italic">"{{ req.response_note }}"</p>
+                            {% endif %}
+                            <small class="text-muted">{{ req.responded_at|date:"Y-m-d H:i" }}</small>
+                        </div>
+                        <div>
+                            <a href="{% url 'contracts:detail' req.contract.pk %}" class="btn btn-sm btn-{% if req.status == 'APPROVED' %}success{% else %}danger{% endif %}">
+                                {% trans "View Contract" %} <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close mark-as-read" data-request-id="{{ req.pk }}" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% if user.user_type == 'TENANT' %}
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">📝 {% trans "Contract Management" %}</h5>
+                        <p class="card-text">{% trans "Register and manage your property contracts." %}</p>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <a href="{% url 'contracts:list' %}" class="btn btn-primary w-100">{% trans "View Contracts" %}</a>
+                            </div>
+                            <div class="col-6">
+                                <a href="{% url 'contracts:create' %}" class="btn btn-outline-primary w-100">{% trans "New Contract" %}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">🎙️ {% trans "Recording Management" %}</h5>
+                        <p class="card-text">{% trans "Record and manage contract discussions." %}</p>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <a href="{% url 'recordings:list' %}" class="btn btn-primary w-100">{% trans "View Recordings" %}</a>
+                            </div>
+                            <div class="col-6">
+                                <a href="{% url 'recordings:create' %}" class="btn btn-outline-primary w-100">{% trans "New Recording" %}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">📷 {% trans "Move-in/Move-out Records" %}</h5>
+                        <p class="card-text">{% trans "Document property condition at move-in and move-out." %}</p>
+                        <a href="{% url 'contracts:list' %}" class="btn btn-primary">{% trans "Select Contract to Record" %}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">{% trans "My Contracts" %}</h5>
+            </div>
+            <div class="card-body">
+                {% if user.tenant_contracts.all %}
+                    <!-- 데스크톱: 테이블 -->
+                    <div class="table-responsive d-none d-md-block">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>{% trans "Property Address" %}</th>
+                                    <th>{% trans "Landlord" %}</th>
+                                    <th>{% trans "Contract Date" %}</th>
+                                    <th>{% trans "End Date" %}</th>
+                                    <th>{% trans "Status" %}</th>
+                                    <th>{% trans "Records" %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for contract in user.tenant_contracts.all %}
+                                <tr style="cursor: pointer;" onclick="window.location='{% url 'contracts:detail' contract.pk %}';">
+                                    <td><a href="{% url 'contracts:detail' contract.pk %}" class="text-decoration-none">{{ contract.get_display_address }}</a></td>
+                                    <td>
+                                        {% if contract.landlord %}
+                                            {{ contract.landlord.username }}
+                                        {% else %}
+                                            {{ contract.landlord_name }}
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ contract.contract_date }}</td>
+                                    <td>
+                                        {% if contract.move_out_date %}
+                                            {{ contract.move_out_date }}
+                                        {% else %}
+                                            <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{% if contract.get_current_status == 'ACTIVE' %}success{% else %}secondary{% endif %}">
+                                            {{ contract.get_current_status_display }}
+                                        </span>
+                                    </td>
+                                    <td>{% blocktrans with count=contract.records.count %}{{ count }} records{% endblocktrans %}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 모바일: 카드 -->
+                    <div class="d-md-none">
+                        {% for contract in user.tenant_contracts.all %}
+                        <div class="card mb-3" onclick="window.location='{% url 'contracts:detail' contract.pk %}';" style="cursor: pointer;">
+                            <div class="card-body">
+                                <h6 class="card-title mb-2">
+                                    <i class="bi bi-building"></i> {{ contract.get_display_address }}
+                                </h6>
+                                <div class="mb-2">
+                                    <span class="badge bg-{% if contract.get_current_status == 'ACTIVE' %}success{% else %}secondary{% endif %}">
+                                        {{ contract.get_current_status_display }}
+                                    </span>
+                                </div>
+                                <p class="card-text small mb-1">
+                                    <strong>{% trans "Landlord" %}:</strong>
+                                    {% if contract.landlord %}
+                                        {{ contract.landlord.username }}
+                                    {% else %}
+                                        {{ contract.landlord_name }}
+                                    {% endif %}
+                                </p>
+                                <p class="card-text small mb-1">
+                                    <strong>{% trans "Contract Date" %}:</strong> {{ contract.contract_date }}
+                                </p>
+                                <p class="card-text small mb-1">
+                                    <strong>{% trans "End Date" %}:</strong>
+                                    {% if contract.move_out_date %}
+                                        {{ contract.move_out_date }}
+                                    {% else %}
+                                        <span class="text-muted">-</span>
+                                    {% endif %}
+                                </p>
+                                <p class="card-text small mb-0">
+                                    <strong>{% trans "Records" %}:</strong> {% blocktrans with count=contract.records.count %}{{ count }} records{% endblocktrans %}
+                                </p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted mb-0">{% trans "No contracts registered yet." %}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        {% elif user.user_type == 'LANDLORD' %}
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">📝 {% trans "Contract Management" %}</h5>
+                        <p class="card-text">{% trans "Register and manage your property contracts." %}</p>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <a href="{% url 'contracts:list' %}" class="btn btn-primary w-100">{% trans "View Contracts" %}</a>
+                            </div>
+                            <div class="col-6">
+                                <a href="{% url 'contracts:create' %}" class="btn btn-outline-primary w-100">{% trans "New Contract" %}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">🎙️ {% trans "Recording Management" %}</h5>
+                        <p class="card-text">{% trans "Record and manage contract discussions." %}</p>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <a href="{% url 'recordings:list' %}" class="btn btn-primary w-100">{% trans "View Recordings" %}</a>
+                            </div>
+                            <div class="col-6">
+                                <a href="{% url 'recordings:create' %}" class="btn btn-outline-primary w-100">{% trans "New Recording" %}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">✅ {% trans "Pending Approvals" %}</h5>
+                        <p class="card-text">{% trans "Approve tenant's move-in/move-out records." %}</p>
+                        <a href="{% url 'contracts:list' %}" class="btn btn-primary">{% trans "Select Contract to Approve" %}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">{% trans "Properties Under Management" %}</h5>
+            </div>
+            <div class="card-body">
+                {% if user.landlord_contracts.all %}
+                    <!-- 데스크톱: 테이블 -->
+                    <div class="table-responsive d-none d-md-block">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>{% trans "Property Address" %}</th>
+                                    <th>{% trans "Tenant" %}</th>
+                                    <th>{% trans "Contract Date" %}</th>
+                                    <th>{% trans "End Date" %}</th>
+                                    <th>{% trans "Status" %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for contract in user.landlord_contracts.all %}
+                                <tr style="cursor: pointer;" onclick="window.location='{% url 'contracts:detail' contract.pk %}';">
+                                    <td><a href="{% url 'contracts:detail' contract.pk %}" class="text-decoration-none">{{ contract.get_display_address }}</a></td>
+                                    <td>
+                                        {% if contract.tenant %}
+                                            {{ contract.tenant.username }}
+                                        {% else %}
+                                            {{ contract.tenant_name }}
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ contract.contract_date }}</td>
+                                    <td>
+                                        {% if contract.move_out_date %}
+                                            {{ contract.move_out_date }}
+                                        {% else %}
+                                            <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{% if contract.get_current_status == 'ACTIVE' %}success{% else %}secondary{% endif %}">
+                                            {{ contract.get_current_status_display }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 모바일: 카드 -->
+                    <div class="d-md-none">
+                        {% for contract in user.landlord_contracts.all %}
+                        <div class="card mb-3" onclick="window.location='{% url 'contracts:detail' contract.pk %}';" style="cursor: pointer;">
+                            <div class="card-body">
+                                <h6 class="card-title mb-2">
+                                    <i class="bi bi-building"></i> {{ contract.get_display_address }}
+                                </h6>
+                                <div class="mb-2">
+                                    <span class="badge bg-{% if contract.get_current_status == 'ACTIVE' %}success{% else %}secondary{% endif %}">
+                                        {{ contract.get_current_status_display }}
+                                    </span>
+                                </div>
+                                <p class="card-text small mb-1">
+                                    <strong>{% trans "Tenant" %}:</strong>
+                                    {% if contract.tenant %}
+                                        {{ contract.tenant.username }}
+                                    {% else %}
+                                        {{ contract.tenant_name }}
+                                    {% endif %}
+                                </p>
+                                <p class="card-text small mb-1">
+                                    <strong>{% trans "Contract Date" %}:</strong> {{ contract.contract_date }}
+                                </p>
+                                <p class="card-text small mb-0">
+                                    <strong>{% trans "End Date" %}:</strong>
+                                    {% if contract.move_out_date %}
+                                        {{ contract.move_out_date }}
+                                    {% else %}
+                                        <span class="text-muted">-</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted mb-0">{% trans "No properties under management." %}</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// 계약 변경 요청 알림 읽음 처리
+document.querySelectorAll('.mark-as-read').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        const requestId = this.getAttribute('data-request-id');
+
+        fetch(`/contracts/change-request/${requestId}/mark-read/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('Notification marked as read.');
+            }
+        })
+        .catch(error => {
+            console.error('Error marking as read:', error);
+        });
+    });
+});
+
+// 입실/퇴실 기록 알림 읽음 처리
+document.querySelectorAll('.mark-record-read').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        const recordId = this.getAttribute('data-record-id');
+        const notifElement = document.getElementById(`record-notif-${recordId}`);
+
+        fetch(`/records/${recordId}/mark-read/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // 알림 요소 페이드 아웃 후 제거
+                notifElement.style.transition = 'opacity 0.3s';
+                notifElement.style.opacity = '0';
+                setTimeout(() => {
+                    notifElement.remove();
+                    // 알림이 모두 제거되면 카드 숨기기
+                    const remainingNotifs = document.querySelectorAll('.record-notification');
+                    if (remainingNotifs.length === 0) {
+                        const card = document.querySelector('.card.shadow-sm.mb-3.border-0');
+                        if (card) card.remove();
+                    } else {
+                        // 알림 건수 업데이트
+                        const badge = document.querySelector('.card-header .badge.bg-light');
+                        if (badge) {
+                            badge.textContent = remainingNotifs.length + ' items';
+                        }
+                    }
+                }, 300);
+            }
+        })
+        .catch(error => {
+            console.error('Error marking as read:', error);
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,374 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Add Photos" %} - {{ record.get_record_type_display }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'contracts:list' %}">{% trans "Contracts" %}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'contracts:detail' contract.pk %}">{{ contract.get_display_address|truncatechars:20 }}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'records:detail' record.pk %}">{{ record.get_record_type_display }}</a></li>
+                <li class="breadcrumb-item active">{% trans "Add Photos" %}</li>
+            </ol>
+        </nav>
+
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-clipboard-check"></i> {% trans "Inspection Checklist" %}
+                </h4>
+            </div>
+            <div class="card-body p-4">
+                <div class="alert alert-info mb-4">
+                    <strong>{{ record.get_record_type_display }}</strong> {% trans "record - adding photos" %}
+                    <br><small class="text-muted">{% trans "Currently uploaded" %}: {{ record.photos.count }}{% trans " photos" %}</small>
+                    {% if template %}
+                    <br><small class="text-muted"><i class="bi bi-file-text"></i> {% trans "Template" %}: {{ template.name }}</small>
+                    {% endif %}
+                </div>
+
+                <!-- Photo Shooting Guidelines -->
+                <div class="card border-info mb-4" id="photoGuidelines">
+                    <div class="card-header bg-info text-white d-flex justify-content-between align-items-center py-2">
+                        <h6 class="mb-0">
+                            <i class="bi bi-camera"></i> {% trans "Photo Shooting Guidelines" %}
+                        </h6>
+                        <button class="btn btn-sm btn-outline-light" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#guidelinesBody">
+                            <i class="bi bi-chevron-down"></i>
+                        </button>
+                    </div>
+                    <div class="collapse show" id="guidelinesBody">
+                        <div class="card-body py-3">
+                            <div class="row g-3 text-center">
+                                <div class="col-6 col-md-3">
+                                    <i class="bi bi-arrows-fullscreen text-primary" style="font-size: 1.5rem;"></i>
+                                    <h6 class="mt-1 small fw-bold">{% trans "Full Room Shot" %}</h6>
+                                    <p class="small text-muted mb-0">{% trans "Capture the entire room from corner to corner to show overall condition." %}</p>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <i class="bi bi-zoom-in text-danger" style="font-size: 1.5rem;"></i>
+                                    <h6 class="mt-1 small fw-bold">{% trans "Close-up Defect" %}</h6>
+                                    <p class="small text-muted mb-0">{% trans "Take close-up photos of any damage, stains, or defects." %}</p>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <i class="bi bi-geo-alt text-success" style="font-size: 1.5rem;"></i>
+                                    <h6 class="mt-1 small fw-bold">{% trans "Mid-range Location" %}</h6>
+                                    <p class="small text-muted mb-0">{% trans "Show where the defect is located in the room for context." %}</p>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <i class="bi bi-calendar-date text-warning" style="font-size: 1.5rem;"></i>
+                                    <h6 class="mt-1 small fw-bold">{% trans "Date Stamping" %}</h6>
+                                    <p class="small text-muted mb-0">{% trans "Enable date stamp on your camera for proof of date." %}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form method="post" enctype="multipart/form-data" id="addPhotosForm">
+                    {% csrf_token %}
+
+                    {% if use_template %}
+                    <!-- Template-based inspection UI -->
+                    <div id="templateUploadArea" class="mb-4">
+                        {% for section in template_sections %}
+                        <div class="card mb-3">
+                            <div class="card-header bg-secondary text-white">
+                                <h6 class="mb-0">
+                                    <i class="bi bi-folder"></i> {{ section.name }}
+                                    {% if section.is_required %}<span class="badge bg-danger ms-2">{% trans "Required" %}</span>{% endif %}
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                {% for item in section.items %}
+                                <div class="card mb-3 border-start border-3 {% if item.existing_response and item.existing_response.condition_status == 'DEFECTIVE' %}border-danger{% elif item.existing_response and item.existing_response.condition_status == 'NEEDS_REPAIR' %}border-warning{% elif item.existing_response and item.existing_response.condition_status == 'AGED' %}border-info{% else %}border-primary{% endif %}" data-item-id="{{ item.id }}">
+                                    <div class="card-body p-3">
+                                        <!-- Item header -->
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <div>
+                                                <span class="fw-bold">{{ item.name }}</span>
+                                                {% if item.is_required %}<span class="badge bg-warning text-dark ms-1">{% trans "Required" %}</span>{% endif %}
+                                                {% if item.responsibility_hint %}
+                                                <span class="badge bg-outline-secondary ms-1">{{ item.responsibility_hint }}</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        {% if item.description %}
+                                        <p class="text-muted small mb-2">{{ item.description }}</p>
+                                        {% endif %}
+
+                                        <!-- Condition status (universal) -->
+                                        <div class="row g-2 mb-2">
+                                            <div class="col-sm-6">
+                                                <label class="form-label small fw-semibold mb-1">{% trans "Condition" %}</label>
+                                                <select name="condition_{{ item.id }}" class="form-select form-select-sm condition-select">
+                                                    {% for code, label in condition_choices %}
+                                                    <option value="{{ code }}" {% if item.existing_response and item.existing_response.condition_status == code %}selected{% endif %}>{{ label }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label class="form-label small fw-semibold mb-1">{% trans "Notes" %}</label>
+                                                <input type="text" name="notes_{{ item.id }}" class="form-control form-control-sm"
+                                                       placeholder="{% trans 'Optional notes' %}"
+                                                       value="{{ item.existing_response.notes|default:'' }}">
+                                            </div>
+                                        </div>
+
+                                        <!-- Item-type specific input -->
+                                        {% if item.item_type == 'PHOTO' %}
+                                        <!-- PHOTO type -->
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <small class="text-muted">
+                                                <span class="badge bg-secondary photo-count" id="count-{{ item.id }}" data-existing="{{ item.existing_photos }}">{{ item.existing_photos }}</span>
+                                                ({% trans "Min" %}: {{ item.min_photos }}, {% trans "Max" %}: {{ item.max_photos }})
+                                            </small>
+                                            <div>
+                                                <input type="file" id="file-item-{{ item.id }}" accept="image/*" multiple class="d-none" data-item-id="{{ item.id }}" data-item-name="{{ item.name }}">
+                                                <button type="button" class="btn btn-sm btn-primary" onclick="document.getElementById('file-item-{{ item.id }}').click()">
+                                                    <i class="bi bi-upload"></i> {% trans "Upload" %}
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="row g-2 photo-preview" id="preview-item-{{ item.id }}">
+                                            <div class="col-12 text-center text-muted py-1 empty-message" id="empty-item-{{ item.id }}"{% if item.existing_photos > 0 %} style="display:none"{% endif %}>
+                                                <small>{% trans "No photos uploaded yet" %}</small>
+                                            </div>
+                                        </div>
+
+                                        {% elif item.item_type == 'CHECKBOX' %}
+                                        <!-- CHECKBOX type -->
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" name="response_{{ item.id }}" value="true"
+                                                   id="check-{{ item.id }}"
+                                                   {% if item.existing_response and item.existing_response.response_value == 'true' %}checked{% endif %}>
+                                            <label class="form-check-label" for="check-{{ item.id }}">{{ item.name }}</label>
+                                        </div>
+
+                                        {% elif item.item_type == 'SELECT' %}
+                                        <!-- SELECT type -->
+                                        <select name="response_{{ item.id }}" class="form-select form-select-sm">
+                                            <option value="">-- {% trans "Select" %} --</option>
+                                            {% for opt in item.options %}
+                                            <option value="{{ opt.value }}" {% if item.existing_response and item.existing_response.response_value == opt.value %}selected{% endif %}>
+                                                {{ opt.label_ko }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+
+                                        {% elif item.item_type == 'TEXT' %}
+                                        <!-- TEXT type -->
+                                        <textarea name="response_{{ item.id }}" class="form-control form-control-sm" rows="2"
+                                                  placeholder="{% trans 'Enter text' %}">{{ item.existing_response.response_value|default:'' }}</textarea>
+
+                                        {% elif item.item_type == 'NUMBER' %}
+                                        <!-- NUMBER type -->
+                                        <input type="number" name="response_{{ item.id }}" class="form-control form-control-sm"
+                                               placeholder="{% trans 'Enter number' %}"
+                                               value="{{ item.existing_response.response_value|default:'' }}">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    {% else %}
+                    <!-- Legacy category-based upload UI -->
+                    <div class="alert alert-warning mb-4">
+                        <i class="bi bi-info-circle"></i>
+                        {% trans "Click the upload button for each category to add photos." %}
+                    </div>
+                    <div id="categoryUploadArea" class="mb-4">
+                        {% for code, name in photo_categories %}
+                        <div class="card mb-3 category-section" data-category="{{ code }}">
+                            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0">
+                                    <i class="bi bi-tag"></i> {{ name }}
+                                    <span class="badge bg-secondary photo-count" id="count-{{ code }}">0</span>
+                                </h6>
+                                <div>
+                                    <input type="file" id="file-{{ code }}" accept="image/*" multiple class="d-none" data-category="{{ code }}">
+                                    <button type="button" class="btn btn-sm btn-primary upload-btn" onclick="document.getElementById('file-{{ code }}').click()">
+                                        <i class="bi bi-upload"></i> {% trans "Add" %}
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body p-2">
+                                <div class="row g-2 photo-preview" id="preview-{{ code }}">
+                                    <div class="col-12 text-center text-muted py-3 empty-message" id="empty-{{ code }}">
+                                        <small>{% trans "No photos uploaded yet" %}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'records:detail' record.pk %}" class="btn btn-secondary">
+                            <i class="bi bi-x"></i> {% trans "Cancel" %}
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i> {% trans "Save" %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<style>
+    .photo-card { position: relative; }
+    .photo-card .remove-btn { position: absolute; top: 5px; right: 5px; padding: 2px 6px; font-size: 12px; }
+    .photo-card img { height: 100px; object-fit: cover; }
+    .condition-select option[value="NORMAL"] { color: #198754; }
+    .condition-select option[value="DEFECTIVE"] { color: #dc3545; }
+    .condition-select option[value="AGED"] { color: #0dcaf0; }
+    .condition-select option[value="NEEDS_REPAIR"] { color: #fd7e14; }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const addPhotosForm = document.getElementById('addPhotosForm');
+    const useTemplate = {{ use_template|yesno:"true,false" }};
+    let uploadedFiles = {};
+
+    if (useTemplate) {
+        document.querySelectorAll('input[type="file"][data-item-id]').forEach(input => {
+            input.addEventListener('change', function(e) {
+                const itemId = this.dataset.itemId;
+                const itemName = this.dataset.itemName;
+                handleTemplateFiles(itemId, itemName, this.files);
+                this.value = '';
+            });
+        });
+    } else {
+        document.querySelectorAll('input[type="file"][data-category]').forEach(input => {
+            input.addEventListener('change', function(e) {
+                const category = this.dataset.category;
+                handleCategoryFiles(category, this.files);
+                this.value = '';
+            });
+        });
+    }
+
+    function handleTemplateFiles(itemId, itemName, files) {
+        const key = `item_${itemId}`;
+        if (!uploadedFiles[key]) uploadedFiles[key] = [];
+        Array.from(files).forEach(file => {
+            if (file.type.startsWith('image/')) {
+                const index = uploadedFiles[key].length;
+                uploadedFiles[key].push({ file, itemId, itemName, description: '' });
+                addPhotoCard(`preview-item-${itemId}`, `empty-item-${itemId}`, `photo-item-${itemId}-${index}`, file, () => removeFile(key, index, itemId));
+            }
+        });
+        updateCount(itemId, key);
+    }
+
+    function handleCategoryFiles(category, files) {
+        if (!uploadedFiles[category]) uploadedFiles[category] = [];
+        Array.from(files).forEach(file => {
+            if (file.type.startsWith('image/')) {
+                const index = uploadedFiles[category].length;
+                uploadedFiles[category].push({ file, description: '' });
+                addPhotoCard(`preview-${category}`, `empty-${category}`, `photo-${category}-${index}`, file, () => removeFile(category, index));
+            }
+        });
+        const badge = document.getElementById(`count-${category}`);
+        if (badge) badge.textContent = uploadedFiles[category].filter(f => f).length;
+    }
+
+    function addPhotoCard(previewId, emptyId, cardId, file, onRemove) {
+        const preview = document.getElementById(previewId);
+        const empty = document.getElementById(emptyId);
+        if (empty) empty.style.display = 'none';
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const col = document.createElement('div');
+            col.className = 'col-4 col-md-3 col-lg-2';
+            col.id = cardId;
+            col.innerHTML = `<div class="card photo-card h-100"><img src="${e.target.result}" class="card-img-top"><button type="button" class="btn btn-danger btn-sm remove-btn"><i class="bi bi-x"></i></button></div>`;
+            col.querySelector('.remove-btn').addEventListener('click', onRemove);
+            preview.appendChild(col);
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function removeFile(key, index, itemId) {
+        if (uploadedFiles[key]) uploadedFiles[key][index] = null;
+        const cardId = itemId ? `photo-item-${itemId}-${index}` : `photo-${key}-${index}`;
+        const card = document.getElementById(cardId);
+        if (card) card.remove();
+        if (itemId) updateCount(itemId, key);
+    }
+
+    function updateCount(itemId, key) {
+        const badge = document.getElementById(`count-${itemId}`);
+        if (badge && uploadedFiles[key]) {
+            const existing = parseInt(badge.dataset.existing || 0);
+            const added = uploadedFiles[key].filter(f => f).length;
+            badge.textContent = existing + added;
+        }
+    }
+
+    // Form submit
+    addPhotosForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(addPhotosForm);
+
+        // Append photo files
+        if (useTemplate) {
+            Object.keys(uploadedFiles).forEach(key => {
+                uploadedFiles[key].forEach(item => {
+                    if (item) {
+                        formData.append('images', item.file);
+                        formData.append('template_items', item.itemId);
+                        formData.append('categories', 'OTHER');
+                        formData.append('descriptions', item.description);
+                    }
+                });
+            });
+        } else {
+            Object.keys(uploadedFiles).forEach(category => {
+                uploadedFiles[category].forEach(item => {
+                    if (item) {
+                        formData.append('images', item.file);
+                        formData.append('categories', category);
+                        formData.append('template_items', '');
+                        formData.append('descriptions', item.description);
+                    }
+                });
+            });
+        }
+
+        fetch(addPhotosForm.action || window.location.href, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (response.redirected) {
+                window.location.href = response.url;
+            } else {
+                return response.text();
+            }
+        })
+        .then(html => { if (html) document.body.innerHTML = html; })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('{% trans "Error occurred during upload." %}');
+        });
+    });
+});
+</script>
+{% endblock %}

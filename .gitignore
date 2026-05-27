@@ -1,0 +1,48 @@
+# Django
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+
+# Database - OAuth Secret이 여기 저장됩니다!
+db.sqlite3
+db.sqlite3-journal
+
+# Python virtual environment
+venv/
+env/
+ENV/
+
+# Media files (사용자가 업로드한 사진들)
+media/
+
+# Static files
+staticfiles/
+/static/
+
+# Environment variables (나중에 사용)
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+
+# Test/error files
+err/
+
+# Claude Code
+.claude/

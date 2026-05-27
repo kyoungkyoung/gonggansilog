@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Sign Up" %} - {% trans "Space Chronicle" %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-body p-5 text-center">
+                <h4 class="mb-3">{% trans "Sign Up Error" %}</h4>
+                <p class="text-muted">{% trans "Automatic registration failed." %}</p>
+                <p>{% trans "This page should not appear. Please contact the administrator." %}</p>
+
+                <div class="mt-4">
+                    <a href="{% url 'accounts:login' %}" class="btn btn-primary">{% trans "Back to Login" %}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
