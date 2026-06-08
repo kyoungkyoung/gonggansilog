@@ -33,6 +33,7 @@ urlpatterns = [
     path('exports/', include('core.exports.urls')),  # Export engine
     path('japan/', include('countries.jp.urls')),  # Japan layer
     path('i18n/', include('django.conf.urls.i18n')),  # Language switching
+    path('api/v1/', include('api.urls')),  # REST API
 ]
 
 # Development only: serve media files

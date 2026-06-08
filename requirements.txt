@@ -42,3 +42,6 @@ typing-inspection==0.4.2
 typing_extensions==4.15.0
 urllib3==2.5.0
 wrapt==2.0.1
+djangorestframework==3.16.1
+djangorestframework-simplejwt==5.5.1
+django-cors-headers==4.9.0
